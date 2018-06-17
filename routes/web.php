@@ -11,6 +11,17 @@
 |
 */
 
+/**
+ * Autenticación
+ */
+Route::post('/login', 'Auth\LoginController@login')->name('login');
+Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+Route::post('/register', 'Auth\RegisterController@register')->name('registro');
+
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('index');
+})->name('index');
+
+Route::get('/inicio', function() {
+    return view('bienvenida');
+})->middleware('auth')->name('bienvenida');
