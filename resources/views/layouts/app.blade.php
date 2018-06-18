@@ -12,10 +12,8 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/semantic.min.js') }}"></script>
 
     <!-- Styles -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/semantic.min.css') }}">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
