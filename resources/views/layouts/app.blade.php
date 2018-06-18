@@ -1,4 +1,4 @@
-@extends('boilerplate')
+@extends('layouts.boilerplate')
 
 @section('body')
     <!-- Menu -->
