@@ -1,21 +1,6 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+@extends('boilerplate')
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Estilos -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-</head>
-
-<body>
+@section('body')
     <!-- Menu -->
     <div class="container">
         <nav class="navbar navbar-expand-md navbar-light bg-light">
@@ -65,11 +50,6 @@
 
     <!-- Contenido principal -->
     <main role="main" class="container">
-        @yield('contenedor')
+        @yield('container')
     </main>
-
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
-</body>
-
-</html>
+@endsection
