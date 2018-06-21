@@ -24,10 +24,12 @@ Route::get('/logout', 'Auth\LoginController@logout')
 Route::post('/registro', 'Auth\RegisterController@register')
     ->name('registro');
 
-Route::get('/', function () {
-    return view('index');
-})->name('index');
+/**
+ * Página de inicio y de bienvenida
+ */
 
-Route::get('/inicio', function() {
-    return view('bienvenida');
-})->middleware('auth')->name('bienvenida');
+Route::get('/', 'IndexController')
+    ->name('index');
+
+Route::get('/inicio', 'BienvenidaController')
+    ->name('bienvenida');
