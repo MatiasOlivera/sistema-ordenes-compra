@@ -14,7 +14,7 @@
         name="password" class="form-control" id="password"
         aria-describedby="password" placeholder="Contraseña">
 
-        <vc-form-error v-for="(clave, error) in errores"
+        <vc-form-error v-for="(error, clave) in errores"
         :error="error" :key="clave">
         </vc-form-error>
 
