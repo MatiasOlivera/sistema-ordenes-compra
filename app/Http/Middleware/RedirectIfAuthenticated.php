@@ -18,7 +18,12 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->check()) {
-            return redirect('/home');
+
+            if ($request->expectsJson()) {
+                return response()->json(['ruta' => '/inicio'], 303);
+            }
+
+            return redirect()->route('index');
         }
 
         return $next($request);

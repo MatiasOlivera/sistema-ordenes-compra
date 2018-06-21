@@ -5,8 +5,6 @@
     <div class="container">
         <nav class="navbar navbar-expand-md navbar-light bg-light">
 
-            <a class="navbar-brand" href="#">Sistema de ordenes</a>
-
             <button class="navbar-toggler navbar-toggler-right" type="button"
             data-toggle="collapse" data-target="#barraNavegacion"
             aria-controls="barraNavegacion" aria-expanded="false"
@@ -18,29 +16,30 @@
 
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">
-                            Inicio <span class="sr-only">(seleccionado)</span>
-                        </a>
+                        <a class="nav-link" href="#">Ordenes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Ordenes</a>
+                        <a class="nav-link" href="#">Personas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Empresas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Usuarios</a>
                     </li>
                 </ul>
 
                 <div class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#"
-                        id="navbarDropdown" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                            Nombre del usuario
+                    <li class="nav-item">
+                        <a class="nav-link font-weight-bold" href="#">
+                            {{ Auth::user()->display_name }}
                         </a>
+                    </li>
 
-                        <div class="dropdown-menu"
-                        aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Mi perfil</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Cerrar sesión</a>
-                        </div>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('logout') }}">
+                            Cerrar sesión
+                        </a>
                     </li>
                 </div>
 

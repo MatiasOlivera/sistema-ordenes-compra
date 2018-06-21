@@ -14,9 +14,15 @@
 /**
  * Autenticación
  */
-Route::post('/login', 'Auth\LoginController@login')->name('login');
-Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
-Route::post('/register', 'Auth\RegisterController@register')->name('registro');
+
+Route::post('/login', 'Auth\LoginController@login')
+    ->name('login');
+
+Route::get('/logout', 'Auth\LoginController@logout')
+    ->name('logout');
+
+Route::post('/registro', 'Auth\RegisterController@register')
+    ->name('registro');
 
 Route::get('/', function () {
     return view('index');
