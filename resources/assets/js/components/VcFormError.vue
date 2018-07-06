@@ -1,6 +1,6 @@
 <template lang="html">
-    <div v-if="error" class="invalid-feedback">
-        {{ error[0] }}
+    <div class="invalid-feedback">
+        {{ error }}
     </div>
 </template>
 
@@ -9,7 +9,7 @@ export default {
     name: 'vc-form-error',
     props: {
         error : {
-            type : Array,
+            type : String,
             required: true
         }
     }

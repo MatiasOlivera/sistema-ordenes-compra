@@ -27,27 +27,26 @@
 
 <script>
 import VcFormError from '../components/VcFormError.vue';
+import ValidacionMixin from '../mixins/ValidacionMixin.js';
 
 export default {
+    mixins: [ ValidacionMixin ],
     data() {
         return {
             user: {
                 username: null,
                 password: null
             },
-            errores: {},
-            mensajesError: {
-                defecto: ["¡Oops! Hubo un problema al procesar la solicitud"],
-                peticion: [`No estás en la misma red que el servidor o este
-                    podría estar caído`],
-                config: ["¡Oops! Hubo un problema al configurar la solicitud"]
-            }
+            errores: {}
         }
     },
     components: {
         VcFormError
     },
     methods: {
+        obtenerMensajesError(errores) {
+            return this.$_ValidacionMixin_obtenerMensajesError(errores);
+        },
         autenticar() {
             axios.post('/login', this.user)
             .then((response) => {
@@ -60,18 +59,37 @@ export default {
                     switch (status) {
                         case 422:
                         case 429:
-                            this.errores = error.response.data.errors;
+                            let errores = error.response.data.errors;
+                            this.errores = this.obtenerMensajesError(errores);
                             break;
                         default:
-                            this.errores.defecto = this.mensajesError.defecto;
+                            this.porDefecto();
                             break;
                     }
                 } else if (error.request) {
-                    this.errores.peticion = this.mensajesError.peticion;
+                    this.peticion();
                 } else {
-                    this.errores.config = this.mensajesError.config;
+                    this.config();
                 }
             });
+        }
+    },
+    notifications: {
+        porDefecto: {
+            title: 'Solicitud',
+            message: '¡Oops! Hubo un problema al procesar la solicitud',
+            type: 'error'
+        },
+        peticion: {
+            title: 'Petición',
+            message: `No estás en la misma red que el servidor o este
+                podría estar caído`,
+            type: 'error'
+        },
+        config: {
+            title: 'Configuración',
+            message: '¡Oops! Hubo un problema al configurar la solicitud',
+            type: 'error'
         }
     }
 }
