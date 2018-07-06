@@ -1,4 +1,3 @@
-<<<<<<< current
 <?php
 
 namespace App;
@@ -6,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class TipoOrganizacion extends Model
+class PersonaJuridica extends Model
 {
     use SoftDeletes;
 
@@ -15,7 +14,7 @@ class TipoOrganizacion extends Model
      *
      * @var string
      */
-    protected $table = 'tipos_organizacion';
+    protected $table = 'personas_juridicas';
 
     /**
     * The attributes that should be mutated to dates.
@@ -30,15 +29,23 @@ class TipoOrganizacion extends Model
      * @var array
      */
     protected $fillable = [
-        'descripcion'
+        'denominacion', 'cuit', 'tipo_organizacion_id'
     ];
 
     /**
-     * Obtener las personas jurídicas que pertenezcan a este tipo de organización
+     * Obtener la persona asociada a esta persona jurídica
      */
-    
-    public function juridicas()
+
+    public function persona()
     {
-        return $this->hasMany('App\PersonaJuridica');
+        return $this->belongsTo('App\Persona', 'id');
+    }
+
+    /**
+     * Obtener el tipo de organización de esta persona jurídica
+     */
+    public function tipoOrganizacion()
+    {
+        return $this->belongsTo('App\TipoOrganizacion');
     }
 }
