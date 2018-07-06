@@ -2,9 +2,8 @@
 
 @section('body')
     <!-- Menu -->
-    <div class="container">
-        <nav class="navbar navbar-expand-md navbar-light bg-light">
-
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+        <div class="container">
             <button class="navbar-toggler navbar-toggler-right" type="button"
             data-toggle="collapse" data-target="#barraNavegacion"
             aria-controls="barraNavegacion" aria-expanded="false"
@@ -46,8 +45,8 @@
                 </div>
 
             </div>
-        </nav>
-    </div>
+        </div>
+    </nav>
 
     <!-- Contenido principal -->
     <main role="main" class="container">
