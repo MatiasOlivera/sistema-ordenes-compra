@@ -14,6 +14,8 @@
 
             <div class="collapse navbar-collapse" id="barraNavegacion">
 
+                <a class="navbar-brand" href="{{ route('bienvenida') }}">Gestión de ordenes</a>
+
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="#">Ordenes</a>
