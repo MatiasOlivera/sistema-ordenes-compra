@@ -41,3 +41,9 @@ Route::get('/inicio', 'BienvenidaController')
 Route::apiResource('/juridicas', 'PersonaJuridicaController')
     ->parameters(['juridicas' => 'personaJuridica']);
 
+/**
+ * Tipos de organización
+ */
+
+Route::apiResource('/tipos-organizacion', 'TipoOrganizacionController')
+    ->parameters(['tipos-organizacion' => 'tipoOrganizacion']);
