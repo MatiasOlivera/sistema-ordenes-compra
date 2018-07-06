@@ -33,3 +33,11 @@ Route::get('/', 'IndexController')
 
 Route::get('/inicio', 'BienvenidaController')
     ->name('bienvenida');
+
+/**
+ * Personas jurídicas
+ */
+
+Route::apiResource('/juridicas', 'PersonaJuridicaController')
+    ->parameters(['juridicas' => 'personaJuridica']);
+
