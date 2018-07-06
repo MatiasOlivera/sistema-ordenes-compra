@@ -16,11 +16,9 @@
     @stack('styles')
 </head>
 
-<body>
-    <div id="main">
-        @yield('body')
-    </div>
-
+<body class="bg-light">
+    @yield('body')
+    
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
     @stack('scripts')

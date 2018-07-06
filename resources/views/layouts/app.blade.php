@@ -49,7 +49,7 @@
     </nav>
 
     <!-- Contenido principal -->
-    <main role="main" class="container">
+    <main role="main" id="main" class="container">
         @yield('container')
     </main>
 @endsection
