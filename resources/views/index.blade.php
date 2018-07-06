@@ -1,7 +1,9 @@
 @extends('layouts.boilerplate')
 
 @section('body')
-    <view-login></view-login>
+    <main id="main">
+        <view-login></view-login>
+    </main>
 @endsection
 
 @push('scripts')
