@@ -1,4 +1,3 @@
-<<<<<<< current
 <?php
 
 namespace App;
