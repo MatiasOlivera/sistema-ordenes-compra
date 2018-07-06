@@ -20,4 +20,5 @@
         "vue": "^2.5.7"
     },
     "dependencies": {}
+        "vue-tables-2": "^1.4.63",
 }
