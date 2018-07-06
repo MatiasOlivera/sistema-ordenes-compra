@@ -19,6 +19,7 @@
         "popper.js": "^1.14.1",
         "vue": "^2.5.7"
     },
-    "dependencies": {}
+    "dependencies": {
         "vue-tables-2": "^1.4.63",
+    }
 }
