@@ -5,6 +5,7 @@
         :url="url"
         :columnas="columnas"
         :opciones="opciones"
+        :campoNombre="campoNombre"
         :obtenerTabla="obtenerTabla"
         @ver-perfil="verPerfil"
         @editar="editar"
@@ -40,6 +41,7 @@ export default {
                 },
                 sortable: ['denominacion', 'cuit']
             },
+            campoNombre: 'denominacion',
             obtenerTabla: false
         }
     },
