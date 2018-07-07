@@ -18,8 +18,12 @@
             <vc-boton-editar @click.native="editar(id)"></vc-boton-editar>
         </template>
 
-        <template slot="eliminar" slot-scope="{ row: {id} }">
-            <vc-boton-eliminar @click.native="eliminar(id)"></vc-boton-eliminar>
+        <template slot="eliminar" slot-scope="{ row: fila }">
+            <vc-boton-eliminar
+                :nombre="fila[campoNombre]"
+                @confirmado="eliminar(fila.id)"
+            >
+            </vc-boton-eliminar>
         </template>
     </v-server-table>
 
@@ -56,6 +60,10 @@ export default {
         obtenerTabla: {
             type: Boolean,
             default: false
+        },
+        campoNombre: {
+            type: String,
+            required: true
         }
     },
     computed: {
