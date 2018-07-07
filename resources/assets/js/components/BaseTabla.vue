@@ -80,7 +80,7 @@ export default {
     },
     methods: {
         verPerfil(id) {
-            this.$emit('ver-perfil');
+            this.$emit('ver-perfil', id);
         },
         editar(id) {
             this.$emit('editar', id);
