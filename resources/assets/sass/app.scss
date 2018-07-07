@@ -3,3 +3,18 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+// iziToast
+@import '~izitoast/dist/css/iziToast.min.css';
+
+// Iconos Feather
+.icono {
+    height: 16px;
+    width: 16px;
+    margin-bottom: -2px;
+}
+
+// Contenedor
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
