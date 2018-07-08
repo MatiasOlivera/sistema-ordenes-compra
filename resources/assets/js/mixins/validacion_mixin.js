@@ -1,6 +1,6 @@
 export default {
     methods: {
-        $_ValidacionMixin_obtenerMensajesError(errores) {
+        $_validacionMixin_obtenerMensajesError(errores) {
             let mensajes = _.mapValues(errores, function (error) {
                 return error[0]
             });

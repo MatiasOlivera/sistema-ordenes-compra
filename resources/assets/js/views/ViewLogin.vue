@@ -27,7 +27,7 @@
 
 <script>
 import VcFormError from '../components/VcFormError.vue';
-import ValidacionMixin from '../mixins/ValidacionMixin.js';
+import ValidacionMixin from '../mixins/validacion_mixin.js';
 
 export default {
     mixins: [ ValidacionMixin ],
@@ -45,7 +45,7 @@ export default {
     },
     methods: {
         obtenerMensajesError(errores) {
-            return this.$_ValidacionMixin_obtenerMensajesError(errores);
+            return this.$_validacionMixin_obtenerMensajesError(errores);
         },
         autenticar() {
             axios.post('/login', this.user)
