@@ -34,6 +34,14 @@ Route::get('/', 'IndexController')
 Route::get('/inicio', 'BienvenidaController')
     ->name('bienvenida');
 
+/** 
+ * Personas Fisicas
+ */
+Route::get('/persona','PersonaFisicaController@view');
+
+Route::apiResource('/personas', 'PersonaFisicaController')
+    ->parameters(['personas' => 'PersonaFisica']);
+
 /**
  * Personas jurídicas
  */
