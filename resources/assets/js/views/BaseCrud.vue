@@ -17,7 +17,7 @@
                 <plus-circle-icon class="icono"></plus-circle-icon> {{ botonNuevo }}
             </button>
         </div>
-        
+
         <div class="row">
             <!-- Perfil -->
             <div
@@ -26,11 +26,11 @@
             >
                 <slot
                     name="perfil"
-                    :ocultarPerfil="ocultarPerfil"    
+                    :ocultarPerfil="ocultarPerfil"
                 >
                 </slot>
             </div>
-            
+
             <!-- Formulario -->
             <div
                 v-show="form.visible"
@@ -60,6 +60,7 @@
 
 <script>
 import { PlusCircleIcon } from 'vue-feather-icons';
+import VueScrollTo from 'vue-scrollto'
 
 export default {
     components: { PlusCircleIcon },
@@ -88,14 +89,19 @@ export default {
         }
     },
     methods: {
-        mostrarPerfil() {
+        scrollHaciaArriba() {
+            this.$scrollTo('#main', 500, { easing: 'ease-in' });
+        },
+        mostrarPerfil(scroll = false) {
             this.perfil.visible = true;
+            if (scroll) this.scrollHaciaArriba();
         },
         ocultarPerfil() {
             this.perfil.visible = false;
         },
-        mostrarForm() {
+        mostrarForm(scroll = false) {
             this.form.visible = true;
+            if (scroll) this.scrollHaciaArriba();
         },
         ocultarForm() {
             this.form.visible = false;
