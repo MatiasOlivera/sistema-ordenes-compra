@@ -3,10 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\PersonaFisica;
+use App\Persona;
 use Illuminate\Http\Request;
+use App\Http\Requests\PersonaFisicaRequest;
+use Illuminate\Support\Facades\DB;
 
 class PersonaFisicaController extends Controller
 {
+  /**
+   * Display a listing of the resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+    public function view()
+    {
+        return view('fisicas');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +26,23 @@ class PersonaFisicaController extends Controller
      */
     public function index()
     {
-        //
+        try {
+              $listadoPersonasFisicas = PersonaFisica::all();
+
+              if ($listadoPersonasFisicas->isNotEmpty()) {
+                  $listado = $listadoPersonasFisicas;
+                  $codigoEstado = 200; // Todo OK
+              } else {
+                  $listado = $listadoPersonasFisicas;
+                  $codigoEstado = 204; //Arreglo vacio
+              }
+        } catch (\Exception $e) {
+              $listado = [];
+              $codigoEstado = 409;
+        }
+
+        return response()->json($listado, $codigoEstado);
+
     }
 
     /**
@@ -22,7 +50,7 @@ class PersonaFisicaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         //
     }
@@ -33,9 +61,46 @@ class PersonaFisicaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PersonaFisicaRequest $request)
     {
-        //
+          try {
+              DB::beginTransaction();
+
+                $Persona = new Persona;
+                $Persona -> save();
+
+                $personaFisica = new PersonaFisica;
+                $personaFisica -> persona() -> associate($Persona);
+                $personaFisica -> nombres = $request-> nombres;
+                $personaFisica -> apellidos = $request-> apellidos;
+                $personaFisica -> documento = $request-> documento;
+                $personaFisica -> fecha_nacimiento = $request-> fecha_nacimiento;
+                $personaFisica -> sexo = $request-> sexo;
+                $personaFisica ->save();
+
+              DB::commit();
+                $transaccion = true;
+          } catch (\Exception $e) {
+              DB::rollBack();
+                $transaccion = false;
+          }
+
+          if ($transaccion) {
+                $respuesta['alerta'] = ['mensaje' => 'La Persona se ha guardado con exito',
+                                         'titulo' => 'Exito',
+                                          'clase' => 'alert-success'];
+                $codigoEstado = 201;
+          } else {
+                $respuesta['alerta'] = ['mensaje' => 'Ha ocurrido un error mientras se intentaba guardar, vuelva a intentar mas tarde',
+                                         'titulo' => 'Fallo',
+                                          'clase' => 'alert-danger'];
+                $codigoEstado = 400;
+          }
+
+
+      return response()->json($respuesta, $codigoEstado);
+
+
     }
 
     /**
@@ -44,9 +109,10 @@ class PersonaFisicaController extends Controller
      * @param  \App\PersonaFisica  $personaFisica
      * @return \Illuminate\Http\Response
      */
+
     public function show(PersonaFisica $personaFisica)
     {
-        //
+        return response()->json($personaFisica);
     }
 
     /**
@@ -55,9 +121,9 @@ class PersonaFisicaController extends Controller
      * @param  \App\PersonaFisica  $personaFisica
      * @return \Illuminate\Http\Response
      */
-    public function edit(PersonaFisica $personaFisica)
+    public function edit($id)
     {
-        //
+      //
     }
 
     /**
@@ -67,9 +133,37 @@ class PersonaFisicaController extends Controller
      * @param  \App\PersonaFisica  $personaFisica
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PersonaFisica $personaFisica)
+
+
+    public function update(Request $request,  PersonaFisica $personaFisica)
     {
-        //
+        try {
+            $personaFisica = PersonaFisica::find($request -> id);
+            $personaFisica -> nombres = $request -> nombres;
+            $personaFisica -> apellidos = $request -> apellidos;
+            $personaFisica -> documento = $request -> documento;
+            $personaFisica -> fecha_nacimiento = $request -> fecha_nacimiento;
+            $personaFisica -> sexo = $request -> sexo;
+            $personaFisica->save();
+
+            $update = true;
+        } catch (\Exception $e) {
+            $update = false;
+        }
+
+        if ($update) {
+              $respuesta['alerta'] = ['mensaje' => 'La Persona se ha modificado con exito',
+                             'titulo' => 'Exito',
+                              'clase' => 'alert-success'];
+              $codigoEstado = 201;
+        } else {
+              $respuesta['alerta'] = ['mensaje' => 'Ha ocurrido un error mientras se intentaba guardar los cambios, vuelva a intentar mas tarde',
+                             'titulo' => 'Fallo',
+                              'clase' => 'alert-danger'];
+              $codigoEstado = 400;
+        }
+
+        return response()->json($respuesta, $codigoEstado);
     }
 
     /**
@@ -80,6 +174,6 @@ class PersonaFisicaController extends Controller
      */
     public function destroy(PersonaFisica $personaFisica)
     {
-        //
+        $personaFisica = PersonaFisica::find($personaFisica -> id);
     }
 }
