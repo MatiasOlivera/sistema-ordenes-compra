@@ -22,7 +22,7 @@
 
             <div class="col-auto ml-auto">
                 <button
-                    v-if="nuevoModelo"
+                    v-if="id === null"
                     @click.prevent="limpiar"
                     type="reset"
                     name="reset"
@@ -44,12 +44,14 @@
         </div>
 
     </form>
-    
+
 </template>
 
 <script>
 import { SaveIcon, DeleteIcon, RotateCcwIcon } from 'vue-feather-icons';
 import BaseCabecera from '../components/BaseCabecera.vue';
+import ObtenerInstanciaMixin from '../mixins/obtener_instancia_mixin.js';
+import ValidacionMixin from '../mixins/validacion_mixin.js';
 
 export default {
     name: 'base-formulario',
@@ -59,6 +61,10 @@ export default {
         DeleteIcon,
         RotateCcwIcon
     },
+    mixins: [
+        ObtenerInstanciaMixin,
+        ValidacionMixin
+    ],
     props: {
         titulos: {
             type: Object,
@@ -68,25 +74,145 @@ export default {
                 editar: 'Editar modelo'
             }
         },
-        nuevoModelo: {
-            type: Boolean,
-            required: true,
-            default: true
+        url: {
+            type: String,
+            required: true
         },
-        confirmarAlEliminar: {
-            type: Boolean,
+        modelo: {
+            type: Object,
+            required: true
+        },
+        id: {
+            type: Number,
+            default: null
+        },
+        mensajes: {
+            type: Object,
             required: true,
-            default: false
+            default: {
+                obtener: {
+                    error: {
+                        noEncontrado: {
+                            titulo: '',
+                            mensaje: ''
+                        },
+                        porDefecto: {
+                            titulo: '',
+                            mensaje: ''
+                        }
+                    }
+                },
+                enviar: {
+                    error: {
+                        porDefecto: {
+                            titulo: '',
+                            mensaje: ''
+                        }
+                    }
+                }
+            }
         }
     },
     computed: {
+        urlEspecifica() {
+            return `${this.url}/${this.id}`;
+        },
         titulo() {
-            return this.nuevoModelo ? this.titulos.crear : this.titulos.editar;
+            return this.id ? this.titulos.editar : this.titulos.crear;
+        }
+    },
+    watch: {
+        id: function(id) {
+            if (id !== null) this.obtener();
         }
     },
     methods: {
+        obtenerMensajesError(errores) {
+            return this.$_validacionMixin_obtenerMensajesError(errores);
+        },
+        obtener() {
+            this.$_obtenerInstanciaMixin_obtener(
+                this.urlEspecifica,
+                (response) => {
+                    let modelo = response.data;
+                    // Crear un nuevo objeto para evitar la reactividad
+                    this.modeloObtenido = { ...modelo };
+                    this.$emit('obtenido', modelo);
+                }
+            );
+        },
         guardar() {
-            this.$emit('guardar');
+            let url = '';
+            let metodo = '';
+
+            if (!this.modelo.id) {
+                url = this.url;
+                metodo = 'POST';
+            } else {
+                url = this.urlEspecifica;
+                metodo = 'PUT';
+            }
+
+            this.enviar(metodo, url);
+        },
+        enviar(metodo, url) {
+            axios({
+                method: metodo,
+                url: url,
+                data: this.modelo
+            })
+            .then((response) => {
+                let status = response.status;
+                let notificacion = {
+                    title: '',
+                    message: response.data.mensaje
+                };
+
+                switch(status) {
+                    case 200:
+                        notificacion.title = 'Actualizado';
+                        break;
+                    case 201:
+                        notificacion.title = 'Guardado';
+                        break;
+                    default:
+                        break;
+                }
+
+                this.exito(notificacion);
+
+                this.$emit('guardado');
+            })
+            .catch((error) => {
+                let status = error.response.status;
+                let porDefecto = this.mensajes.enviar.error.porDefecto;
+
+                switch (status) {
+                    case 422:
+                        var errores = error.response.data.errors;
+
+                        if (errores) {
+                            let mensajes = this.obtenerMensajesError(errores);
+                            this.$emit('validado', mensajes);
+                        }
+                        break;
+                    case 400:
+                        var error = error.response.data.mensaje;
+
+                        if (error) {
+                            this.error({
+                                title: 'Error',
+                                message: error
+                            });
+                        }
+                        break;
+                    default:
+                        this.error({
+                            title: porDefecto.titulo,
+                            message: porDefecto.mensaje
+                        });
+                }
+            });
         },
         limpiar() {
             this.$emit('limpiar');
@@ -132,8 +258,18 @@ export default {
         }
     },
     notifications: {
+        exito: {
+            title: 'Exito',
+            message: '',
+            type: 'success'
+        },
+        error: {
+            title: 'Error',
+            message: '',
+            type: 'error'
+        },
         pregunta: {
-            title: '',
+            title: 'Pregunta',
             message: '',
             type: 'question'
         }
