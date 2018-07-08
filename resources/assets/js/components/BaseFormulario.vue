@@ -82,6 +82,10 @@ export default {
             type: Object,
             required: true
         },
+        modeloPorDefecto: {
+            type: Object,
+            required: true
+        },
         id: {
             type: Number,
             default: null
@@ -111,6 +115,11 @@ export default {
                     }
                 }
             }
+        }
+    },
+    data() {
+        return {
+            modeloObtenido: {}
         }
     },
     computed: {
@@ -218,13 +227,23 @@ export default {
             this.$emit('limpiar');
         },
         deshacer() {
-            this.$emit('deshacer');
+            // Crear un nuevo objeto para evitar la reactividad
+            let modelo = { ...this.modeloObtenido };
+            this.$emit('deshacer', modelo);
         },
         emitirCerrar() {
             this.$emit('cerrar');
         },
         cerrar() {
-            if (this.confirmarAlEliminar) {
+            let iguales = false;
+
+            if (!this.modelo.id) {
+                iguales = _.isEqual(this.modeloPorDefecto, this.modelo);
+            } else {
+                iguales = _.isEqual(this.modeloObtenido, this.modelo);
+            }
+
+            if (!this.iguales) {
                 function ocultarNotificacion(instancia, notificacion) {
                     instancia.hide({
                         transitionOut: 'fadeOut'
