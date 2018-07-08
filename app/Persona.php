@@ -31,4 +31,13 @@ class Persona extends Model
     {
         return $this->hasOne('App\PersonaJuridica', 'id');
     }
+
+    /**
+     * Obtener la persona Fisica asociada a esta persona
+     */
+
+    public function fisica()
+    {
+        return $this->hasOne('App\PersonaFisica', 'id');
+    }
 }
