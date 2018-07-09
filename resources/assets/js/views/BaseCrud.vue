@@ -27,6 +27,7 @@
                 <slot
                     name="perfil"
                     :ocultarPerfil="ocultarPerfil"
+                    :mostrarForm="mostrarForm"
                 >
                 </slot>
             </div>
