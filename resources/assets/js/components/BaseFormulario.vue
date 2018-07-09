@@ -243,7 +243,7 @@ export default {
                 iguales = _.isEqual(this.modeloObtenido, this.modelo);
             }
 
-            if (!this.iguales) {
+            if (!iguales) {
                 function ocultarNotificacion(instancia, notificacion) {
                     instancia.hide({
                         transitionOut: 'fadeOut'

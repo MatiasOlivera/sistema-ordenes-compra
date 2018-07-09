@@ -11,7 +11,7 @@
         <div class="d-flex justify-content-center mb-2">
             <button
                 v-if="!form.visible"
-                @click="mostrarForm"
+                @click="mostrarForm(false)"
                 type="button" name="nuevo" class="btn btn-primary"
             >
                 <plus-circle-icon class="icono"></plus-circle-icon> {{ botonNuevo }}
@@ -92,16 +92,20 @@ export default {
         scrollHaciaArriba() {
             this.$scrollTo('#main', 500, { easing: 'ease-in' });
         },
-        mostrarPerfil(scroll = false) {
+        mostrarPerfil() {
             this.perfil.visible = true;
-            if (scroll) this.scrollHaciaArriba();
+            this.scrollHaciaArriba();
         },
         ocultarPerfil() {
             this.perfil.visible = false;
         },
-        mostrarForm(scroll = false) {
+        mostrarForm(scroll) {
+            if (!_.isBoolean(scroll)) {
+                throw new Error('El argumento debe ser un booleano');
+            }
+            
             this.form.visible = true;
-            if (scroll) this.scrollHaciaArriba();
+            if (scroll) this.scrollHaciaArriba()
         },
         ocultarForm() {
             this.form.visible = false;
