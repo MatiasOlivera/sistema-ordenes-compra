@@ -37,6 +37,34 @@ if (token) {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
+window.axios.interceptors.response.use(function (response) {
+    return response;
+}, function (error) {
+    if (error.response) {
+        let status = error.response.status;
+        
+        switch (status) {
+            
+            case 422:
+                if (error.response.data.hasOwnProperty('errors')) {
+                    let errores = error.response.data.errors;
+                    
+                    let mensajes = _.mapValues(errores, function (error) {
+                        return error[0]
+                    });
+                    
+                    error.response.data.errors = mensajes;
+                }
+                break;
+            
+            default:
+                
+        }
+        
+        return Promise.reject(error);
+    }
+});
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
