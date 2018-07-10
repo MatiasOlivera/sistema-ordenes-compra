@@ -45,6 +45,10 @@ window.axios.interceptors.response.use(function (response) {
         
         switch (status) {
             
+            case 401:
+                window.location.replace('/');
+                break;
+            
             case 422:
                 if (error.response.data.hasOwnProperty('errors')) {
                     let errores = error.response.data.errors;
