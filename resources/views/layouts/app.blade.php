@@ -23,7 +23,7 @@
                         <a class="nav-link" href="#">Personas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Empresas</a>
+                        <a class="nav-link" href="{{ route('juridicas.view') }}">Jurídicas</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Usuarios</a>

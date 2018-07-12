@@ -46,6 +46,9 @@ Route::apiResource('/personas', 'PersonaFisicaController')
  * Personas jurídicas
  */
 
+Route::get('/personas-juridicas', 'PersonaJuridicaController@view')
+    ->name('juridicas.view');
+
 Route::apiResource('/juridicas', 'PersonaJuridicaController')
     ->parameters(['juridicas' => 'personaJuridica']);
 
