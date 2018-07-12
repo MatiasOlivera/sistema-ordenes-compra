@@ -1,0 +1,56 @@
+<template lang="html">
+
+    <base-crud
+        :titulo="titulo"
+        :botonNuevo="botonNuevo"
+    >
+    
+        <template slot="perfil" slot-scope="{ mostrarForm, ocultarPerfil }">
+            <vc-perfil-juridica
+                @mostrar-form="mostrarForm(false)"
+                @cerrar="ocultarPerfil"
+            >
+            </vc-perfil-juridica>
+        </template>
+        
+        <template slot="formulario" slot-scope="{ ocultarForm }">
+            <vc-form-juridica @cerrar="ocultarForm">
+            </vc-form-juridica>
+        </template>
+        
+        <template slot="tabla" slot-scope="{ mostrarPerfil, mostrarForm }">
+            <vc-tabla-juridicas
+                @mostrar-perfil="mostrarPerfil"
+                @mostrar-form="mostrarForm(true)"
+            >
+            </vc-tabla-juridicas>
+        </template>
+    
+    </base-crud>
+    
+</template>
+
+<script>
+import BaseCrud from '../views/BaseCrud.vue';
+import VcPerfilJuridica from '../components/persona_juridica/VcPerfilJuridica.vue';
+import VcFormJuridica from '../components/persona_juridica/VcFormJuridica.vue';
+import VcTablaJuridicas from '../components/persona_juridica/VcTablaJuridicas.vue';
+
+export default {
+    components: {
+        BaseCrud,
+        VcPerfilJuridica,
+        VcFormJuridica,
+        VcTablaJuridicas
+    },
+    data() {
+        return {
+            titulo: 'Personas Jurídicas',
+            botonNuevo: 'Nueva'
+        }
+    }
+}
+</script>
+
+<style lang="css">
+</style>
