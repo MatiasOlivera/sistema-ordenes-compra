@@ -85,3 +85,13 @@ const TiposDeNotificacion = {
 VueNotifications.config.timeout = 10000;
 
 Vue.use(VueNotifications, TiposDeNotificacion);
+
+/**
+ * Vue-moment
+ */
+const moment = require('moment');
+require('moment/locale/es');
+
+const VueMoment = require('vue-moment');
+
+Vue.use(VueMoment, { moment });
