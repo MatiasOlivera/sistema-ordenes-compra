@@ -156,4 +156,25 @@ class PersonaJuridicaController extends Controller
 
         return response()->json($respuesta, $codigoEstado);
     }
+    
+    /**
+     * Restaurar la persona jurídica que ha sido eliminada
+     *
+     * @param  \App\PersonaJuridica  $personaJuridica
+     * @return \Illuminate\Http\Response
+     */
+    public function restore(PersonaJuridica $personaJuridica) {
+        $denominacion = $personaJuridica->denominacion;
+        $restaurada = $personaJuridica->restore();
+        
+        if ($restaurada) {
+            $respuesta = ['mensaje' => "{$denominacion} ha sido dada de alta"];
+            $codigoEstado = 200;
+        } else {
+            $respuesta = ['mensaje' => "Hubo un problema al intentar dar de alta a {$denominacion}"];
+            $codigoEstado = 400;
+        }
+
+        return response()->json($respuesta, $codigoEstado);
+    }
 }

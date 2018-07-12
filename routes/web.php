@@ -49,6 +49,9 @@ Route::apiResource('/personas', 'PersonaFisicaController')
 Route::get('/personas-juridicas', 'PersonaJuridicaController@view')
     ->name('juridicas.view');
 
+Route::patch('/juridicas/{personaJuridica}/restore', 'PersonaJuridicaController@restore')
+    ->name('juridicas.restore');
+
 Route::apiResource('/juridicas', 'PersonaJuridicaController')
     ->parameters(['juridicas' => 'personaJuridica']);
 
