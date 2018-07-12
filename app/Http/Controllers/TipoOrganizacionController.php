@@ -31,10 +31,12 @@ class TipoOrganizacionController extends Controller
     {
         $vuetable = new VueTables();
         $modelo   = new TipoOrganizacion();
+        $campos   = ['descripcion'];
 
         $respuesta = $vuetable->obtener(
             $request,
-            $modelo
+            $modelo,
+            $campos
         );
 
         return $respuesta;
