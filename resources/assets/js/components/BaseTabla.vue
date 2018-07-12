@@ -31,12 +31,20 @@
             <vc-boton-editar @click.native="editar(id)"></vc-boton-editar>
         </template>
 
-        <template slot="eliminar" slot-scope="{ row: fila }">
-            <vc-boton-eliminar
+        <template slot="baja" slot-scope="{ row: fila }">
+            <vc-boton-baja
                 :nombre="fila[campoNombre]"
-                @confirmado="eliminar(fila.id)"
+                @confirmado="darDeBaja(fila.id)"
             >
-            </vc-boton-eliminar>
+            </vc-boton-baja>
+        </template>
+        
+        <template slot="alta" slot-scope="{ row: fila }">
+            <vc-boton-alta
+                :nombre="fila[campoNombre]"
+                @confirmado="darDeAlta(fila.id)"
+            >
+            </vc-boton-alta>
         </template>
     </v-server-table>
 
@@ -45,13 +53,15 @@
 <script>
 import { InfoIcon } from 'vue-feather-icons';
 import VcBotonEditar from '../components/VcBotonEditar.vue';
-import VcBotonEliminar from '../components/VcBotonEliminar.vue';
+import VcBotonBaja from '../components/VcBotonBaja.vue';
+import VcBotonAlta from '../components/VcBotonAlta.vue';
 
 export default {
     components: {
         InfoIcon,
         VcBotonEditar,
-        VcBotonEliminar
+        VcBotonBaja,
+        VcBotonAlta
     },
     props: {
         nombre: {
@@ -142,9 +152,15 @@ export default {
         editar(id) {
             this.$emit('editar', id);
         },
-        eliminar(id) {
-            this.$emit('eliminar', id);
+        
+        darDeBaja(id) {
+            this.$emit('dar-de-baja', id);
         },
+        
+        darDeAlta(id) {
+            this.$emit('dar-de-alta', id);
+        },
+        
         obtenerModelos() {
             this.$refs[this.nombre].getData();
         }
