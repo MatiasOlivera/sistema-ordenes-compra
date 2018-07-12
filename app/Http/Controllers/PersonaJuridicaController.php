@@ -103,7 +103,10 @@ class PersonaJuridicaController extends Controller
      */
     public function show(PersonaJuridica $personaJuridica)
     {
-        return $personaJuridica;
+        return PersonaJuridica::with('tipoOrganizacion')
+            ->withTrashed()
+            ->where('id', $personaJuridica->id)
+            ->first();
     }
 
     /**
