@@ -139,7 +139,7 @@ export default {
                     let modelo = response.data;
                     // Crear un nuevo objeto para evitar la reactividad
                     this.modeloObtenido = { ...modelo };
-                    this.$emit('update:modelo', modelo);
+                    this.$emit('obtenido', modelo);
                 }
             );
         },
@@ -218,7 +218,7 @@ export default {
         deshacer() {
             // Crear un nuevo objeto para evitar la reactividad
             let modelo = { ...this.modeloObtenido };
-            this.$emit('update:modelo', modelo);
+            this.$emit('deshacer', modelo);
         },
         emitirCerrar() {
             this.$emit('cerrar');
