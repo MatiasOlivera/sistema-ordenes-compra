@@ -22,6 +22,16 @@ class PersonaJuridicaController extends Controller
     {
         $this->middleware('auth');
     }
+    
+    /**
+     * Mostrar la vista
+     *
+     * @return \Illuminate\Http\Response
+     */
+    
+    public function view() {
+        return view('juridicas');
+    }
 
     /**
      * Display a listing of the resource.
