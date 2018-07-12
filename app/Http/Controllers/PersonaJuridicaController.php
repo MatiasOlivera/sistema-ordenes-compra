@@ -43,12 +43,14 @@ class PersonaJuridicaController extends Controller
     {
         $vuetable = new VueTables();
 
-        $modelo   = new PersonaJuridica();
-        $modelos  = ['tipoOrganizacion'];
+        $modelo  = new PersonaJuridica();
+        $modelos = ['tipoOrganizacion'];
+        $campos  = ['denominacion', 'cuit'];
 
         $respuesta = $vuetable->obtener(
             $request,
             $modelo,
+            $campos,
             $modelos
         );
 
