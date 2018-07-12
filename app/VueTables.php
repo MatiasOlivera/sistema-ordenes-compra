@@ -7,23 +7,24 @@ use Carbon\Carbon;
 
 class VueTables
 {
-    public function obtener(Request $request, $modelo, array $modelos = [], array $campos = []) {
+    public function obtener(Request $request, $modelo, array $campos = [], array $modelos = []) {
 
-        $busqueda   = $request->query('query', null);
-        $limite     = $request->query('limit', 10);
-        $pagina     = $request->query('page', 1);
-        $ordenarPor = $request->query('orderBy', null);
-        $ascendente = $request->query('ascending', null);
-        $porColumna = $request->query('byColumn', null);
+        $busqueda       = $request->query('busqueda', null);
+        $limite         = $request->query('limite', 10);
+        $pagina         = $request->query('pagina', 1);
+        $ordenarPor     = $request->query('ordenarPor', null);
+        $ascendente     = $request->query('ascendente', null);
+        $porColumna     = $request->query('porColumna', null);
+        $soloEliminados = $request->query('soloEliminados', 0);
 
         if (!isset($modelos) && $modelos) {
             $datos = $modelo;
         } else {
             $datos = $modelo::with($modelos);
         }
-
-        if (isset($campos) && $campos) {
-            $datos->select($campos);
+        
+        if (isset($soloEliminados) && $soloEliminados) {
+            $datos->onlyTrashed();
         }
 
         if (isset($busqueda) && $busqueda) {
@@ -37,9 +38,9 @@ class VueTables
             $datos->orderBy($ordenarPor, $direccion);
         }
 
-        $resultado = $datos->paginate($limite);
+        $registros = $datos->paginate($limite, ['*'], 'pagina');
 
-        return $resultado;
+        return $registros;
     }
 
     protected function filtrarPorColumna($datos, $busqueda)

@@ -21,6 +21,14 @@ const OpcionesVueTables = {
     },
     perPage: 10,
     perPageValues: [10, 15, 20],
+    requestKeys: {
+        query:     'busqueda',
+        limit:     'limite',
+        page:      'pagina',
+        orderBy:   'ordenarPor',
+        ascending: 'ascendente',
+        byColumn:  'porColumna'
+    },
     responseAdapter(response) {
         return {
             data:  response.data.data,
