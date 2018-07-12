@@ -51,7 +51,6 @@
 import { SaveIcon, DeleteIcon, RotateCcwIcon } from 'vue-feather-icons';
 import BaseCabecera from '../components/BaseCabecera.vue';
 import ObtenerInstanciaMixin from '../mixins/obtener_instancia_mixin.js';
-import ValidacionMixin from '../mixins/validacion_mixin.js';
 
 export default {
     name: 'base-formulario',
@@ -61,10 +60,7 @@ export default {
         DeleteIcon,
         RotateCcwIcon
     },
-    mixins: [
-        ObtenerInstanciaMixin,
-        ValidacionMixin
-    ],
+    mixins: [ ObtenerInstanciaMixin ],
     props: {
         titulos: {
             type: Object,
@@ -136,9 +132,6 @@ export default {
         }
     },
     methods: {
-        obtenerMensajesError(errores) {
-            return this.$_validacionMixin_obtenerMensajesError(errores);
-        },
         obtener() {
             this.$_obtenerInstanciaMixin_obtener(
                 this.urlEspecifica,
@@ -198,12 +191,8 @@ export default {
 
                 switch (status) {
                     case 422:
-                        var errores = error.response.data.errors;
-
-                        if (errores) {
-                            let mensajes = this.obtenerMensajesError(errores);
-                            this.$emit('validado', mensajes);
-                        }
+                        let mensajes = error.response.data.errors;
+                        this.$emit('validado', mensajes);
                         break;
                     case 400:
                         var error = error.response.data.mensaje;
