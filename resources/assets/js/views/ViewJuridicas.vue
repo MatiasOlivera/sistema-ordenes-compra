@@ -31,9 +31,9 @@
 </template>
 
 <script>
-import BaseCrud from '../views/BaseCrud.vue';
+import BaseCrud         from '../views/BaseCrud.vue';
 import VcPerfilJuridica from '../components/persona_juridica/VcPerfilJuridica.vue';
-import VcFormJuridica from '../components/persona_juridica/VcFormJuridica.vue';
+import VcFormJuridica   from '../components/persona_juridica/VcFormJuridica.vue';
 import VcTablaJuridicas from '../components/persona_juridica/VcTablaJuridicas.vue';
 
 export default {

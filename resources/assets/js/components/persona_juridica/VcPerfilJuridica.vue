@@ -48,11 +48,11 @@
 </template>
 
 <script>
-import BasePerfil from '../../components/BasePerfil.vue';
+import BasePerfil            from '../../components/BasePerfil.vue';
 import ObtenerInstanciaMixin from '../../mixins/obtener_instancia_mixin.js';
 import DarBajaInstanciaMixin from '../../mixins/dar_baja_instancia_mixin.js';
 import DarAltaInstanciaMixin from '../../mixins/dar_alta_instancia_mixin.js';
-import FiltroCuitMixin from '../../mixins/persona_juridica/filtro_cuit_mixin.js';
+import FiltroCuitMixin       from '../../mixins/persona_juridica/filtro_cuit_mixin.js';
 
 export default {
     name: 'vc-perfil-juridica',

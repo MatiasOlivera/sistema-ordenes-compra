@@ -17,11 +17,12 @@
 </template>
 
 <script>
-import BaseTabla from '../../components/BaseTabla.vue';
+import BaseTabla             from '../../components/BaseTabla.vue';
 import DarBajaInstanciaMixin from '../../mixins/dar_baja_instancia_mixin.js';
 import DarAltaInstanciaMixin from '../../mixins/dar_alta_instancia_mixin.js';
 
 export default {
+    name: 'vc-tabla-juridicas',
     components: { BaseTabla },
     mixins: [
         DarBajaInstanciaMixin,
@@ -34,15 +35,15 @@ export default {
     },
     created() {
         BusEventos.$on('VcFormJuridica:guardada', () => {
-            this.obtenerJuridicas();
+            this.obtenerRegistros();
         });
         
         BusEventos.$on('VcPerfilJuridica:eliminada', () => {
-            this.obtenerJuridicas();
+            this.obtenerRegistros();
         });
         
         BusEventos.$on('VcPerfilJuridica:restaurada', () => {
-            this.obtenerJuridicas();
+            this.obtenerRegistros();
         });
     },
     static: {
@@ -111,7 +112,7 @@ export default {
         darDeBaja(id) {
             this.$_darBajaInstanciaMixin_eliminar(
                 `${this.$options.static.url}/${id}`,
-                () => { this.obtenerJuridicas() },
+                () => { this.obtenerRegistros() },
                 this.$options.static.mensajes.baja
             );
         },
@@ -120,14 +121,14 @@ export default {
             this.$_darAltaInstanciaMixin_restaurar(
                 `${this.$options.static.url}/${id}/restore`,
                 () => {
-                    this.obtenerJuridicas();
+                    this.obtenerRegistros();
                     BusEventos.$emit('VcTablaJuridicas:restaurada', id);
                 },
                 this.$options.static.mensajes.alta
             )
         },
         
-        obtenerJuridicas() {
+        obtenerRegistros() {
             this.obtenerTabla = true;
             this.$nextTick(() => {
                 this.obtenerTabla = false;
