@@ -18,7 +18,7 @@
             </button>
         </div>
 
-        <div class="row">
+        <div class="row justify-content-center align-items-start">
             <!-- Perfil -->
             <div
                 v-show="perfil.visible"
