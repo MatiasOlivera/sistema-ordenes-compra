@@ -28,6 +28,15 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Usuarios</a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdownMenu"role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Administración
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu">
+                            <a href="{{ route('tipos-organizacion.view') }}" class="dropdown-item">Tipos de organización</a>
+                        </div>
+                    </li>
                 </ul>
 
                 <div class="navbar-nav">

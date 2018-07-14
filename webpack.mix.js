@@ -14,4 +14,5 @@ let mix = require('laravel-mix');
 mix.js('resources/assets/js/app.js', 'public/js')
    .js('resources/assets/js/index.js', 'public/js')
    .js('resources/assets/js/juridicas.js', 'public/js')
+   .js('resources/assets/js/tipos_organizacion.js', 'public/js')
    .sass('resources/assets/sass/app.scss', 'public/css');

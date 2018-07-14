@@ -58,6 +58,8 @@ Route::apiResource('/juridicas', 'PersonaJuridicaController')
 /**
  * Tipos de organización
  */
+Route::get('/tipos-de-organizacion', 'TipoOrganizacionController@view')
+    ->name('tipos-organizacion.view');
 
 Route::apiResource('/tipos-organizacion', 'TipoOrganizacionController')
     ->parameters(['tipos-organizacion' => 'tipoOrganizacion']);
