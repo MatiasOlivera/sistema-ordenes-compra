@@ -61,5 +61,8 @@ Route::apiResource('/juridicas', 'PersonaJuridicaController')
 Route::get('/tipos-de-organizacion', 'TipoOrganizacionController@view')
     ->name('tipos-organizacion.view');
 
+Route::patch('/tipos-organizacion/{tipoOrganizacion}/restore', 'TipoOrganizacionController@restore')
+    ->name('tipos-organizacion.restore');
+
 Route::apiResource('/tipos-organizacion', 'TipoOrganizacionController')
     ->parameters(['tipos-organizacion' => 'tipoOrganizacion']);

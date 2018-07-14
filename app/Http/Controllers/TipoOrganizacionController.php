@@ -136,4 +136,25 @@ class TipoOrganizacionController extends Controller
 
         return response()->json($respuesta, $codigoEstado);
     }
+    
+    /**
+     * Restaurar el tipo de organización que ha sido eliminado
+     *
+     * @param  \App\TipoOrganizacion  $tipoOrganizacion
+     * @return \Illuminate\Http\Response
+     */
+    public function restore(TipoOrganizacion $tipoOrganizacion) {
+        $descripcion = $tipoOrganizacion->descripcion;
+        $restaurado = $tipoOrganizacion->restore();
+        
+        if ($restaurado) {
+            $respuesta = ['mensaje' => "{$descripcion} ha sido dado de alta"];
+            $codigoEstado = 200;
+        } else {
+            $respuesta = ['mensaje' => "Hubo un problema al intentar dar de alta a {$descripcion}"];
+            $codigoEstado = 400;
+        }
+
+        return response()->json($respuesta, $codigoEstado);
+    }
 }
