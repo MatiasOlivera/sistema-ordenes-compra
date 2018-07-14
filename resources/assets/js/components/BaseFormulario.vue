@@ -182,8 +182,14 @@ export default {
                 }
 
                 this.exito(notificacion);
-
-                this.$emit('guardado');
+                
+                let id = null;
+                
+                if (response.data.hasOwnProperty('data')) {
+                    id = response.data.data.id;
+                }
+                
+                this.$emit('guardado', id);
             })
             .catch((error) => {
                 let status = error.response.status;

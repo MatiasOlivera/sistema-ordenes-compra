@@ -68,7 +68,10 @@ class TipoOrganizacionController extends Controller
         $guardado = $tipo->save();
         
         if ($guardado) {
-            $respuesta = ['mensaje' => "{$descripcion} ha sido creado"];
+            $respuesta = [
+                'mensaje' => "{$descripcion} ha sido creado",
+                'data' => $tipo
+            ];
             $codigoEstado = 201;
         } else {
             $respuesta = ['mensaje' => "Hubo un problema al intentar guardar a ${$descripcion}"];

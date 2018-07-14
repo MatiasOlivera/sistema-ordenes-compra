@@ -1,138 +1,165 @@
 <template lang="html">
 
-    <base-formulario
-        :titulos="$options.static.titulos"
-        :url="$options.static.url.juridicas"
-        :id="id"
-        :modelo="juridica"
-        :modeloPorDefecto="$options.static.juridicaPorDefecto"
-        :mensajes="$options.static.mensajes"
-        @obtenido="setJuridica"
-        @validado="validado"
-        @guardado="guardado"
-        @deshacer="setJuridica"
-        @limpiar="resetearTodo"
-        @cerrar="cerrar"
-    >
-        <fieldset class="form-group">
-            <label for="cuit">CUIT
-                <span
-                    v-if="digitosCuit"
-                    class="text-muted"
+    <div>
+        <base-formulario
+            v-if="!tipoOrganizacionForm.visible"
+            :titulos="$options.static.titulos"
+            :url="$options.static.url.juridicas"
+            :id="id"
+            :modelo="juridica"
+            :modeloPorDefecto="$options.static.juridicaPorDefecto"
+            :mensajes="$options.static.mensajes"
+            @obtenido="setJuridica"
+            @validado="validado"
+            @guardado="guardado"
+            @deshacer="setJuridica"
+            @limpiar="resetearTodo"
+            @cerrar="cerrar"
+        >
+        
+            <fieldset class="form-group">
+                <label for="cuit">CUIT
+                    <span
+                        v-if="digitosCuit"
+                        class="text-muted"
+                    >
+                        {{ digitosCuit }} - {{ juridica.cuit | formatoCuit }}
+                    </span>
+                </label>
+
+                <input
+                    v-model="juridica.cuit"
+                    :class="{'is-invalid' : validacion.cuit}"
+                    type="text"
+                    name="cuit"
+                    class="form-control"
+                    id="cuit"
+                    aria-describedby="cuitAyuda"
                 >
-                    {{ digitosCuit }} - {{ juridica.cuit | formatoCuit }}
-                </span>
-            </label>
 
-            <input
-                v-model="juridica.cuit"
-                :class="{'is-invalid' : validacion.cuit}"
-                type="text"
-                name="cuit"
-                class="form-control"
-                id="cuit"
-                aria-describedby="cuitAyuda"
-            >
-
-            <small
-                v-if="!validacion.cuit"
-                id="cuitAyuda"
-                class="form-text text-muted"
-            >
-                El CUIT de la persona jurídica sin puntos ni guiones medios
-            </small>
-            <vc-form-error
-                v-else
-                :error="validacion.cuit"
-            >
-            </vc-form-error>
-        </fieldset>
-
-        <fieldset class="form-group">
-            <label for="denominacion">Denominación / Razón social</label>
-
-            <input
-                v-model="juridica.denominacion"
-                :class="{'is-invalid' : validacion.denominacion}"
-                type="text"
-                name="denominacion"
-                class="form-control"
-                id="denominacion"
-                aria-describedby="denominacionAyuda"
-            >
-
-            <small
-                v-if="!validacion.denominacion"
-                id="denominacionAyuda"
-                class="form-text text-muted"
-            >
-                La denominación de la organización o razón social registrada en AFIP
-            </small>
-            <vc-form-error
-                v-else
-                :error="validacion.denominacion"
-            >
-            </vc-form-error>
-        </fieldset>
-
-        <fieldset class="form-group">
-            <label for="tipoOrganizacion">Tipo de organización</label>
-
-            <select
-                v-model="juridica.tipo_organizacion_id"
-                :class="{'is-invalid' : validacion.tipo_organizacion_id}"
-                name="tipoOrganizacion"
-                id="tipoOrganizacion"
-                class="custom-select"
-                aria-describedby="denominacionAyuda"
-            >
-                <option
-                    v-for="tipo in tiposOrganizacion"
-                    :key="tipo.id"
-                    :value="tipo.id"
-                    v-text="tipo.descripcion"
+                <small
+                    v-if="!validacion.cuit"
+                    id="cuitAyuda"
+                    class="form-text text-muted"
                 >
-                </option>
-            </select>
+                    El CUIT de la persona jurídica sin puntos ni guiones medios
+                </small>
+                <vc-form-error
+                    v-else
+                    :error="validacion.cuit"
+                >
+                </vc-form-error>
+            </fieldset>
 
-            <small
-                v-if="!validacion.tipo_organizacion_id"
-                id="tipoOrganizacionAyuda"
-                class="form-text text-muted"
-            >
-                El tipo de organización de la persona jurídica
-            </small>
-            <vc-form-error
-                v-else
-                :error="validacion.tipo_organizacion_id"
-            >
-            </vc-form-error>
-        </fieldset>
-    </base-formulario>
+            <fieldset class="form-group">
+                <label for="denominacion">Denominación / Razón social</label>
+
+                <input
+                    v-model="juridica.denominacion"
+                    :class="{'is-invalid' : validacion.denominacion}"
+                    type="text"
+                    name="denominacion"
+                    class="form-control"
+                    id="denominacion"
+                    aria-describedby="denominacionAyuda"
+                >
+
+                <small
+                    v-if="!validacion.denominacion"
+                    id="denominacionAyuda"
+                    class="form-text text-muted"
+                >
+                    La denominación de la organización o razón social registrada en AFIP
+                </small>
+                <vc-form-error
+                    v-else
+                    :error="validacion.denominacion"
+                >
+                </vc-form-error>
+            </fieldset>
+            
+            <fieldset>
+                <label for="tipoOrganizacion">Tipo de organización</label>
+
+                <div class="input-group">
+                    <select
+                        v-model="juridica.tipo_organizacion_id"
+                        :class="{'is-invalid' : validacion.tipo_organizacion_id}"
+                        name="tipoOrganizacion"
+                        id="tipoOrganizacion"
+                        class="custom-select"
+                        aria-describedby="denominacionAyuda"
+                    >
+                        <option
+                            v-for="tipo in tiposOrganizacion"
+                            :key="tipo.id"
+                            :value="tipo.id"
+                            v-text="tipo.descripcion"
+                        >
+                        </option>
+                    </select>
+                    <div class="input-group-append">
+                        <button
+                            @click="mostrarFormTipoOrg"
+                            type="button"
+                            class="btn btn-secondary"
+                        >
+                            <plus-circle-icon class="icono"></plus-circle-icon>
+                        </button>
+                    </div>
+                </div>
+                
+                <small
+                    v-if="!validacion.tipo_organizacion_id"
+                    id="tipoOrganizacionAyuda"
+                    class="form-text text-muted"
+                >
+                    El tipo de organización de la persona jurídica
+                </small>
+                <vc-form-error
+                    v-else
+                    :error="validacion.tipo_organizacion_id"
+                >
+                </vc-form-error>
+            </fieldset>
+        
+        </base-formulario>
+        
+        <vc-form-tipo-org
+            v-if="tipoOrganizacionForm.visible"
+            @guardado="guardadoFormTipoOrg"
+            @cerrar="cerrarFormTipoOrg"
+        >
+        </vc-form-tipo-org>
+    </div>
 
 </template>
 
 <script>
-import BaseFormulario from '../../components/BaseFormulario.vue';
-import VcFormError from '../../components/VcFormError.vue';
-import FiltroCuitMixin from '../../mixins/persona_juridica/filtro_cuit_mixin.js';
+import { PlusCircleIcon } from 'vue-feather-icons';
+import BaseFormulario     from '../../components/BaseFormulario.vue';
+import VcFormError        from '../../components/VcFormError.vue';
+import VcFormTipoOrg      from '../../components/tipo_organizacion/VcFormTipoOrg.vue';
+import FiltroCuitMixin    from '../../mixins/persona_juridica/filtro_cuit_mixin.js';
 
 export default {
     name: 'vc-form-juridica',
     components: {
         BaseFormulario,
-        VcFormError
+        VcFormError,
+        PlusCircleIcon,
+        VcFormTipoOrg
     },
     mixins: [ FiltroCuitMixin ],
     data() {
         return {
             id: null,
             juridica: null,
+            tiposOrganizacion: null,
             
-            tiposOrganizacion: [{
-                id: '',
-                descripcion: 'Seleccione un tipo de organización'
-            }],
+            tipoOrganizacionForm: {
+                visible: false
+            },
             
             validacion: null
         }
@@ -192,7 +219,12 @@ export default {
             cuit: null,
             denominacion: null,
             tipo_organizacion_id: null
-        }
+        },
+        
+        tiposOrganizacionPorDefecto: [{
+            id: '',
+            descripcion: 'Seleccione un tipo de organización'
+        }]
     },
     created() {
         this.resetearTodo();
@@ -205,17 +237,17 @@ export default {
         obtenerTiposOrganizacion() {
             axios.get(this.$options.static.url.tiposOrganizacion, {
                 params: {
-                    page: 1,
-                    limit: 50,
-                    orderBy: 'descripcion',
-                    ascending: 1
+                    limite: 50,
+                    pagina: 1,
+                    ordenarPor: 'descripcion',
+                    ascendente: 1,
+                    soloEliminados: 0
                 }
             })
             .then((response) => {
                 let tipos = response.data.data;
-                tipos.forEach((tipo) => {
-                    this.tiposOrganizacion.push(tipo)
-                });
+                this.resetearTiposOrganizacion();
+                this.tiposOrganizacion = this.tiposOrganizacion.concat(tipos);
             })
             .catch((error) => {
                 if (error.response) {
@@ -237,6 +269,19 @@ export default {
                     }
                 }
             })
+        },
+        
+        mostrarFormTipoOrg() {
+            this.tipoOrganizacionForm.visible = true;
+        },
+        
+        cerrarFormTipoOrg() {
+            this.tipoOrganizacionForm.visible = false;
+        },
+        
+        guardadoFormTipoOrg(id) {
+            this.obtenerTiposOrganizacion();
+            this.juridica.tipo_organizacion_id = id;
         },
         
         setID(id) {
@@ -278,10 +323,15 @@ export default {
             this.validacion = { ...this.$options.static.validacionPorDefecto };
         },
         
+        resetearTiposOrganizacion() {
+            this.tiposOrganizacion = [ ...this.$options.static.tiposOrganizacionPorDefecto ];
+        },
+        
         resetearTodo() {
             this.resetearJuridica();
             this.resetearId();
             this.resetearValidacion();
+            this.resetearTiposOrganizacion();
         }
     },
     notifications: {
