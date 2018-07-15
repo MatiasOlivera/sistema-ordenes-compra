@@ -66,3 +66,12 @@ Route::patch('/tipos-organizacion/{tipoOrganizacion}/restore', 'TipoOrganizacion
 
 Route::apiResource('/tipos-organizacion', 'TipoOrganizacionController')
     ->parameters(['tipos-organizacion' => 'tipoOrganizacion']);
+
+/**
+ * Empresas
+ */
+
+Route::patch('/empresas/{empresa}/restore', 'EmpresaController@restore')
+    ->name('empresas.restore');
+
+Route::apiResource('/empresas', 'EmpresaController');
