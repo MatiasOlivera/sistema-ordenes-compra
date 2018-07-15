@@ -70,6 +70,8 @@ Route::apiResource('/tipos-organizacion', 'TipoOrganizacionController')
 /**
  * Empresas
  */
+Route::get('/empresa', 'EmpresaController@view')
+    ->name('empresas.view');
 
 Route::patch('/empresas/{empresa}/restore', 'EmpresaController@restore')
     ->name('empresas.restore');
