@@ -48,4 +48,12 @@ class PersonaJuridica extends Model
     {
         return $this->belongsTo('App\TipoOrganizacion');
     }
+    
+    /**
+     * Obtener las empresas que pertenecen a esta persona jurídica
+     */
+    public function empresas()
+    {
+        return $this->belongsToMany('App\Empresa', 'persona_juridica_empresa');
+    }
 }
