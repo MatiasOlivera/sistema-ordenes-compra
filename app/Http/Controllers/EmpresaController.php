@@ -86,7 +86,10 @@ class EmpresaController extends Controller
      */
     public function show(Empresa $empresa)
     {
-        return $empresa;
+        return Empresa::with('proveedor')
+            ->withTrashed()
+            ->where('id', $empresa->id)
+            ->first();
     }
 
     /**
