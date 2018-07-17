@@ -16,6 +16,8 @@
             >
             </vc-boton-editar>
             
+            <slot name="acciones"></slot>
+            
             <vc-boton-alta
                 v-if="eliminado"
                 :nombre="nombreInstancia"

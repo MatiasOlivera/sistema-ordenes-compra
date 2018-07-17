@@ -9,51 +9,80 @@
         @dar-de-alta="darDeAlta"
         @cerrar="cerrar"
     >
-        <dl>
-            <dt>Nombre de fantasía:</dt>
-            <dd>{{ empresa.nombre_fantasia }}</dd>
+    
+        <template slot="acciones">
+        
+            <button
+                v-if="esProveedor"
+                @click="bajaProveedor"
+                type="button"
+                name="bajaProveedor"
+                class="btn btn-sm btn-outline-warning"
+            >
+                <truck-icon class="icono"></truck-icon> Baja proveedor
+            </button>
             
-            <dt>Es mayorista:</dt>
-            <dd>
-                <check-icon
-                    v-if="empresa.es_mayorista === 1"
-                    class="icono"
-                >
-                </check-icon>
-                <x-icon
-                    v-else
-                    class="icono"
-                >
-                </x-icon>
-            </dd>
+            <button
+                v-else
+                @click="altaProveedor"
+                type="button"
+                name="altaProveedor"
+                class="btn btn-sm btn-outline-primary"
+            >
+                <truck-icon class="icono"></truck-icon> Alta proveedor
+            </button>
+        
+        </template>
+    
+        <template>
             
-            <dt>Creado:</dt>
-            <dd>
-                {{ empresa.created_at | moment('from') }}, 
-                {{ empresa.created_at | moment('L LT a') }}
-            </dd>
-            
-            <dt>Actualizado:</dt>
-            <dd>
-                {{ empresa.updated_at | moment('from') }}, 
-                {{ empresa.updated_at | moment('L LT a') }}
-            </dd>
-            
-            <template v-if="eliminado">
-                <dt>Eliminado:</dt>
+            <dl>
+                <dt>Nombre de fantasía:</dt>
+                <dd>{{ empresa.nombre_fantasia }}</dd>
+                
+                <dt>Mayorista:</dt>
                 <dd>
-                    {{ empresa.deleted_at | moment('from') }}, 
-                    {{ empresa.deleted_at | moment('L LT a') }}
+                    <vc-icono-estado :estado="esMayorista">
+                    </vc-icono-estado>
                 </dd>
-            </template>
-        </dl>
+                
+                <dt>Proveedor:</dt>
+                <dd>
+                    <vc-icono-estado :estado="esProveedor">
+                    </vc-icono-estado>
+                </dd>
+                
+                <dt>Creado:</dt>
+                <dd>
+                    {{ empresa.created_at | moment('from') }}, 
+                    {{ empresa.created_at | moment('L LT a') }}
+                </dd>
+                
+                <dt>Actualizado:</dt>
+                <dd>
+                    {{ empresa.updated_at | moment('from') }}, 
+                    {{ empresa.updated_at | moment('L LT a') }}
+                </dd>
+                
+                <template v-if="eliminado">
+                    <dt>Eliminado:</dt>
+                    <dd>
+                        {{ empresa.deleted_at | moment('from') }}, 
+                        {{ empresa.deleted_at | moment('L LT a') }}
+                    </dd>
+                </template>
+            </dl>
+            
+        </template>
+    
     </base-perfil>
     
 </template>
 
 <script>
-import { CheckIcon, XIcon }  from 'vue-feather-icons';
+import { TruckIcon }         from 'vue-feather-icons';
 import BasePerfil            from '../../components/BasePerfil.vue';
+import VcIconoEstado         from '../../components/VcIconoEstado.vue';
 import ObtenerInstanciaMixin from '../../mixins/obtener_instancia_mixin.js';
 import DarBajaInstanciaMixin from '../../mixins/dar_baja_instancia_mixin.js';
 import DarAltaInstanciaMixin from '../../mixins/dar_alta_instancia_mixin.js';
@@ -62,8 +91,8 @@ export default {
     name: 'vc-perfil-empresa',
     components: {
         BasePerfil,
-        CheckIcon,
-        XIcon
+        VcIconoEstado,
+        TruckIcon
     },
     mixins: [
         ObtenerInstanciaMixin,
@@ -79,6 +108,14 @@ export default {
     computed: {
         titulo() {
             return `Perfil de ${this.empresa.nombre_fantasia}`;
+        },
+        
+        esMayorista() {
+            return this.empresa.es_mayorista === 1 ? true : false;
+        },
+        
+        esProveedor() {
+            return _.isNull(this.empresa.proveedor) ? false : true;
         },
                 
         eliminado() {
@@ -135,6 +172,35 @@ export default {
         editar() {
             BusEventos.$emit('VcPerfilEmpresa:editar', this.id);
             this.$emit('mostrar-form');
+        },
+        
+        altaProveedor() {
+            axios.post(`${this.urlEspecifica}/proveedor`)
+            .then((response) => {
+                this.obtener();
+                BusEventos.$emit('VcPerfilEmpresa:altaProveedor');
+                
+                this.exito({
+                    title: 'Éxito',
+                    message: response.data.mensaje
+                });
+            })
+            .catch((error) => {
+                this.error({
+                    title: 'Error',
+                    message: response.data.mensaje
+                });
+            })
+        },
+        
+        bajaProveedor() {
+            this.$_darBajaInstanciaMixin_eliminar(
+                `${this.urlEspecifica}/proveedor`,
+                () => {
+                    this.obtener();
+                    BusEventos.$emit('VcPerfilEmpresa:bajaProveedor');
+                }
+            );
         },
         
         darDeBaja() {

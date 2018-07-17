@@ -68,6 +68,14 @@ export default {
         BusEventos.$on('VcPerfilEmpresa:restaurada', () => {
             this.obtenerRegistros();
         });
+        
+        BusEventos.$on('VcPerfilEmpresa:altaProveedor', () => {
+            if (this.soloProveedores) this.obtenerRegistros();
+        });
+        
+        BusEventos.$on('VcPerfilEmpresa:bajaProveedor', () => {
+            if (this.soloProveedores) this.obtenerRegistros();
+        });
     },
     static: {
         nombre: 'empresas',
