@@ -18,6 +18,8 @@
                     Solo eliminados
                 </label>
             </div>
+            
+            <slot name="filtros"></slot>
         </template>
     
         <template slot="perfil" slot-scope="{ row: {id} }">

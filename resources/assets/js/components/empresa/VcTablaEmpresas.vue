@@ -2,7 +2,7 @@
 
     <base-tabla
         :nombre="this.$options.static.nombre"
-        :url="this.$options.static.url"
+        :url="url"
         :columnas="this.$options.static.columnas"
         :opciones="this.$options.static.opciones"
         :campoNombre="this.$options.static.campoNombre"
@@ -12,6 +12,21 @@
         @dar-de-baja="darDeBaja"
         @dar-de-alta="darDeAlta"
     >
+    
+        <template slot="filtros">
+            <div class="custom-control custom-checkbox ml-3">
+                <input
+                    v-model="soloProveedores"
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="soloProveedores"
+                >
+                <label class="custom-control-label" for="soloProveedores">
+                    Solo proveedores
+                </label>
+            </div>
+        </template>
+    
     </base-tabla>
 
 </template>
@@ -30,7 +45,15 @@ export default {
     ],
     data() {
         return {
-            obtenerTabla: false
+            obtenerTabla: false,
+            soloProveedores: false
+        }
+    },
+    computed: {
+        url() {
+            return this.soloProveedores
+            ? this.$options.static.url.proveedores
+            : this.$options.static.url.empresas;
         }
     },
     created() {
@@ -48,7 +71,10 @@ export default {
     },
     static: {
         nombre: 'empresas',
-        url: '/empresas',
+        url: {
+            empresas: '/empresas',
+            proveedores: '/proveedores'
+        },
 
         columnas: [
             'nombre_fantasia'
@@ -107,7 +133,7 @@ export default {
 
         darDeBaja(id) {
             this.$_darBajaInstanciaMixin_eliminar(
-                `${this.$options.static.url}/${id}`,
+                `${this.$options.static.url.empresas}/${id}`,
                 () => { this.obtenerRegistros() },
                 this.$options.static.mensajes.baja
             );
@@ -115,7 +141,7 @@ export default {
 
         darDeAlta(id) {
             this.$_darAltaInstanciaMixin_restaurar(
-                `${this.$options.static.url}/${id}/restore`,
+                `${this.$options.static.url.empresas}/${id}/restore`,
                 () => {
                     this.obtenerRegistros();
                     BusEventos.$emit('VcTablaEmpresas:restaurada', id);
