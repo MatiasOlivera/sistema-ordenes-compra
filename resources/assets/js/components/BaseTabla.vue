@@ -3,6 +3,7 @@
     <v-server-table
         :ref="nombre"
         :name="nombre"
+        :url="url"
         :columns="todasColumnas"
         :options="todasOpciones"
     >
@@ -120,17 +121,11 @@ export default {
         
         todasOpciones() {
             let opcionesPorDefecto = {
-                requestFunction: (data) => {
+                requestAdapter: (data) => {
                     let binario = this.soloEliminados ? 1 : 0;
-                    let eliminados = { soloEliminados: binario };
+                    data.soloEliminados = binario;
                     
-                    let parametros = { ...data, ...eliminados };
-                    
-                    return axios.get(this.url, {
-                        params: parametros
-                    }).catch(function (error) {
-                        this.dispatch('error', error);
-                    }.bind(this));
+                    return data;
                 }
             };
             
