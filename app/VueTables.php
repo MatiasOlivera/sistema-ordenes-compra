@@ -7,7 +7,7 @@ use Carbon\Carbon;
 
 class VueTables
 {
-    public function obtener(Request $request, $modelo, array $campos = [], array $modelos = []) {
+    public function obtener(Request $request, $modelo, array $campos = [], array $modelos = [], string $existenciaRelacion = null) {
 
         $busqueda       = $request->query('busqueda', null);
         $limite         = $request->query('limite', 10);
@@ -25,6 +25,10 @@ class VueTables
         
         if (isset($soloEliminados) && $soloEliminados) {
             $datos->onlyTrashed();
+        }
+        
+        if (isset($existenciaRelacion) && $existenciaRelacion) {
+            $datos->has($existenciaRelacion);
         }
 
         if (isset($busqueda) && $busqueda) {
