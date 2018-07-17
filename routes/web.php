@@ -77,3 +77,16 @@ Route::patch('/empresas/{empresa}/restore', 'EmpresaController@restore')
     ->name('empresas.restore');
 
 Route::apiResource('/empresas', 'EmpresaController');
+
+/**
+ * Proveedores
+ */
+Route::post('/empresas/{empresa}/proveedor', 'ProveedorController@store')
+    ->name('proveedores.store');
+
+Route::delete('/empresas/{empresa}/proveedor', 'ProveedorController@destroy')
+    ->name('proveedores.destroy');
+
+Route::apiResource('/proveedores', 'ProveedorController')
+    ->only(['index'])
+    ->parameters(['proveedores' => 'proveedor']);
