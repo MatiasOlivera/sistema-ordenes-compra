@@ -39,4 +39,12 @@ class Empresa extends Model
     {
         return $this->belongsToMany('App\PersonaJuridica');
     }
+
+    /**
+     * Dar de alta la empresa como proveedor
+     */
+    public function proveedor()
+    {
+        return $this->hasOne('App\Proveedor', 'id');
+    }
 }
