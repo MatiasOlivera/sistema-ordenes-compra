@@ -1,6 +1,6 @@
 <template lang="html">
     <form @submit.prevent="autenticar" class="form-signin">
-        <h1 class="h3 mb-3">Sistema de Ordenes</h1>
+        <h1 class="h3 mb-3">Gestión de ordenes</h1>
 
         <label for="username" class="sr-only">DNI</label>
         <input v-model="user.username"
