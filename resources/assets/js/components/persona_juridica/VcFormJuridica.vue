@@ -303,12 +303,12 @@ export default {
         guardado() {
             this.$emit('cerrar');
             BusEventos.$emit('VcFormJuridica:guardada', this.id);
-            this.resetearTodo();
+            this.resetearFormulario();
         },
         
         cerrar() {
             this.$emit('cerrar');
-            this.resetearTodo();
+            this.resetearFormulario();
         },
         
         resetearId() {
@@ -325,6 +325,12 @@ export default {
         
         resetearTiposOrganizacion() {
             this.tiposOrganizacion = [ ...this.$options.static.tiposOrganizacionPorDefecto ];
+        },
+        
+        resetearFormulario() {
+            this.resetearJuridica();
+            this.resetearId();
+            this.resetearValidacion();
         },
         
         resetearTodo() {
