@@ -37,7 +37,8 @@ class Empresa extends Model
      */
     public function juridicas()
     {
-        return $this->belongsToMany('App\PersonaJuridica');
+        return $this->belongsToMany('App\PersonaJuridica', 'persona_juridica_empresa')
+            ->withTimestamps();
     }
 
     /**
