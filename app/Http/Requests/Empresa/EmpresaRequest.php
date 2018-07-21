@@ -12,7 +12,8 @@ class EmpresaRequest extends FormRequest
             'required',
             'string',
             'min:3',
-            'max:100'
+            'max:100',
+            'unique:empresas,nombre_fantasia'
         ],
         'es_mayorista' => [
             'bail',
