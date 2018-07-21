@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Empresa;
 use App\Http\Requests\Empresa\GuardarEmpresaRequest;
+use App\Http\Requests\Empresa\ActualizarEmpresaRequest;
 use App\VueTables;
 use Illuminate\Http\Request;
 
@@ -99,7 +100,7 @@ class EmpresaController extends Controller
      * @param  \App\Empresa  $empresa
      * @return \Illuminate\Http\Response
      */
-    public function update(EmpresaRequest $request, Empresa $empresa)
+    public function update(ActualizarEmpresaRequest $request, Empresa $empresa)
     {
         $nombre = $empresa->nombre_fantasia;
         $input = $request->all();
