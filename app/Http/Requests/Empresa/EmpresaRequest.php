@@ -4,7 +4,7 @@ namespace App\Http\Requests\Empresa;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EmpresaRequest extends FormRequest
+abstract class EmpresaRequest extends FormRequest
 {
     protected $reglas = [
         'nombre_fantasia' => [

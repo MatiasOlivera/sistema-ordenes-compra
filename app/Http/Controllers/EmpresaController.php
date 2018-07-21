@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Empresa;
-use App\Http\Requests\Empresa\EmpresaRequest;
+use App\Http\Requests\Empresa\GuardarEmpresaRequest;
 use App\VueTables;
 use Illuminate\Http\Request;
 
@@ -58,7 +58,7 @@ class EmpresaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(EmpresaRequest $request)
+    public function store(GuardarEmpresaRequest $request)
     {
         $nombre = $request->input('nombre_fantasia');
         $input = $request->all();
