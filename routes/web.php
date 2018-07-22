@@ -56,6 +56,15 @@ Route::apiResource('/juridicas', 'PersonaJuridicaController')
     ->parameters(['juridicas' => 'personaJuridica']);
 
 /**
+ * Relación entre personas jurídicas y empresas
+ */
+Route::post('/juridicas/{personaJuridica}/empresas/{empresa}', 'JuridicaEmpresaController@store')
+    ->name('juridicas_empresas.store');
+
+Route::delete('/juridicas/{personaJuridica}/empresas/{empresa}', 'JuridicaEmpresaController@destroy')
+    ->name('juridicas_empresas.destroy');
+
+/**
  * Tipos de organización
  */
 Route::get('/tipos-de-organizacion', 'TipoOrganizacionController@view')
