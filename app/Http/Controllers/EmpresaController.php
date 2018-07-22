@@ -69,7 +69,10 @@ class EmpresaController extends Controller
         $guardado = $empresa->save();
         
         if ($guardado) {
-            $respuesta = ['mensaje' => "{$nombre} ha sido creada"];
+            $respuesta = [
+                'mensaje' => "{$nombre} ha sido creada",
+                'data' => $empresa
+            ];
             $codigoEstado = 201;
         } else {
             $respuesta = ['mensaje' => "Hubo un problema al intentar guardar a ${$nombre}"];
