@@ -52,6 +52,17 @@
                     </vc-icono-estado>
                 </dd>
                 
+                <template v-if="conJuridicas">
+                    <dt>Personas jurídicas:</dt>
+                    <dd>
+                        <ul class="list-unstyled">
+                            <li v-for="juridica in empresa.juridicas">
+                                {{ juridica.denominacion }}
+                            </li>
+                        </ul>
+                    </dd>
+                </template>
+                
                 <dt>Creado:</dt>
                 <dd>
                     {{ empresa.created_at | moment('from') }}, 
@@ -115,11 +126,15 @@ export default {
         },
         
         esProveedor() {
-            return _.isNull(this.empresa.proveedor) ? false : true;
+            return ! _.isNull(this.empresa.proveedor);
+        },
+        
+        conJuridicas() {
+            return ! _.isEmpty(this.empresa.juridicas);
         },
                 
         eliminado() {
-            return _.isNull(this.empresa.deleted_at) ? false : true;
+            return ! _.isNull(this.empresa.deleted_at);
         },
         
         urlEspecifica() {

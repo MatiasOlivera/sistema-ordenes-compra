@@ -90,7 +90,7 @@ class EmpresaController extends Controller
      */
     public function show(Empresa $empresa)
     {
-        return Empresa::with('proveedor')
+        return Empresa::with(['juridicas', 'proveedor'])
             ->withTrashed()
             ->where('id', $empresa->id)
             ->first();
