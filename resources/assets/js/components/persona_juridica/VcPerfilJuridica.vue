@@ -21,6 +21,17 @@
                 </template>
             </dd>
             
+            <template v-if="conEmpresas">
+                <dt>Empresas:</dt>
+                <dd>
+                    <ul class="list-unstyled">
+                        <li v-for="empresa in juridica.empresas">
+                            {{ empresa.nombre_fantasia }}
+                        </li>
+                    </ul>
+                </dd>
+            </template>
+            
             <dt>Creado:</dt>
             <dd>
                 {{ juridica.created_at | moment('from') }}, 
@@ -72,6 +83,10 @@ export default {
     computed: {
         titulo() {
             return `Perfil de ${this.juridica.denominacion}`;
+        },
+        
+        conEmpresas() {
+            return ! _.isEmpty(this.juridica.empresas);
         },
         
         eliminado() {
