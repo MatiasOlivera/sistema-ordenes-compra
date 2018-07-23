@@ -87,7 +87,10 @@ class PersonaJuridicaController extends Controller
         }
 
         if ($transaccion) {
-            $respuesta = ['mensaje' => "{$denominacion} ha sido creada"];
+            $respuesta = [
+                'mensaje' => "{$denominacion} ha sido creada",
+                'data'    => $personaJuridica
+            ];
             $codigoEstado = 201;
         } else {
             $respuesta = ['mensaje' => "Hubo un problema al intentar guardar a {$denominacion}"];

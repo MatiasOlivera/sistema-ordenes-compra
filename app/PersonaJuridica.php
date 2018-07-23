@@ -15,6 +15,12 @@ class PersonaJuridica extends Model
      * @var string
      */
     protected $table = 'personas_juridicas';
+    
+    /**
+     * La clave primaria no es autoincremental
+     * @var boolean
+     */
+    public $incrementing = false;
 
     /**
     * The attributes that should be mutated to dates.
