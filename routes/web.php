@@ -88,6 +88,12 @@ Route::patch('/empresas/{empresa}/restore', 'EmpresaController@restore')
 Route::apiResource('/empresas', 'EmpresaController');
 
 /**
+ * Actividades econonómicas
+ */
+Route::apiResource('/actividades-economicas', 'ActividadEconomicaController')
+    ->only(['index']);
+
+/**
  * Proveedores
  */
 Route::post('/empresas/{empresa}/proveedor', 'ProveedorController@store')
