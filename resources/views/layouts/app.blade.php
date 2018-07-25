@@ -17,7 +17,7 @@
 
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Ordenes</a>
+                        <a class="nav-link" href="{{ route('ordenes.view') }}">Ordenes</a>
                     </li>
 
                     <li class="nav-item">
@@ -39,6 +39,7 @@
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="dropdownMenu">
+                            <a href="{{ route('rubros.view') }}" class="dropdown-item">Rubros</a> 
                             <a href="{{ route('tipos-organizacion.view') }}" class="dropdown-item">Tipos de organización</a>
 
                             <div class="dropdown-divider"></div>

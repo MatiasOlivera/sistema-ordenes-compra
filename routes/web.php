@@ -96,6 +96,8 @@ Route::apiResource('/actividades-economicas', 'ActividadEconomicaController')
 /**
  * Rubros
  */
+Route::get('/rubro', 'RubroController@view')
+    ->name('rubros.view');
 
 Route::patch('/rubros/{rubro}/restore', 'RubroController@restore')
     ->name('rubros.restore');

@@ -22,6 +22,16 @@ class RubroController extends Controller
     }
     
     /**
+     * Mostrar la vista
+     *
+     * @return \Illuminate\Http\Response
+     */
+    
+    public function view() {
+        return view('rubros');
+    }
+    
+    /**
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
