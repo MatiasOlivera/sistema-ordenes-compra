@@ -94,6 +94,15 @@ Route::apiResource('/actividades-economicas', 'ActividadEconomicaController')
     ->only(['index']);
 
 /**
+ * Rubros
+ */
+
+Route::patch('/rubros/{rubro}/restore', 'RubroController@restore')
+    ->name('rubros.restore');
+
+Route::apiResource('/rubros', 'RubroController');
+
+/**
  * Proveedores
  */
 Route::post('/empresas/{empresa}/proveedor', 'ProveedorController@store')

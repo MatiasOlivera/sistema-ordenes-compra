@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\PersonaJuridica;
 use App\TipoOrganizacion;
 use App\Empresa;
+use App\Rubro;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -52,6 +53,15 @@ class RouteServiceProvider extends ServiceProvider
          */
         Route::bind('empresa', function($id) {
             return Empresa::withTrashed()
+                ->where('id', $id)
+                ->firstOrFail();
+        });
+        
+        /**
+         * Rubro
+         */
+        Route::bind('rubro', function($id) {
+            return Rubro::withTrashed()
                 ->where('id', $id)
                 ->firstOrFail();
         });
