@@ -39,11 +39,17 @@
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="dropdownMenu">
-                            <a href="{{ route('rubros.view') }}" class="dropdown-item">Rubros</a> 
-                            <a href="{{ route('tipos-organizacion.view') }}" class="dropdown-item">Tipos de organización</a>
-
+                            <h6 class="dropdown-header">Empresa</h6>
+                            <a href="{{ route('rubros.view') }}" class="dropdown-item">Rubros</a>
+                            
                             <div class="dropdown-divider"></div>
-
+                            
+                            <h6 class="dropdown-header">Persona jurídica</h6>
+                            <a href="{{ route('tipos-organizacion.view') }}" class="dropdown-item">Tipos de organización</a>
+                            
+                            <div class="dropdown-divider"></div>
+                            
+                            <h6 class="dropdown-header">Seguridad</h6>
                             <a class="dropdown-item" href="#">Usuarios</a>
                         </div>
                     </li>
