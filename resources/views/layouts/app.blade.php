@@ -17,7 +17,7 @@
 
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('ordenes.view') }}">Ordenes</a>
+                        <a class="nav-link" href="#">Ordenes</a>
                     </li>
 
                     <li class="nav-item">
