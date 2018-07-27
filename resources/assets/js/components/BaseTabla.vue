@@ -23,45 +23,44 @@
             <slot name="filtros"></slot>
         </template>
     
-        <template slot="perfil" slot-scope="{ row: {id} }">
-            <button @click="verPerfil(id)" type="button" name="perfil"
-            class="btn btn-sm btn-outline-info">
-                <info-icon class="icono"></info-icon> Perfil
-            </button>
-        </template>
-
-        <template slot="editar" slot-scope="{ row: {id} }">
-            <vc-boton-editar @click.native="editar(id)"></vc-boton-editar>
-        </template>
-
-        <template slot="baja" slot-scope="{ row: fila }">
-            <vc-boton-baja
-                :nombre="fila[campoNombre]"
-                @confirmado="darDeBaja(fila.id)"
+        <template slot="acciones" slot-scope="{ row: fila, row: {id} }">
+            <vc-boton-info
+                @click.native="verPerfil(id)"
             >
-            </vc-boton-baja>
-        </template>
-        
-        <template slot="alta" slot-scope="{ row: fila }">
+            </vc-boton-info>
+                                    
+            <vc-boton-editar
+                @click.native="editar(id)"
+            >
+            </vc-boton-editar>
+            
             <vc-boton-alta
+                v-if="soloEliminados"
                 :nombre="fila[campoNombre]"
                 @confirmado="darDeAlta(fila.id)"
             >
             </vc-boton-alta>
+            
+            <vc-boton-baja
+                v-else
+                :nombre="fila[campoNombre]"
+                @confirmado="darDeBaja(fila.id)"
+            >
+            </vc-boton-baja>
         </template>
     </v-server-table>
 
 </template>
 
 <script>
-import { InfoIcon } from 'vue-feather-icons';
+import VcBotonInfo   from '../components/VcBotonInfo.vue';
 import VcBotonEditar from '../components/VcBotonEditar.vue';
-import VcBotonBaja from '../components/VcBotonBaja.vue';
-import VcBotonAlta from '../components/VcBotonAlta.vue';
+import VcBotonBaja   from '../components/VcBotonBaja.vue';
+import VcBotonAlta   from '../components/VcBotonAlta.vue';
 
 export default {
     components: {
-        InfoIcon,
+        VcBotonInfo,
         VcBotonEditar,
         VcBotonBaja,
         VcBotonAlta
@@ -105,17 +104,7 @@ export default {
     computed: {
         todasColumnas() {
             const especificas = this.columnas;
-            const porDefecto = ['perfil', 'editar', 'baja'];
-
-            /**
-             * Ocultar las columnas editar y eliminar
-             * cuando se ven los registros eliminados
-             */
-            if (this.soloEliminados) {
-                porDefecto.splice(1, 2);
-                porDefecto.push('alta');
-            }
-            
+            const porDefecto = ['acciones'];
             return especificas.concat(porDefecto);
         },
         
