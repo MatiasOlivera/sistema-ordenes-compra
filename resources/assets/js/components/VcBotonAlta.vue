@@ -5,23 +5,43 @@
         type="button"
         name="alta"
         class="btn btn-sm btn-outline-primary"
+        data-toggle="tooltip"
+        data-placement="top"
+        :title="tooltip"
     >
-        <arrow-up-icon class="icono"></arrow-up-icon> Dar de alta
+        <arrow-up-icon class="icono"></arrow-up-icon>
     </button>
     
 </template>
 
 <script>
+/**
+ * Mixins
+ */
+import TooltipMixin from '../mixins/tooltip_mixin.js';
+
+/**
+ * Componentes
+ */
 import { ArrowUpIcon } from 'vue-feather-icons';
 
 export default {
+    name: 'vc-boton-alta',
+    mixins: [ TooltipMixin ],
     components: { ArrowUpIcon },
     props: {
+        tooltip: {
+            type: String,
+            default: 'Dar de alta'
+        },
         nombre: {
             type: String
         }
     },
-    methods: {
+    static: {
+        elemento: 'button[name="alta"]'
+    },
+    methods: {        
         confirmar() {
             
             function ocultarNotificacion(instancia, notificacion) {
@@ -57,6 +77,8 @@ export default {
                     ]
                 ]
             });
+            
+            this.$_TooltipMixin_ocultarTooltip();
         }
     },
     notifications: {

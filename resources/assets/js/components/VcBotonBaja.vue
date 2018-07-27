@@ -3,23 +3,43 @@
     <button
         @click="confirmar"
         type="button"
-        name="eliminar"
+        name="baja"
         class="btn btn-sm btn-outline-danger"
+        data-toggle="tooltip"
+        data-placement="top"
+        :title="tooltip"
     >
-        <trash-icon class="icono"></trash-icon> Eliminar
+        <trash-icon class="icono"></trash-icon>
     </button>
 
 </template>
 
 <script>
+/**
+ * Mixins
+ */
+import TooltipMixin from '../mixins/tooltip_mixin.js';
+
+/**
+ * Componentes
+ */
 import { TrashIcon } from 'vue-feather-icons';
 
 export default {
+    name: 'vc-boton-baja',
+    mixins: [ TooltipMixin ],
     components: { TrashIcon },
     props: {
+        tooltip: {
+            type: String,
+            default: 'Dar de baja'
+        },
         nombre: {
             type: String
         }
+    },
+    static: {
+        elemento: 'button[name="baja"]'
     },
     methods: {
         confirmar() {
@@ -57,6 +77,8 @@ export default {
                     ]
                 ]
             });
+            
+            this.$_TooltipMixin_ocultarTooltip();
         }
     },
     notifications: {
