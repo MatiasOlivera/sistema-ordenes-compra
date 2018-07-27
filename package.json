@@ -26,6 +26,6 @@
         "vue-multiselect": "^2.1.0",
         "vue-notifications": "^0.9.0",
         "vue-scrollto": "^2.11.0",
-        "vue-tables-2": "^1.4.63",
+        "vue-tables-2": "^1.4.63"
     }
 }
