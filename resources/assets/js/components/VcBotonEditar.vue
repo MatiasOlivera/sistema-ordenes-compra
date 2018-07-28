@@ -1,7 +1,7 @@
 <template lang="html">
 
     <button
-        @click="$_TooltipMixin_ocultarTooltip"
+        @click="click"
         type="button"
         name="editar"
         class="btn btn-sm btn-outline-primary"
@@ -36,6 +36,12 @@ export default {
     },
     static: {
         elemento: 'button[name="editar"]'
+    },
+    methods: {
+        click() {
+            this.$_TooltipMixin_ocultarTooltip();
+            this.$emit('click');
+        }
     }
 }
 </script>

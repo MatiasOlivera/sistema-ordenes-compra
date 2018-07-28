@@ -25,12 +25,12 @@
     
         <template slot="acciones" slot-scope="{ row: fila, row: {id} }">
             <vc-boton-info
-                @click.native="verPerfil(id)"
+                @click="verPerfil(id)"
             >
             </vc-boton-info>
                                     
             <vc-boton-editar
-                @click.native="editar(id)"
+                @click="editar(id)"
             >
             </vc-boton-editar>
             

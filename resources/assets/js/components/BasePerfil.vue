@@ -12,7 +12,7 @@
         <div class="mb-3">
             <vc-boton-editar
                 v-if="!eliminado"
-                @click.native="editar"
+                @click="editar"
             >
             </vc-boton-editar>
             
