@@ -1,13 +1,11 @@
 <template lang="html">
 
-    <div>
-        <!-- Cabecera -->
-        <base-cabecera
-            :titulo="titulo"
-            @cerrar="cerrar"
-        >
-        </base-cabecera>
-
+    <base-tarjeta
+        :titulo="titulo"
+        :botonIzqVisible="tarjeta.botonIzq.visible"
+        :botonIzqTipo="tarjeta.botonIzq.tipo"
+        @cerrar="cerrar"
+    >
         <!-- Botones -->
         <div class="mb-3">
             <vc-boton-editar
@@ -30,25 +28,28 @@
                 @confirmado="darDeBaja"
             >
             </vc-boton-baja>
-            
         </div>
+        
         
         <!-- Datos -->
         <slot></slot>
-    </div>
+    </base-tarjeta>
 
 </template>
 
 <script>
-import BaseCabecera from '../components/BaseCabecera.vue';
+/**
+ * Componentes
+ */
+import BaseTarjeta   from '../components/BaseTarjeta.vue';
 import VcBotonEditar from '../components/VcBotonEditar.vue';
-import VcBotonBaja from '../components/VcBotonBaja.vue';
-import VcBotonAlta from '../components/VcBotonAlta.vue';
+import VcBotonBaja   from '../components/VcBotonBaja.vue';
+import VcBotonAlta   from '../components/VcBotonAlta.vue';
 
 export default {
     name: 'base-perfil',
     components: {
-        BaseCabecera,
+        BaseTarjeta,
         VcBotonEditar,
         VcBotonBaja,
         VcBotonAlta
@@ -66,6 +67,16 @@ export default {
             type: Boolean,
             required: true,
             default: false
+        }
+    },
+    data() {
+        return {
+            tarjeta: {
+                botonIzq: {
+                    visible: true,
+                    tipo: 'cerrar'
+                }
+            }
         }
     },
     methods: {
