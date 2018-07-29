@@ -2,65 +2,72 @@
     
     <form @submit.prevent="guardar">
 
-        <!-- Cabecera -->
-        <base-cabecera
+        <base-tarjeta
             :titulo="titulo"
-            @cerrar="cerrar"
+            :botonIzqVisible="tarjeta.botonIzq.visible"
+            :botonIzqTipo="tarjeta.botonIzq.tipo"
+            @volver="cerrar"
         >
-        </base-cabecera>
+            <!-- Campos -->
+            <slot></slot>
 
-        <!-- Campos -->
-        <slot></slot>
+            <!-- Botones -->
+            <div class="row mt-4">
+                <div class="col-auto">
+                    <button type="submit" name="submit" class="btn btn-primary">
+                        <save-icon class="icono"></save-icon> Guardar
+                    </button>
+                </div>
 
-        <!-- Botones -->
-        <div class="row mt-4">
-            <div class="col-auto">
-                <button type="submit" name="submit" class="btn btn-primary">
-                    <save-icon class="icono"></save-icon> Guardar
-                </button>
+                <div class="col-auto ml-auto">
+                    <button
+                        v-if="id === null"
+                        @click.prevent="limpiar"
+                        type="reset"
+                        name="reset"
+                        class="btn btn-secondary"
+                    >
+                        <delete-icon class="icono"></delete-icon> Limpiar
+                    </button>
+                    
+                    <button
+                        v-else
+                        @click="deshacer"
+                        type="button"
+                        name="deshacer"
+                        class="btn btn-secondary"
+                    >
+                        <rotate-ccw-icon class="icono"></rotate-ccw-icon> Deshacer
+                    </button>
+                </div>
             </div>
-
-            <div class="col-auto ml-auto">
-                <button
-                    v-if="id === null"
-                    @click.prevent="limpiar"
-                    type="reset"
-                    name="reset"
-                    class="btn btn-secondary"
-                >
-                    <delete-icon class="icono"></delete-icon> Limpiar
-                </button>
-                
-                <button
-                    v-else
-                    @click="deshacer"
-                    type="button"
-                    name="deshacer"
-                    class="btn btn-secondary"
-                >
-                    <rotate-ccw-icon class="icono"></rotate-ccw-icon> Deshacer
-                </button>
-            </div>
-        </div>
+        </base-tarjeta>
 
     </form>
 
 </template>
 
 <script>
-import { SaveIcon, DeleteIcon, RotateCcwIcon } from 'vue-feather-icons';
-import BaseCabecera from '../components/BaseCabecera.vue';
+/**
+ * Mixins
+ */
 import ObtenerInstanciaMixin from '../mixins/obtener_instancia_mixin.js';
+
+/**
+ * Componentes
+ */
+import BaseTarjeta                             from '../components/BaseTarjeta.vue';
+import { SaveIcon, DeleteIcon, RotateCcwIcon } from 'vue-feather-icons';
 
 export default {
     name: 'base-formulario',
+    mixins: [ ObtenerInstanciaMixin ],
     components: {
-        BaseCabecera,
+        BaseTarjeta,
         SaveIcon,
         DeleteIcon,
         RotateCcwIcon
     },
-    mixins: [ ObtenerInstanciaMixin ],
     props: {
         titulos: {
             type: Object,
@@ -115,7 +122,13 @@ export default {
     },
     data() {
         return {
-            modeloObtenido: {}
+            modeloObtenido: {},
+            tarjeta: {
+                botonIzq: {
+                    visible: true,
+                    tipo: 'volver'
+                }
+            }
         }
     },
     computed: {
