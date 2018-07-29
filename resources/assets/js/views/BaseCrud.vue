@@ -22,7 +22,7 @@
             <!-- Perfil -->
             <div
                 v-show="perfil.visible"
-                class="col-xl-6 p-3 mb-2 bg-white rounded box-shadow"
+                class="col-xl-6"
             >
                 <slot
                     name="perfil"
@@ -35,7 +35,7 @@
             <!-- Formulario -->
             <div
                 v-show="form.visible"
-                class="col-xl-6 p-3 mb-2 bg-white rounded box-shadow"
+                class="col-xl-6"
             >
                 <slot
                     name="formulario"
