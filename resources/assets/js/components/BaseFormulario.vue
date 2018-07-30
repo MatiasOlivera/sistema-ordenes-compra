@@ -5,8 +5,9 @@
         <base-tarjeta
             :titulo="titulo"
             :botonIzqVisible="tarjeta.botonIzq.visible"
-            :botonIzqTipo="tarjeta.botonIzq.tipo"
+            :botonIzqTipo="botonIzqTipo"
             @volver="cerrar"
+            @cerrar="cerrar"
         >
             <!-- Campos -->
             <slot></slot>
@@ -125,8 +126,7 @@ export default {
             modeloObtenido: {},
             tarjeta: {
                 botonIzq: {
-                    visible: true,
-                    tipo: 'volver'
+                    visible: true
                 }
             }
         }
@@ -137,6 +137,10 @@ export default {
         },
         titulo() {
             return this.id ? this.titulos.editar : this.titulos.crear;
+        },
+        
+        botonIzqTipo() {
+            return this.id ? 'volver' : 'cerrar';
         }
     },
     watch: {
