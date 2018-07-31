@@ -19,6 +19,17 @@
             @cerrar="verEmpresa"
         >
         </vc-form-empresa>
+        
+        <!-- Personas jurídicas -->
+        <vc-tarjeta-juridicas
+            :juridicasNoAsociadas="juridicasNoAsociadas"
+            :juridicas="empresa.juridicas"
+            :mensaje="$options.static.tarjetaJuridicas.mensaje"
+            @buscar="buscarJuridica"
+            @dar-de-alta="darDeAltaJuridica"
+            @dar-de-baja="darDeBajaJuridica"
+        >
+        </vc-tarjeta-juridicas>
     </div>
     
 </template>
@@ -32,15 +43,17 @@ import ObtenerInstanciaMixin from '../../mixins/obtener_instancia_mixin.js';
 /**
  * Componentes
  */
-import VcDetalleEmpresa from './VcDetalleEmpresa.vue';
-import VcFormEmpresa    from './VcFormEmpresa';
+import VcDetalleEmpresa   from './VcDetalleEmpresa.vue';
+import VcFormEmpresa      from './VcFormEmpresa';
+import VcTarjetaJuridicas from '../persona_juridica/VcTarjetaJuridicas.vue'
 
 export default {
     name: 'vc-perfil-empresa',
     mixins: [ ObtenerInstanciaMixin ],
     components: {
         VcDetalleEmpresa,
-        VcFormEmpresa
+        VcFormEmpresa,
+        VcTarjetaJuridicas
     },
     data() {
         return {
@@ -50,8 +63,13 @@ export default {
                 es_mayorista: null,
                 created_at: new Date(),
                 updated_at: new Date(),
-                deleted_at: new Date()
+                deleted_at: new Date(),
+                juridicas: []
             },
+            tarjetaJuridicas: {
+                estaCargando: false
+            },
+            juridicasNoAsociadas: [],
             ui: {
                 detalle: {
                     visible: true
@@ -71,8 +89,12 @@ export default {
     },
     static: {
         url: {
-            empresas: '/empresas'
+            empresas: '/empresas',
+            juridicas: '/juridicas'
         },
+        tarjetaJuridicas: {
+            mensaje: 'No existen personas jurídicas asociadas a esta empresa'
+        }
     },
     methods: {
         setID(id) {
@@ -103,6 +125,92 @@ export default {
         
         cerrar() {
             this.$emit('cerrar');
+        },
+        
+        buscarJuridica(valorBuscado) {
+            this.tarjetaJuridicas.estaCargando = true;
+            
+            axios.get(this.$options.static.url.juridicas, {
+                params: {
+                    busqueda: valorBuscado,
+                    limite: 10,
+                    pagina: 1,
+                    ordenarPor: 'denominacion',
+                    ascendente: 1,
+                    soloEliminados: 0,
+                    empresaId: this.empresa.id
+                }
+            })
+            .then((response) => {
+                let juridicas = response.data.data;
+                this.juridicasNoAsociadas = juridicas;
+                
+                this.tarjetaJuridicas.estaCargando = false;
+            })
+            .catch((error) => {
+                if (error.response) {
+                    let status = error.response.status;
+
+                    switch (status) {
+                        case 404:
+                            this.error({
+                                title: 'No encontrados',
+                                message: 'No se ha encontrado ningúna persona jurídica'
+                            });
+
+                            break;
+                        default:
+                            this.error({
+                                title: 'Error',
+                                message: 'No se pudo traer las personas jurídicas'
+                            });
+                    }
+                }
+            })
+        },
+        
+        darDeAltaJuridica(id) {
+            if (!_.isNull(id) && !_.isUndefined(id)) {
+                axios.post(`/juridicas/${id}/empresas/${this.id}`)
+                .then((response) => {
+                    if (response.status === 201) {
+                        this.exito({
+                            message: response.data.mensaje
+                        });
+                        
+                        this.obtener();
+                    }
+                })
+                .catch((error) => {
+                    if (error.response && error.response.status === 400) {
+                        this.error({
+                            message: error.response.data.mensaje
+                        });
+                    }
+                });
+            }
+        },
+        
+        darDeBajaJuridica(id) {
+            if (!_.isNull(id) && !_.isUndefined(id)) {
+                axios.delete(`/juridicas/${id}/empresas/${this.id}`)
+                .then((response) => {
+                    if (response.status === 200) {
+                        this.exito({
+                            message: response.data.mensaje
+                        });
+                        
+                        this.obtener();
+                    }
+                })
+                .catch((error) => {
+                    if (error.response && error.response.status === 400) {
+                        this.error({
+                            message: error.response.data.mensaje
+                        });
+                    }
+                });
+            }
         }
     },
     notifications: {
