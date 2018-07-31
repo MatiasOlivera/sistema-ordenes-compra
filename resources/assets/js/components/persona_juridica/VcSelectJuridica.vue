@@ -49,15 +49,17 @@ export default {
         juridicas: {
             type: Array,
             required: true
-        },
-        estaCargando: {
-            type: Boolean,
-            default: false
         }
     },
     data() {
         return {
-            seleccionada: []
+            seleccionada: [],
+            estaCargando: false
+        }
+    },
+    watch: {
+        juridicas: function() {
+            this.estaCargando = false;
         }
     },
     static: {
@@ -66,6 +68,7 @@ export default {
     },
     methods: {
         buscarJuridicas(valorBuscado) {
+            this.estaCargando = true;
             this.$emit('buscar', valorBuscado);
         },
         

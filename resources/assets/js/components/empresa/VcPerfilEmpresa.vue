@@ -66,9 +66,6 @@ export default {
                 deleted_at: new Date(),
                 juridicas: []
             },
-            tarjetaJuridicas: {
-                estaCargando: false
-            },
             juridicasNoAsociadas: [],
             ui: {
                 detalle: {
@@ -128,8 +125,6 @@ export default {
         },
         
         buscarJuridica(valorBuscado) {
-            this.tarjetaJuridicas.estaCargando = true;
-            
             axios.get(this.$options.static.url.juridicas, {
                 params: {
                     busqueda: valorBuscado,
@@ -144,8 +139,6 @@ export default {
             .then((response) => {
                 let juridicas = response.data.data;
                 this.juridicasNoAsociadas = juridicas;
-                
-                this.tarjetaJuridicas.estaCargando = false;
             })
             .catch((error) => {
                 if (error.response) {
