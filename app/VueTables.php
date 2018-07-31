@@ -7,8 +7,8 @@ use Carbon\Carbon;
 
 class VueTables
 {
-    public function obtener(Request $request, $modelo, array $campos = [], array $modelos = [], string $existenciaRelacion = null) {
-
+    public function obtener(Request $request, $modelo, array $campos = [], array $modelos = [], string $existenciaRelacion = null, array $excluir = []) {
+        
         $busqueda       = $request->query('busqueda', null);
         $limite         = $request->query('limite', 10);
         $pagina         = $request->query('pagina', 1);
@@ -25,6 +25,12 @@ class VueTables
         
         if (isset($soloEliminados) && $soloEliminados) {
             $datos->onlyTrashed();
+        }
+        
+        if (isset($excluir) && $excluir) {
+            $datos->whereDoesntHave($excluir[0], function($consulta) use ($excluir) {
+                $consulta->where($excluir[1], $excluir[2]);
+            });
         }
         
         if (isset($existenciaRelacion) && $existenciaRelacion) {

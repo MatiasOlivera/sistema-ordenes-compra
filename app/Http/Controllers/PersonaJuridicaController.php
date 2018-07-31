@@ -41,17 +41,26 @@ class PersonaJuridicaController extends Controller
      */
     public function index(Request $request)
     {
+        $empresaId = $request->query('empresaId', null);
+        
         $vuetable = new VueTables();
 
         $modelo  = new PersonaJuridica();
         $modelos = ['tipoOrganizacion'];
         $campos  = ['denominacion', 'cuit'];
-
+        $excluir = [];
+        
+        if ($empresaId) {
+            $excluir = ['empresas', 'empresa_id', $empresaId];
+        }
+        
         $respuesta = $vuetable->obtener(
             $request,
             $modelo,
             $campos,
-            $modelos
+            $modelos,
+            null,
+            $excluir
         );
 
         return $respuesta;
