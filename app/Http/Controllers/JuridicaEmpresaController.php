@@ -31,6 +31,16 @@ class JuridicaEmpresaController extends Controller
         $denominacionJuridica = $personaJuridica->denominacion;
         $nombreEmpresa = $empresa->nombre_fantasia;
         
+        $existente = $personaJuridica->empresas()
+            ->where('empresa_id', $empresa->id)
+            ->first();
+        
+        if ($existente) {
+            $respuesta = ['mensaje' => "{$denominacionJuridica} ya es dueña de {$nombreEmpresa}"];
+            $codigoEstado = 400;
+            return response()->json($respuesta, $codigoEstado);
+        }
+        
         $personaJuridica->empresas()->attach($empresa->id);
         $asociada = $personaJuridica->save();
         
