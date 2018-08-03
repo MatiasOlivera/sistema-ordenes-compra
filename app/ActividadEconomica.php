@@ -29,4 +29,13 @@ class ActividadEconomica extends Model
      * @var array
      */
     protected $fillable = ['descripcion'];
+    
+    /**
+     * Obtener las empresas que se dedican a esta actividad económica
+     */
+    public function empresas()
+    {
+        return $this->belongsToMany('App\Empresa', 'empresa_actividad')
+            ->withTimestamps();
+    }
 }

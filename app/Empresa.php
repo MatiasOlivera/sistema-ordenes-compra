@@ -48,4 +48,13 @@ class Empresa extends Model
     {
         return $this->hasOne('App\Proveedor', 'id');
     }
+    
+    /**
+     * Obtener las actividades económicas a las que se dedica esta empresa
+     */
+    public function actividades()
+    {
+        return $this->belongsToMany('App\ActividadEconomica', 'empresa_actividad')
+            ->withTimestamps();
+    }
 }
