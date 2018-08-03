@@ -100,6 +100,15 @@ Route::apiResource('/actividades-economicas', 'ActividadEconomicaController')
     ->parameters(['actividades-economicas' => 'actividadEconomica']);
 
 /**
+ * Relación entre empresas y actividades econonómicas
+ */
+Route::post('/empresas/{empresa}/actividades/{actividadEconomica}', 'EmpresaActividadController@store')
+    ->name('empresas_actividades.store');
+
+Route::delete('/empresas/{empresa}/actividades/{actividadEconomica}', 'EmpresaActividadController@destroy')
+    ->name('empresas_actividades.destroy');
+
+/**
  * Proveedores
  */
 Route::post('/empresas/{empresa}/proveedor', 'ProveedorController@store')
