@@ -123,18 +123,6 @@
                 </vc-form-error>
             </fieldset>
             
-            <hr>
-            
-            <fieldset class="form-group">
-                <label for="vc-select-empresas">Empresas</label>
-                
-                <vc-select-empresas
-                    :seleccionadas="juridica.empresas"
-                    @input="selectEmpresasInput"
-                >
-                </vc-select-empresas>
-            </fieldset>
-        
         </base-formulario>
         
         <vc-form-tipo-org
@@ -152,7 +140,6 @@ import { PlusCircleIcon } from 'vue-feather-icons';
 import BaseFormulario     from '../../components/BaseFormulario.vue';
 import VcFormError        from '../../components/VcFormError.vue';
 import VcFormTipoOrg      from '../../components/tipo_organizacion/VcFormTipoOrg.vue';
-import VcSelectEmpresas   from '../../components/empresa/VcSelectEmpresas.vue';
 import FiltroCuitMixin    from '../../mixins/persona_juridica/filtro_cuit_mixin.js';
 
 export default {
@@ -161,7 +148,6 @@ export default {
         BaseFormulario,
         VcFormError,
         VcFormTipoOrg,
-        VcSelectEmpresas,
         PlusCircleIcon
     },
     mixins: [ FiltroCuitMixin ],
@@ -169,7 +155,6 @@ export default {
         return {
             id: null,
             juridica: null,
-            empresasGuardadas: null,
             tiposOrganizacion: null,
             
             tipoOrganizacionForm: {
@@ -188,26 +173,6 @@ export default {
                 return `${digitos} ${numero}`;
             }
             return null;
-        },
-        
-        idsEmpresas() {
-            if (_.isEmpty(this.juridica.empresas)) {
-                return [];
-            } else {
-                return this.juridica.empresas.map(
-                    function (empresa) { return empresa.id; }
-                );
-            }
-        },
-        
-        idsEmpresasGuardadas() {
-            if (_.isEmpty(this.empresasGuardadas)) {
-                return [];
-            } else {
-                return this.empresasGuardadas.map(
-                    function (empresa) { return empresa.id; }
-                );
-            }
         }
     },
     static: {
@@ -247,8 +212,7 @@ export default {
         juridicaPorDefecto: {
             cuit: null,
             denominacion: null,
-            tipo_organizacion_id: '',
-            empresas: []
+            tipo_organizacion_id: ''
         },
         
         validacionPorDefecto: {
@@ -330,7 +294,6 @@ export default {
             }
             
             this.juridica = juridica;
-            this.empresasGuardadas = juridica.empresas;
         },
         
         validado(errores) {
@@ -342,52 +305,6 @@ export default {
                 this.setID(id);
             }
             
-            if(! _.isEmpty(this.idsEmpresas)) {
-                let nuevas = _.difference(this.idsEmpresas, this.idsEmpresasGuardadas);
-                
-                if (! _.isEmpty(nuevas)) {
-                    nuevas.forEach((id) => {
-                        axios.post(`/juridicas/${this.id}/empresas/${id}`)
-                        .then((response) => {
-                            if (response.status === 201) {
-                                this.exito({
-                                    message: response.data.mensaje
-                                });
-                            }
-                        })
-                        .catch((error) => {
-                            if (error.response && error.response.status === 400) {
-                                this.error({
-                                    message: error.response.data.mensaje
-                                });
-                            }
-                        });
-                    });
-                }
-                
-                let eliminadas = _.difference(this.idsEmpresasGuardadas, this.idsEmpresas);
-                
-                if (! _.isEmpty(eliminadas)) {
-                    eliminadas.forEach((id) => {
-                        axios.delete(`/juridicas/${this.id}/empresas/${id}`)
-                        .then((response) => {
-                            if (response.status === 200) {
-                                this.exito({
-                                    message: response.data.mensaje
-                                });
-                            }
-                        })
-                        .catch((error) => {
-                            if (error.response && error.response.status === 400) {
-                                this.error({
-                                    message: error.response.data.mensaje
-                                });
-                            }
-                        });
-                    });
-                }
-            }            
-            
             this.$emit('cerrar');
             BusEventos.$emit('VcFormJuridica:guardada', this.id);
             this.resetearFormulario();
@@ -396,11 +313,7 @@ export default {
         cerrar() {
             this.$emit('cerrar');
             this.resetearFormulario();
-        },
-        
-        selectEmpresasInput(empresas) {
-            this.juridica.empresas = empresas;
-        },        
+        },      
         
         resetearId() {
             this.id = null;
