@@ -6,24 +6,24 @@
     >
     
         <template slot="perfil" slot-scope="{ mostrarForm, ocultarPerfil }">
-            <vc-perfil-rubro
+            <vc-perfil-actividad
                 @mostrar-form="mostrarForm(false)"
                 @cerrar="ocultarPerfil"
             >
-            </vc-perfil-rubro>
+            </vc-perfil-actividad>
         </template>
         
         <template slot="formulario" slot-scope="{ ocultarForm }">
-            <vc-form-rubro @cerrar="ocultarForm">
-            </vc-form-rubro>
+            <vc-form-actividad @cerrar="ocultarForm">
+            </vc-form-actividad>
         </template>
         
         <template slot="tabla" slot-scope="{ mostrarPerfil, mostrarForm }">
-            <vc-tabla-rubros
+            <vc-tabla-actividades
                 @mostrar-perfil="mostrarPerfil"
                 @mostrar-form="mostrarForm(true)"
             >
-            </vc-tabla-rubros>
+            </vc-tabla-actividades>
         </template>
     
     </base-crud>
@@ -31,17 +31,17 @@
 </template>
 
 <script>
-import BaseCrud      from '../views/BaseCrud.vue';
-import VcPerfilRubro from '../components/rubro/VcPerfilRubro.vue';
-import VcFormRubro   from '../components/rubro/VcFormRubro';
-import VcTablaRubros from '../components/rubro/VcTablaRubros.vue';
+import BaseCrud           from '../views/BaseCrud.vue';
+import VcPerfilActividad  from '../components/actividad_economica/VcPerfilActividad.vue';
+import VcFormActividad    from '../components/actividad_economica/VcFormActividad.vue';
+import VcTablaActividades from '../components/actividad_economica/VcTablaActividades.vue';
 
 export default {
     components: {
         BaseCrud,
-        VcPerfilRubro,
-        VcFormRubro,
-        VcTablaRubros
+        VcPerfilActividad,
+        VcFormActividad,
+        VcTablaActividades
     },
     data() {
         return {

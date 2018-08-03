@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Rubro;
+namespace App\Http\Requests\ActividadEconomica;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-abstract class RubroRequest extends FormRequest
+abstract class ActividadRequest extends FormRequest
 {
     protected $reglas = [
         'descripcion' => [
@@ -13,7 +13,7 @@ abstract class RubroRequest extends FormRequest
             'string',
             'min:3',
             'max:100',
-            'unique:rubros,descripcion'
+            'unique:actividades_economicas,descripcion'
         ]
     ];
     /**

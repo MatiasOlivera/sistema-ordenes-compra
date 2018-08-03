@@ -5,7 +5,7 @@ namespace App\Providers;
 use App\PersonaJuridica;
 use App\TipoOrganizacion;
 use App\Empresa;
-use App\Rubro;
+use App\ActividadEconomica;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -58,10 +58,10 @@ class RouteServiceProvider extends ServiceProvider
         });
         
         /**
-         * Rubro
+         * Actividades económicas
          */
-        Route::bind('rubro', function($id) {
-            return Rubro::withTrashed()
+        Route::bind('actividadEconomica', function($id) {
+            return ActividadEconomica::withTrashed()
                 ->where('id', $id)
                 ->firstOrFail();
         });

@@ -2,7 +2,7 @@
     
     <base-perfil
         :titulo="titulo"
-        :nombreInstancia="rubro.descripcion"
+        :nombreInstancia="actividad.descripcion"
         :eliminado="eliminado"
         @editar="editar"
         @dar-de-baja="darDeBaja"
@@ -11,25 +11,25 @@
     >
         <dl>
             <dt>Descripcion:</dt>
-            <dd>{{ rubro.descripcion }}</dd>
+            <dd>{{ actividad.descripcion }}</dd>
             
             <dt>Creado:</dt>
             <dd>
-                {{ rubro.created_at | moment('from') }}, 
-                {{ rubro.created_at | moment('L LT a') }}
+                {{ actividad.created_at | moment('from') }}, 
+                {{ actividad.created_at | moment('L LT a') }}
             </dd>
             
             <dt>Actualizado:</dt>
             <dd>
-                {{ rubro.updated_at | moment('from') }}, 
-                {{ rubro.updated_at | moment('L LT a') }}
+                {{ actividad.updated_at | moment('from') }}, 
+                {{ actividad.updated_at | moment('L LT a') }}
             </dd>
             
             <template v-if="eliminado">
                 <dt>Eliminado:</dt>
                 <dd>
-                    {{ rubro.deleted_at | moment('from') }}, 
-                    {{ rubro.deleted_at | moment('L LT a') }}
+                    {{ actividad.deleted_at | moment('from') }}, 
+                    {{ actividad.deleted_at | moment('L LT a') }}
                 </dd>
             </template>
         </dl>
@@ -38,13 +38,17 @@
 </template>
 
 <script>
+/**
+ * Componentes
+ */
 import BasePerfil            from '../../components/BasePerfil.vue';
 import ObtenerInstanciaMixin from '../../mixins/obtener_instancia_mixin.js';
 import DarBajaInstanciaMixin from '../../mixins/dar_baja_instancia_mixin.js';
 import DarAltaInstanciaMixin from '../../mixins/dar_alta_instancia_mixin.js';
 
+
 export default {
-    name: 'vc-perfil-rubro',
+    name: 'vc-perfil-actividad',
     components: { BasePerfil },
     mixins: [
         ObtenerInstanciaMixin,
@@ -54,20 +58,20 @@ export default {
     data() {
         return {
             id: null,
-            rubro: null
+            actividad: null
         }
     },
     computed: {
         titulo() {
-            return `Detalle de ${this.rubro.descripcion}`;
+            return `Detalle de ${this.actividad.descripcion}`;
         },
         
         eliminado() {
-            return _.isNull(this.rubro.deleted_at) ? false : true;
+            return _.isNull(this.actividad.deleted_at) ? false : true;
         },
         
         urlEspecifica() {
-            return `${this.$options.static.url.rubros}/${this.id}`;
+            return `${this.$options.static.url.actividades}/${this.id}`;
         }
     },
     watch: {
@@ -76,18 +80,18 @@ export default {
         }
     },
     created() {
-        this.resetearRubro();
+        this.resetearActividad();
         
-        BusEventos.$on('VcTablaRubros:verPerfil', (id) => { this.setID(id) });
-        BusEventos.$on('VcTablaRubros:restaurado', (id) => { this.actualizar(id) });
-        BusEventos.$on('VcFormRubro:guardado', (id) => { this.actualizar(id) });
+        BusEventos.$on('VcTablaActividades:verPerfil', (id) => { this.setID(id) });
+        BusEventos.$on('VcTablaActividades:restaurado', (id) => { this.actualizar(id) });
+        BusEventos.$on('VcFormActividad:guardado', (id) => { this.actualizar(id) });
     },
     static: {
         url: {
-            rubros: '/rubros'
+            actividades: '/actividades-economicas'
         },
         
-        rubroPorDefecto: {
+        actividadPorDefecto: {
             descripcion: '',
             created_at: new Date(),
             updated_at: new Date(),
@@ -108,12 +112,12 @@ export default {
         obtener() {
             this.$_obtenerInstanciaMixin_obtener(
                 this.urlEspecifica,
-                (response) => { this.rubro = response.data }
+                (response) => { this.actividad = response.data }
             );
         },
         
         editar() {
-            BusEventos.$emit('VcPerfilRubro:editar', this.id);
+            BusEventos.$emit('VcPerfilActividad:editar', this.id);
             this.$emit('mostrar-form');
         },
         
@@ -122,7 +126,7 @@ export default {
                 this.urlEspecifica,
                 () => {
                     this.obtener();
-                    BusEventos.$emit('VcPerfilRubro:eliminado')
+                    BusEventos.$emit('VcPerfilActividad:eliminado')
                 }
             );
         },
@@ -132,7 +136,7 @@ export default {
                 `${this.urlEspecifica}/restore`,
                 () => {
                     this.obtener();
-                    BusEventos.$emit('VcPerfilRubro:restaurado')
+                    BusEventos.$emit('VcPerfilActividad:restaurado')
                 }
             )
         },
@@ -141,8 +145,8 @@ export default {
             this.$emit('cerrar');
         },
         
-        resetearRubro() {
-            this.rubro = { ...this.$options.static.rubroPorDefecto };
+        resetearActividad() {
+            this.actividad = { ...this.$options.static.actividadPorDefecto };
         }
     }
 }

@@ -1,11 +1,11 @@
 <template lang="html">
     
     <base-tabla
-        :nombre="this.$options.static.nombre"
-        :url="this.$options.static.url"
-        :columnas="this.$options.static.columnas"
-        :opciones="this.$options.static.opciones"
-        :campoNombre="this.$options.static.campoNombre"
+        :nombre="$options.static.nombre"
+        :url="$options.static.url"
+        :columnas="$options.static.columnas"
+        :opciones="$options.static.opciones"
+        :campoNombre="$options.static.campoNombre"
         :obtenerTabla="obtenerTabla"
         @ver-perfil="verPerfil"
         @editar="editar"
@@ -17,12 +17,16 @@
 </template>
 
 <script>
+/**
+ * Componentes
+ */
 import BaseTabla             from '../../components/BaseTabla.vue';
 import DarBajaInstanciaMixin from '../../mixins/dar_baja_instancia_mixin.js';
 import DarAltaInstanciaMixin from '../../mixins/dar_alta_instancia_mixin.js';
 
+
 export default {
-    name: 'vc-tabla-rubros',
+    name: 'vc-tabla-actividades',
     components: { BaseTabla },
     mixins: [
         DarBajaInstanciaMixin,
@@ -34,21 +38,21 @@ export default {
         }
     },
     created() {
-        BusEventos.$on('VcFormRubro:guardado', () => {
+        BusEventos.$on('VcFormActividad:guardado', () => {
             this.obtenerRegistros();
         });
         
-        BusEventos.$on('VcPerfilRubro:eliminado', () => {
+        BusEventos.$on('VcPerfilActividad:eliminado', () => {
             this.obtenerRegistros();
         });
         
-        BusEventos.$on('VcPerfilRubro:restaurado', () => {
+        BusEventos.$on('VcPerfilActividad:restaurado', () => {
             this.obtenerRegistros();
         });
     },
     static: {
-        nombre: 'rubros',
-        url: '/rubros',
+        nombre: 'actividades',
+        url: '/actividades-economicas',
         columnas: ['descripcion'],
         
         opciones: {
@@ -93,12 +97,12 @@ export default {
     },
     methods: {
         verPerfil(id) {
-            BusEventos.$emit('VcTablaRubros:verPerfil', id);
-            this.$emit('mostrar-perfil')
+            BusEventos.$emit('VcTablaActividades:verPerfil', id);
+            this.$emit('mostrar-perfil');
         },
         
         editar(id) {
-            BusEventos.$emit('VcTablaRubros:editar', id);
+            BusEventos.$emit('VcTablaActividades:editar', id);
             this.$emit('mostrar-form');
         },
         
@@ -115,7 +119,7 @@ export default {
                 `${this.$options.static.url}/${id}/restore`,
                 () => {
                     this.obtenerRegistros();
-                    BusEventos.$emit('VcTablaRubros:restaurado', id);
+                    BusEventos.$emit('VcTablaActividades:restaurado', id);
                 },
                 this.$options.static.mensajes.alta
             )

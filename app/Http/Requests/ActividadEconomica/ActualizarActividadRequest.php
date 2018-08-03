@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Requests\Rubro;
+namespace App\Http\Requests\ActividadEconomica;
 
-class ActualizarRubroRequest extends RubroRequest {
+class ActualizarActividadRequest extends ActividadRequest {
     /**
      * Setter de descripción
      */
     private function setDescripcion()
     {
-        // Regla unique: ignora al rubro que
-        // actualmente posee esta descripción
-        $this->reglas['descripcion'][5] .= ",{$this->rubro->id}";
+        // Regla unique: ignora la actividad económica
+        // que actualmente posee esta descripción
+        $this->reglas['descripcion'][5] .= ",{$this->actividadEconomica->id}";
     }
     
     /**

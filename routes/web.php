@@ -90,19 +90,14 @@ Route::apiResource('/empresas', 'EmpresaController');
 /**
  * Actividades econonómicas
  */
+Route::get('/rubros', 'ActividadEconomicaController@view')
+    ->name('actividades-economicas.view');
+
+Route::patch('/actividades-economicas/{actividadEconomica}/restore', 'ActividadEconomicaController@restore')
+    ->name('actividades-economicas.restore');
+
 Route::apiResource('/actividades-economicas', 'ActividadEconomicaController')
-    ->only(['index']);
-
-/**
- * Rubros
- */
-Route::get('/rubro', 'RubroController@view')
-    ->name('rubros.view');
-
-Route::patch('/rubros/{rubro}/restore', 'RubroController@restore')
-    ->name('rubros.restore');
-
-Route::apiResource('/rubros', 'RubroController');
+    ->parameters(['actividades-economicas' => 'actividadEconomica']);
 
 /**
  * Proveedores

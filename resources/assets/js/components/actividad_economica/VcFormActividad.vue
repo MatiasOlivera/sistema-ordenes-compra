@@ -2,15 +2,15 @@
 
     <base-formulario
         :titulos="$options.static.titulos"
-        :url="$options.static.url.rubros"
+        :url="$options.static.url.actividades"
         :id="id"
-        :modelo="rubro"
-        :modeloPorDefecto="$options.static.rubroPorDefecto"
+        :modelo="actividad"
+        :modeloPorDefecto="$options.static.actividadPorDefecto"
         :mensajes="$options.static.mensajes"
-        @obtenido="setRubro"
+        @obtenido="setActividad"
         @validado="validado"
         @guardado="guardado"
-        @deshacer="setRubro"
+        @deshacer="setActividad"
         @limpiar="resetearTodo"
         @cerrar="cerrar"
     >
@@ -19,7 +19,7 @@
             <label for="descripcion">Descripción</label>
 
             <input
-                v-model="rubro.descripcion"
+                v-model="actividad.descripcion"
                 :class="{'is-invalid' : validacion.descripcion}"
                 type="text"
                 name="descripcion"
@@ -38,11 +38,15 @@
 </template>
 
 <script>
+/**
+ * Componentes
+ */
 import BaseFormulario from '../../components/BaseFormulario.vue';
 import VcFormError    from '../../components/VcFormError.vue';
 
+
 export default {
-    name: 'vc-form-tipo-org',
+    name: 'vc-form-actividad',
     components: {
         BaseFormulario,
         VcFormError
@@ -50,7 +54,7 @@ export default {
     data() {
         return {
             id: null,
-            rubro: null,
+            actividad: null,
             validacion: null
         }
     },
@@ -61,7 +65,7 @@ export default {
         },
         
         url: {
-            rubros: '/rubros'
+            actividades: '/actividades-economicas'
         },
         
         mensajes: {
@@ -87,7 +91,7 @@ export default {
             }
         },
         
-        rubroPorDefecto: {
+        actividadPorDefecto: {
             descripcion: null
         },
         
@@ -98,16 +102,16 @@ export default {
     created() {
         this.resetearTodo();
 
-        BusEventos.$on('VcTablaRubros:editar', (id) => { this.setID(id) });
-        BusEventos.$on('VcPerfilRubro:editar', (id) => { this.setID(id) });
+        BusEventos.$on('VcTablaActividades:editar', (id) => { this.setID(id) });
+        BusEventos.$on('VcPerfilActividad:editar', (id) => { this.setID(id) });
     },
     methods: {        
         setID(id) {
             this.id = id;
         },
         
-        setRubro(rubro) {
-            this.rubro = rubro;
+        setActividad(actividad) {
+            this.actividad = actividad;
         },
         
         validado(errores) {
@@ -121,7 +125,7 @@ export default {
             
             this.$emit('cerrar');
             this.$emit('guardado', this.id);
-            BusEventos.$emit('VcFormRubro:guardado', this.id);
+            BusEventos.$emit('VcFormActividad:guardado', this.id);
             this.resetearTodo();
         },
         
@@ -134,8 +138,8 @@ export default {
             this.id = null;
         },
         
-        resetearRubro() {
-            this.rubro = { ...this.$options.static.rubroPorDefecto };
+        resetearActividad() {
+            this.actividad = { ...this.$options.static.actividadPorDefecto };
         },
         
         resetearValidacion() {
@@ -143,7 +147,7 @@ export default {
         },
         
         resetearTodo() {
-            this.resetearRubro();
+            this.resetearActividad();
             this.resetearId();
             this.resetearValidacion();
         }

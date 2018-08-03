@@ -40,7 +40,7 @@
 
                         <div class="dropdown-menu" aria-labelledby="dropdownMenu">
                             <h6 class="dropdown-header">Empresa</h6>
-                            <a href="{{ route('rubros.view') }}" class="dropdown-item">Rubros</a>
+                            <a href="{{ route('actividades-economicas.view') }}" class="dropdown-item">Rubros</a>
                             
                             <div class="dropdown-divider"></div>
                             
