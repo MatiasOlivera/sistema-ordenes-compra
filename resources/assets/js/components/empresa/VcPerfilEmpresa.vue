@@ -30,6 +30,17 @@
             @dar-de-baja="darDeBajaJuridica"
         >
         </vc-tarjeta-juridicas>
+        
+        <!-- Actividades económicas -->
+        <vc-tarjeta-actividades
+            :actividadesNoAsociadas="actividadesNoAsociadas"
+            :actividades="empresa.actividades"
+            :mensaje="$options.static.tarjetaActividades.mensaje"
+            @buscar="buscarActividad"
+            @dar-de-alta="darDeAltaActividad"
+            @dar-de-baja="darDeBajaActividad"
+        >
+        </vc-tarjeta-actividades>
     </div>
     
 </template>
@@ -43,9 +54,10 @@ import ObtenerInstanciaMixin from '../../mixins/obtener_instancia_mixin.js';
 /**
  * Componentes
  */
-import VcDetalleEmpresa   from './VcDetalleEmpresa.vue';
-import VcFormEmpresa      from './VcFormEmpresa';
-import VcTarjetaJuridicas from '../persona_juridica/VcTarjetaJuridicas.vue'
+import VcDetalleEmpresa     from './VcDetalleEmpresa.vue';
+import VcFormEmpresa        from './VcFormEmpresa';
+import VcTarjetaJuridicas   from '../persona_juridica/VcTarjetaJuridicas.vue';
+import VcTarjetaActividades from '../actividad_economica/VcTarjetaActividades.vue';
 
 export default {
     name: 'vc-perfil-empresa',
@@ -53,7 +65,8 @@ export default {
     components: {
         VcDetalleEmpresa,
         VcFormEmpresa,
-        VcTarjetaJuridicas
+        VcTarjetaJuridicas,
+        VcTarjetaActividades
     },
     data() {
         return {
@@ -64,9 +77,11 @@ export default {
                 created_at: new Date(),
                 updated_at: new Date(),
                 deleted_at: new Date(),
-                juridicas: []
+                juridicas: [],
+                actividades: []
             },
             juridicasNoAsociadas: [],
+            actividadesNoAsociadas: [],
             ui: {
                 detalle: {
                     visible: true
@@ -87,10 +102,14 @@ export default {
     static: {
         url: {
             empresas: '/empresas',
-            juridicas: '/juridicas'
+            juridicas: '/juridicas',
+            actividades: '/actividades-economicas'
         },
         tarjetaJuridicas: {
             mensaje: 'No existen personas jurídicas asociadas a esta empresa'
+        },
+        tarjetaActividades: {
+            mensaje: 'Todavía no han sido cargados los rubros a los que se dedica esta empresa'
         }
     },
     methods: {
@@ -202,6 +221,94 @@ export default {
                             message: error.response.data.mensaje
                         });
                     }
+                });
+            }
+        },
+        
+        buscarActividad(valorBuscado) {
+            axios.get(this.$options.static.url.actividades, {
+                params: {
+                    busqueda: valorBuscado,
+                    limite: 10,
+                    pagina: 1,
+                    ordenarPor: 'descripcion',
+                    ascendente: 1,
+                    soloEliminados: 0,
+                    empresaId: this.empresa.id
+                }
+            })
+            .then((response) => {
+                let actividades = response.data.data;
+                this.actividadesNoAsociadas = actividades;
+            })
+            .catch((error) => {
+                if (error.response) {
+                    let status = error.response.status;
+    
+                    switch (status) {
+                        case 404:
+                            this.error({
+                                title: 'No encontrados',
+                                message: 'No se ha encontrado ningún rubro'
+                            });
+    
+                            break;
+                        default:
+                            this.error({
+                                title: 'Error',
+                                message: 'No se pudo traer los rubros'
+                            });
+                    }
+                }
+            })
+        },
+        
+        darDeAltaActividad(id) {
+            if (!_.isNull(id) && !_.isUndefined(id)) {
+                const url = `${this.$options.static.url.empresas}/${this.id}/actividades/${id}`;
+                
+                axios.post(url)
+                .then((response) => {
+                    if (response.status === 201) {
+                        this.exito({
+                            message: response.data.mensaje
+                        });
+                    }
+                })
+                .catch((error) => {
+                    if (error.response && error.response.status === 400) {
+                        this.error({
+                            message: error.response.data.mensaje
+                        });
+                    }
+                })
+                .finally(() => {
+                    this.obtener();
+                });
+            }
+        },
+        
+        darDeBajaActividad(id) {
+            if (!_.isNull(id) && !_.isUndefined(id)) {
+                const url = `${this.$options.static.url.empresas}/${this.id}/actividades/${id}`;
+                
+                axios.delete(url)
+                .then((response) => {
+                    if (response.status === 200) {
+                        this.exito({
+                            message: response.data.mensaje
+                        });
+                    }
+                })
+                .catch((error) => {
+                    if (error.response && error.response.status === 400) {
+                        this.error({
+                            message: error.response.data.mensaje
+                        });
+                    }
+                })
+                .finally(() => {
+                    this.obtener();
                 });
             }
         }

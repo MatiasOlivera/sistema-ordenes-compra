@@ -38,15 +38,25 @@ class ActividadEconomicaController extends Controller
      */
     public function index(Request $request)
     {
+        $empresaId = $request->query('empresaId', null);
+        
         $vuetables = new Vuetables();
         
         $modelo = new ActividadEconomica();
         $campos = ["descripcion"];
+        $excluir = [];
+        
+        if ($empresaId) {
+            $excluir = ['empresas', 'empresa_id', $empresaId];
+        }
         
         $respuesta = $vuetables->obtener(
             $request,
             $modelo,
-            $campos
+            $campos,
+            [],
+            null,
+            $excluir
         );
         
         return $respuesta;
