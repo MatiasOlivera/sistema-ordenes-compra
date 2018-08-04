@@ -39,15 +39,25 @@ class EmpresaController extends Controller
      */
     public function index(Request $request)
     {
+        $juridicaId = $request->query('juridicaId', null);
+        
         $vuetable = new VueTables();
 
         $modelo  = new Empresa();
         $campos  = ['nombre_fantasia'];
+        $excluir = [];
+        
+        if ($juridicaId) {
+            $excluir = ['juridicas', 'persona_juridica_id', $juridicaId];
+        }
 
         $respuesta = $vuetable->obtener(
             $request,
             $modelo,
-            $campos
+            $campos,
+            [],
+            null,
+            $excluir
         );
 
         return $respuesta;

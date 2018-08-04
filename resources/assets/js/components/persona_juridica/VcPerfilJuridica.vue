@@ -17,6 +17,17 @@
             @cerrar="verJuridica"
         >
         </vc-form-juridica>
+        
+        <!-- Empresas -->
+        <vc-tarjeta-empresas
+            :empresasNoAsociadas="tarjetaEmpresas.empresas"
+            :empresas="juridica.empresas"
+            :mensaje="tarjetaEmpresas.mensaje"
+            @buscar="buscarEmpresa"
+            @dar-de-alta="darDeAltaEmpresa"
+            @dar-de-baja="darDeBajaEmpresa"
+        >
+        </vc-tarjeta-empresas>
     </div>
     
 </template>
@@ -32,6 +43,7 @@ import ObtenerInstanciaMixin from '../../mixins/obtener_instancia_mixin.js';
  */
 import VcDetalleJuridica from './VcDetalleJuridica.vue';
 import VcFormJuridica    from './VcFormJuridica.vue';
+import VcTarjetaEmpresas from '../empresa/VcTarjetaEmpresas.vue';
 
 
 export default {
@@ -39,7 +51,8 @@ export default {
     mixins: [ ObtenerInstanciaMixin ],
     components: {
         VcDetalleJuridica,
-        VcFormJuridica
+        VcFormJuridica,
+        VcTarjetaEmpresas
     },
     data() {
         return {
@@ -52,7 +65,12 @@ export default {
                 },
                 created_at: new Date(),
                 updated_at: new Date(),
-                deleted_at: new Date()
+                deleted_at: new Date(),
+                empresas: []
+            },
+            tarjetaEmpresas: {
+                empresas: [],
+                mensaje: 'No existen empresas asociadas a esta persona jurídica'
             },
             ui: {
                 detalle: {
@@ -73,7 +91,8 @@ export default {
     },
     static: {
         url: {
-            juridicas: '/juridicas'
+            juridicas: '/juridicas',
+            empresas: '/empresas'
         }
     },
     methods: {
@@ -105,6 +124,88 @@ export default {
         
         cerrar() {
             this.$emit('cerrar');
+        },
+        
+        buscarEmpresa(valorBuscado) {
+            axios.get(this.$options.static.url.empresas, {
+                params: {
+                    busqueda: valorBuscado,
+                    limite: 10,
+                    pagina: 1,
+                    ordenarPor: 'nombre_fantasia',
+                    ascendente: 1,
+                    soloEliminados: 0,
+                    juridicaId: this.juridica.id
+                }
+            })
+            .then((response) => {
+                let empresas = response.data.data;
+                this.tarjetaEmpresas.empresas = empresas;
+            })
+            .catch((error) => {
+                if (error.response) {
+                    let status = error.response.status;
+
+                    switch (status) {
+                        case 404:
+                            this.error({
+                                title: 'No encontrados',
+                                message: 'No se ha encontrado ningúna empresa'
+                            });
+
+                            break;
+                        default:
+                            this.error({
+                                title: 'Error',
+                                message: 'No se pudo traer las empresas'
+                            });
+                    }
+                }
+            })
+        },
+        
+        darDeAltaEmpresa(id) {
+            if (!_.isNull(id) && !_.isUndefined(id)) {
+                axios.post(`/juridicas/${this.id}/empresas/${id}`)
+                .then((response) => {
+                    if (response.status === 201) {
+                        this.exito({
+                            message: response.data.mensaje
+                        });
+                        
+                        this.obtener();
+                    }
+                })
+                .catch((error) => {
+                    if (error.response && error.response.status === 400) {
+                        this.error({
+                            message: error.response.data.mensaje
+                        });
+                    }
+                });
+            }
+        },
+        
+        darDeBajaEmpresa(id) {
+            if (!_.isNull(id) && !_.isUndefined(id)) {
+                axios.delete(`/juridicas/${this.id}/empresas/${id}`)
+                .then((response) => {
+                    if (response.status === 200) {
+                        this.exito({
+                            message: response.data.mensaje
+                        });
+                        
+                        this.obtener();
+                    }
+                })
+                .catch((error) => {
+                    if (error.response && error.response.status === 400) {
+                        this.error({
+                            message: error.response.data.mensaje
+                        });
+                    }
+                });
+            }
         }
     },
     notifications: {
