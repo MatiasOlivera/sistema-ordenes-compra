@@ -1,100 +1,49 @@
 <template lang="html">
-
-    <base-perfil
-        :titulo="titulo"
-        :nombreInstancia="juridica.denominacion"
-        :eliminado="eliminado"
-        @editar="editar"
-        @dar-de-baja="darDeBaja"
-        @dar-de-alta="darDeAlta"
-        @cerrar="cerrar"
-    >
     
-        <dl>
-            <dt>CUIT:</dt>
-            <dd>{{ juridica.cuit | formatoCuit }}</dd>
-            
-            <dt>Tipo de organización:</dt>
-            <dd>
-                <template v-if="juridica.tipo_organizacion">
-                    {{ juridica.tipo_organizacion.descripcion }}
-                </template>
-            </dd>
-            
-            <template v-if="conEmpresas">
-                <dt>Empresas:</dt>
-                <dd>
-                    <ul class="list-unstyled">
-                        <li v-for="empresa in juridica.empresas">
-                            {{ empresa.nombre_fantasia }}
-                        </li>
-                    </ul>
-                </dd>
-            </template>
-            
-            <dt>Creado:</dt>
-            <dd>
-                {{ juridica.created_at | moment('from') }}, 
-                {{ juridica.created_at | moment('L LT a') }}
-            </dd>
-            
-            <dt>Actualizado:</dt>
-            <dd>
-                {{ juridica.updated_at | moment('from') }}, 
-                {{ juridica.updated_at | moment('L LT a') }}
-            </dd>
-            
-            <template v-if="eliminado">
-                <dt>Eliminado:</dt>
-                <dd>
-                    {{ juridica.deleted_at | moment('from') }}, 
-                    {{ juridica.deleted_at | moment('L LT a') }}
-                </dd>
-            </template>
-            
-        </dl>
-        
-    </base-perfil>
-
+    <div>
+        <!-- Detalle de la persona jurídica -->
+        <vc-detalle-juridica
+            :juridica="juridica"
+            @dar-de-baja="obtener"
+            @dar-de-alta="obtener"
+            @cerrar="cerrar"
+        >
+        </vc-detalle-juridica>
+    </div>
+    
 </template>
 
 <script>
-import BasePerfil            from '../../components/BasePerfil.vue';
+/**
+ * Mixins
+ */
 import ObtenerInstanciaMixin from '../../mixins/obtener_instancia_mixin.js';
-import DarBajaInstanciaMixin from '../../mixins/dar_baja_instancia_mixin.js';
-import DarAltaInstanciaMixin from '../../mixins/dar_alta_instancia_mixin.js';
-import FiltroCuitMixin       from '../../mixins/persona_juridica/filtro_cuit_mixin.js';
+
+/**
+ * Componentes
+ */
+import VcDetalleJuridica from './VcDetalleJuridica.vue';
+
 
 export default {
     name: 'vc-perfil-juridica',
-    components: { BasePerfil },
-    mixins: [
-        ObtenerInstanciaMixin,
-        DarBajaInstanciaMixin,
-        DarAltaInstanciaMixin,
-        FiltroCuitMixin
-    ],
+    mixins: [ ObtenerInstanciaMixin ],
+    components: {
+        VcDetalleJuridica
+    },
     data() {
         return {
             id: null,
-            juridica: null
-        }
-    },
-    computed: {
-        titulo() {
-            return `Perfil de ${this.juridica.denominacion}`;
-        },
-        
-        conEmpresas() {
-            return ! _.isEmpty(this.juridica.empresas);
-        },
-        
-        eliminado() {
-            return _.isNull(this.juridica.deleted_at) ? false : true;
-        },
-        
-        urlEspecifica() {
-            return `${this.$options.static.url.juridicas}/${this.id}`;
+            juridica: {
+                cuit: null,
+                denominacion: '',
+                tipo_organizacion: {
+                    descripcion: ''
+                },
+                created_at: new Date(),
+                updated_at: new Date(),
+                deleted_at: new Date()
+            }
         }
     },
     watch: {
@@ -103,8 +52,6 @@ export default {
         }
     },
     created() {
-        this.resetearJuridica();
-        
         BusEventos.$on('VcTablaJuridicas:verPerfil', (id) => { this.setID(id) });
         BusEventos.$on('VcTablaJuridicas:restaurada', (id) => { this.actualizar(id) });
         BusEventos.$on('VcFormJuridica:guardada', (id) => { this.actualizar(id) });
@@ -112,17 +59,6 @@ export default {
     static: {
         url: {
             juridicas: '/juridicas'
-        },
-        
-        juridicaPorDefecto: {
-            cuit: null,
-            denominacion: '',
-            tipo_organizacion: {
-                descripcion: null
-            },
-            created_at: new Date(),
-            updated_at: new Date(),
-            deleted_at: new Date()
         }
     },
     methods: {
@@ -138,42 +74,25 @@ export default {
         
         obtener() {
             this.$_obtenerInstanciaMixin_obtener(
-                this.urlEspecifica,
+                `${this.$options.static.url.juridicas}/${this.id}`,
                 (response) => { this.juridica = response.data }
             );
         },
-        
-        editar() {
-            BusEventos.$emit('VcPerfilJuridica:editar', this.id);
-            this.$emit('mostrar-form');
-        },
-        
-        darDeBaja() {
-            this.$_darBajaInstanciaMixin_eliminar(
-                this.urlEspecifica,
-                () => {
-                    this.obtener();
-                    BusEventos.$emit('VcPerfilJuridica:eliminada')
-                }
-            );
-        },
-        
-        darDeAlta() {
-            this.$_darAltaInstanciaMixin_restaurar(
-                `${this.urlEspecifica}/restore`,
-                () => {
-                    this.obtener();
-                    BusEventos.$emit('VcPerfilJuridica:restaurada')
-                }
-            )
-        },
-        
+                
         cerrar() {
             this.$emit('cerrar');
+        }
+    },
+    notifications: {
+        exito: {
+            title: 'Exito',
+            message: '',
+            type: 'success'
         },
-        
-        resetearJuridica() {
-            this.juridica = { ...this.$options.static.juridicaPorDefecto };
+        error: {
+            title: 'Error',
+            message: '',
+            type: 'error'
         }
     }
 }
