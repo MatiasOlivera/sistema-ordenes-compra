@@ -55,7 +55,7 @@ import ObtenerInstanciaMixin from '../../mixins/obtener_instancia_mixin.js';
  * Componentes
  */
 import VcDetalleEmpresa     from './VcDetalleEmpresa.vue';
-import VcFormEmpresa        from './VcFormEmpresa';
+import VcFormEmpresa        from './VcFormEmpresa.vue';
 import VcTarjetaJuridicas   from '../persona_juridica/VcTarjetaJuridicas.vue';
 import VcTarjetaActividades from '../actividad_economica/VcTarjetaActividades.vue';
 
