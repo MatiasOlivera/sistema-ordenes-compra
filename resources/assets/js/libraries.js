@@ -45,8 +45,19 @@ window.axios.interceptors.response.use(function (response) {
         
         switch (status) {
             
+            /**
+             * Redireccionar a inicio cuando se termina la sesión del usuario
+             */
             case 401:
                 window.location.replace('/');
+                break;
+            
+            /**
+             * Recargar la página cuando el token X-CSRF-TOKEN es inválido
+             * https://laravel.com/docs/5.6/csrf
+             */
+            case 419:
+                window.location.reload();
                 break;
             
             case 422:
