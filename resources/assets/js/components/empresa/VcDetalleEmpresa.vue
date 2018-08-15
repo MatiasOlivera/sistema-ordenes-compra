@@ -42,7 +42,7 @@
                 
                 <dt>Mayorista:</dt>
                 <dd>
-                    <vc-icono-estado :estado="esMayorista">
+                    <vc-icono-estado :estado="empresa.es_mayorista">
                     </vc-icono-estado>
                 </dd>
                 
@@ -114,10 +114,6 @@ export default {
     computed: {
         titulo() {
             return `Perfil de ${this.empresa.nombre_fantasia}`;
-        },
-        
-        esMayorista() {
-            return this.empresa.es_mayorista === 1 ? true : false;
         },
         
         esProveedor() {

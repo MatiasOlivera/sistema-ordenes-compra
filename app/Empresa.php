@@ -31,6 +31,15 @@ class Empresa extends Model
     protected $fillable = [
         'nombre_fantasia', 'es_mayorista'
     ];
+    
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'es_mayorista' => 'boolean',
+    ];
 
     /**
      * Obtener las personas jurídicas que son dueñas de esta empresa
