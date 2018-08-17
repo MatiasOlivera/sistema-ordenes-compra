@@ -20,7 +20,7 @@
                 class="col-auto ml-auto"
             >
                     <a
-                        @click.prevent="clickBotonIzq"
+                        @click.prevent="cerrar"
                         href="#"
                         class="text-muted"
                     >
@@ -41,6 +41,9 @@
 </template>
 
 <script>
+import { EVENTO_CERRAR } from '../common/components/eventos_tarjeta.js';
+const EVENTO_NUEVO = 'nuevo';
+
 /**
  * Componentes
  */
@@ -76,6 +79,21 @@ export default {
                 const tipos = ['cerrar', 'volver'];
                 return tipos.includes(tipo);
             }
+        },
+        
+        confirmacionRequerida: {
+            type: Boolean,
+            default: false
+        },
+        
+        confirmacionNotificacion: {
+            type: Object,
+            default: function() {
+                return {
+                    titulo: 'Cerrar tarjeta',
+                    mensaje: '¿Estás seguro?'
+                }
+            }
         }
     },
     computed: {
@@ -85,11 +103,51 @@ export default {
     },
     methods: {
         nuevo() {
-            this.$emit('nuevo');
+            this.$emit(EVENTO_NUEVO);
         },
         
-        clickBotonIzq() {
-            this.$emit(this.botonIzqTipo);
+        cerrar() {
+            this.confirmacionRequerida
+            ? this.confirmarAlCerrar()
+            : this.$emit(EVENTO_CERRAR);
+        },
+        
+        confirmarAlCerrar() {
+            function ocultarNotificacion(instancia, notificacion) {
+                instancia.hide({
+                    transitionOut: 'fadeOut'
+                }, notificacion, 'button');
+            }
+
+            this.pregunta({
+                title: this.confirmacionNotificacion.titulo,
+                message: this.confirmacionNotificacion.mensaje,
+                timeout: false,
+                buttons: [
+                    [
+                        '<button>Si</button>',
+                        (instance, toast) => {
+                            this.$emit(EVENTO_CERRAR);
+                            ocultarNotificacion(instance, toast);
+                        },
+                        true
+                    ],
+                    [
+                        '<button>No</button>',
+                        (instance, toast) => {
+                            ocultarNotificacion(instance, toast);
+                        }
+                    ]
+                ],
+                displayMode: 'once'
+            });
+        }
+    },
+    notifications: {
+        pregunta: {
+            title: '',
+            message: '',
+            type: 'question'
         }
     }
 }
