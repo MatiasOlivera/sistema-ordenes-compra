@@ -136,7 +136,7 @@ export default {
 
         editar(id) {
             BusEventos.$emit('VcTablaEmpresas:editar', id);
-            this.$emit('mostrar-form');
+            this.$emit('mostrar-perfil')
         },
 
         darDeBaja(id) {

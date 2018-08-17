@@ -16,6 +16,8 @@
         
         <vc-form-empresa
             v-show="!ui.detalle.visible"
+            :empresa="empresaParaEditar"
+            @actualizado="actualizada"
             @cerrar="verEmpresa"
         >
         </vc-form-empresa>
@@ -73,7 +75,7 @@ export default {
             id: null,
             empresa: {
                 nombre_fantasia: '',
-                es_mayorista: null,
+                es_mayorista: false,
                 created_at: new Date(),
                 updated_at: new Date(),
                 deleted_at: new Date(),
@@ -89,15 +91,28 @@ export default {
             }
         }
     },
+    computed: {
+        empresaParaEditar() {
+            return _.pick(this.empresa, ['id', 'nombre_fantasia', 'es_mayorista']);
+        }
+    },
     watch: {
         id: function(id) {
             if (id !== null) this.obtener();
         }
     },
     created() {        
-        BusEventos.$on('VcTablaEmpresas:verPerfil', (id) => { this.setID(id) });
+        BusEventos.$on('VcTablaEmpresas:verPerfil', (id) => {
+            this.setID(id);
+            this.verEmpresa();
+        });
+        
+        BusEventos.$on('VcTablaEmpresas:editar', (id) => {
+            this.setID(id);
+            this.editarEmpresa();
+        });
+        
         BusEventos.$on('VcTablaEmpresas:restaurada', (id) => { this.actualizar(id) });
-        BusEventos.$on('VcFormEmpresa:guardada', (id) => { this.actualizar(id) });
     },
     static: {
         url: {
@@ -123,6 +138,11 @@ export default {
             }
         },
         
+        actualizada() {
+            this.obtener();
+            this.verEmpresa();
+        },
+        
         obtener() {
             this.$_obtenerInstanciaMixin_obtener(
                 `${this.$options.static.url.empresas}/${this.id}`,
@@ -132,7 +152,6 @@ export default {
         
         editarEmpresa() {
             this.ui.detalle.visible = false;
-            BusEventos.$emit('VcPerfilEmpresa:editar', this.id);
         },
         
         verEmpresa() {
