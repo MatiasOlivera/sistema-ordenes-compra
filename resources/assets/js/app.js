@@ -69,9 +69,9 @@ Vue.use(ServerTable, OpcionesVueTables, false, 'bootstrap4', 'footerPagination')
 import VueNotifications from 'vue-notifications';
 import iziToast from 'izitoast';
 
-function notificacion ({title, message, type, timeout, cb, buttons = []}) {
+function notificacion ({title, message, type, timeout, cb, buttons = [], displayMode}) {
     if (type === VueNotifications.types.warn) type = 'warning';
-    return iziToast[type]({title, message, timeout, buttons});
+    return iziToast[type]({title, message, timeout, buttons, displayMode});
 };
 
 const TiposDeNotificacion = {
