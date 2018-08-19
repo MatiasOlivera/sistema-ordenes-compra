@@ -1,77 +1,63 @@
 <template lang="html">
     
-    <base-perfil
-        :titulo="titulo"
-        :nombreInstancia="actividad.descripcion"
-        :eliminado="eliminado"
-        @editar="editar"
-        @dar-de-baja="darDeBaja"
-        @dar-de-alta="darDeAlta"
-        @cerrar="cerrar"
-    >
-        <dl>
-            <dt>Descripcion:</dt>
-            <dd>{{ actividad.descripcion }}</dd>
-            
-            <dt>Creado:</dt>
-            <dd>
-                {{ actividad.created_at | moment('from') }}, 
-                {{ actividad.created_at | moment('L LT a') }}
-            </dd>
-            
-            <dt>Actualizado:</dt>
-            <dd>
-                {{ actividad.updated_at | moment('from') }}, 
-                {{ actividad.updated_at | moment('L LT a') }}
-            </dd>
-            
-            <template v-if="eliminado">
-                <dt>Eliminado:</dt>
-                <dd>
-                    {{ actividad.deleted_at | moment('from') }}, 
-                    {{ actividad.deleted_at | moment('L LT a') }}
-                </dd>
-            </template>
-        </dl>
-    </base-perfil>
+    <div>
+        <!-- Detalle de la actividad económica -->
+        <vc-detalle-actividad
+            v-show="ui.detalle.visible"
+            :actividad="actividad"
+            @editar="editar"
+            @dado-de-baja="obtener"
+            @dado-de-alta="obtener"
+            @cerrar="cerrar"
+        >
+        </vc-detalle-actividad>
+        
+        <vc-form-actividad
+            v-show="!ui.detalle.visible"
+            :actividadEconomica="actividad"
+            @actualizado="actualizada"
+            @cerrar="verDetalle"
+        >    
+        </vc-form-actividad>
+    </div>
     
 </template>
 
 <script>
+import { apiActividad } from '../../common/api/actividad_economica.js';
+
+/**
+ * Eventos
+ */
+import { EVENTO_CERRAR } from '../../common/components/eventos_tarjeta.js';
+
 /**
  * Componentes
  */
-import BasePerfil            from '../../components/BasePerfil.vue';
-import ObtenerInstanciaMixin from '../../mixins/obtener_instancia_mixin.js';
-import DarBajaInstanciaMixin from '../../mixins/dar_baja_instancia_mixin.js';
-import DarAltaInstanciaMixin from '../../mixins/dar_alta_instancia_mixin.js';
+import VcDetalleActividad from './VcDetalleActividad.vue';
+import VcFormActividad    from './VcFormActividad.vue';
 
 
 export default {
     name: 'vc-perfil-actividad',
-    components: { BasePerfil },
-    mixins: [
-        ObtenerInstanciaMixin,
-        DarBajaInstanciaMixin,
-        DarAltaInstanciaMixin
-    ],
+    components: {
+        VcDetalleActividad,
+        VcFormActividad
+    },
     data() {
         return {
             id: null,
-            actividad: null
-        }
-    },
-    computed: {
-        titulo() {
-            return `Detalle de ${this.actividad.descripcion}`;
-        },
-        
-        eliminado() {
-            return _.isNull(this.actividad.deleted_at) ? false : true;
-        },
-        
-        urlEspecifica() {
-            return `${this.$options.static.url.actividades}/${this.id}`;
+            actividad: {
+                descripcion: '',
+                created_at: new Date(),
+                updated_at: new Date(),
+                deleted_at: new Date()
+            },
+            ui: {
+                detalle: {
+                    visible: true
+                }
+            }
         }
     },
     watch: {
@@ -80,73 +66,73 @@ export default {
         }
     },
     created() {
-        this.resetearActividad();
+        BusEventos.$on('VcTablaActividades:verPerfil', (id) => {
+            this.setID(id);
+            this.verDetalle();
+        });
+
+        BusEventos.$on('VcTablaActividades:editar', (id) => {
+            this.setID(id);
+            this.editar();
+        });
         
-        BusEventos.$on('VcTablaActividades:verPerfil', (id) => { this.setID(id) });
-        BusEventos.$on('VcTablaActividades:restaurado', (id) => { this.actualizar(id) });
-        BusEventos.$on('VcFormActividad:guardado', (id) => { this.actualizar(id) });
-    },
-    static: {
-        url: {
-            actividades: '/actividades-economicas'
-        },
-        
-        actividadPorDefecto: {
-            descripcion: '',
-            created_at: new Date(),
-            updated_at: new Date(),
-            deleted_at: new Date()
-        }
+        BusEventos.$on('VcTablaActividades:eliminado', (id) => {
+            this.actualizar(id);
+        });
+
+        BusEventos.$on('VcTablaActividades:restaurado', (id) => {
+            this.actualizar(id);
+        });
     },
     methods: {
         setID(id) {
             this.id = id;
         },
-        
+
         actualizar(id) {
             if (id !== null && this.id === id) {
                 this.obtener();
             }
         },
-        
+
         obtener() {
-            this.$_obtenerInstanciaMixin_obtener(
-                this.urlEspecifica,
-                (response) => { this.actividad = response.data }
-            );
+            apiActividad.obtener(this.id)
+            .then((respuesta) => {
+                const STATUS = respuesta.status;
+
+                if (STATUS === 200) {
+                    this.actividad = respuesta.data;
+                }
+            })
+            .catch(({notificacion}) => {
+                if (notificacion) {
+                    this.error(notificacion);
+                }
+            });
         },
-        
+
+        actualizada() {
+            this.obtener();
+            this.verDetalle();
+        },
+
+        verDetalle() {
+            this.ui.detalle.visible = true;
+        },
+
         editar() {
-            BusEventos.$emit('VcPerfilActividad:editar', this.id);
-            this.$emit('mostrar-form');
+            this.ui.detalle.visible = false;
         },
-        
-        darDeBaja() {
-            this.$_darBajaInstanciaMixin_eliminar(
-                this.urlEspecifica,
-                () => {
-                    this.obtener();
-                    BusEventos.$emit('VcPerfilActividad:eliminado')
-                }
-            );
-        },
-        
-        darDeAlta() {
-            this.$_darAltaInstanciaMixin_restaurar(
-                `${this.urlEspecifica}/restore`,
-                () => {
-                    this.obtener();
-                    BusEventos.$emit('VcPerfilActividad:restaurado')
-                }
-            )
-        },
-        
+
         cerrar() {
-            this.$emit('cerrar');
-        },
-        
-        resetearActividad() {
-            this.actividad = { ...this.$options.static.actividadPorDefecto };
+            this.$emit(EVENTO_CERRAR);
+        }
+    },
+    notifications: {
+        error: {
+            title: 'Error',
+            message: '',
+            type: 'error'
         }
     }
 }

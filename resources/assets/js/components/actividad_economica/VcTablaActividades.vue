@@ -103,13 +103,16 @@ export default {
         
         editar(id) {
             BusEventos.$emit('VcTablaActividades:editar', id);
-            this.$emit('mostrar-form');
+            this.$emit('mostrar-perfil');
         },
         
         darDeBaja(id) {
             this.$_darBajaInstanciaMixin_eliminar(
                 `${this.$options.static.url}/${id}`,
-                () => { this.obtenerRegistros() },
+                () => {
+                    BusEventos.$emit('VcTablaActividades:eliminado', id);
+                    this.obtenerRegistros()
+                },
                 this.$options.static.mensajes.baja
             );
         },
