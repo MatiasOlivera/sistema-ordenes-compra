@@ -1,155 +1,256 @@
 <template lang="html">
-
-    <base-formulario
-        :titulos="$options.static.titulos"
-        :url="$options.static.url.actividades"
-        :id="id"
-        :modelo="actividad"
-        :modeloPorDefecto="$options.static.actividadPorDefecto"
-        :mensajes="$options.static.mensajes"
-        @obtenido="setActividad"
-        @validado="validado"
-        @guardado="guardado"
-        @deshacer="setActividad"
-        @limpiar="resetearTodo"
+    
+    <base-tarjeta
+        :titulo="tarjeta.titulo"
+        :botonIzqVisible="tarjeta.botonIzqVisible"
+        :botonIzqTipo="tarjeta.botonIzqTipo"
+        :confirmacionRequerida="fueModificada"
+        :confirmacionNotificacion="tarjeta.confirmacion.notificacion"
         @cerrar="cerrar"
     >
     
-        <fieldset class="form-group">
-            <label for="descripcion">Descripción</label>
+        <form @submit.prevent="enviar">
+            <fieldset class="form-group">
+                <label for="descripcion">Descripción</label>
 
-            <input
-                v-model="actividad.descripcion"
-                :class="{'is-invalid' : validacion.descripcion}"
-                type="text"
-                name="descripcion"
-                class="form-control"
-                id="descripcion"
-            >
-            <vc-form-error
-                v-if="validacion.descripcion"
-                :error="validacion.descripcion"
-            >
-            </vc-form-error>
-        </fieldset>
+                <input
+                    v-model="actividad.descripcion"
+                    :class="{'is-invalid' : validacion.descripcion}"
+                    type="text"
+                    name="descripcion"
+                    class="form-control"
+                    id="descripcion"
+                >
+                <vc-form-error
+                    v-if="validacion.descripcion"
+                    :error="validacion.descripcion"
+                >
+                </vc-form-error>
+            </fieldset>
+            
+            <div class="row mt-4">
+                <div class="col">
+                    <vc-boton-submit :disabled="estaCargando">
+                    </vc-boton-submit>
+                </div>
+                
+                <div class="col-auto ml-auto">
+                    <vc-boton-reset @click.native="restaurar">
+                    </vc-boton-reset>
+                </div>
+            </div>
+        </form>
+        
+    </base-tarjeta>
     
-    </base-formulario>
-
 </template>
 
 <script>
+import { apiActividad }                            from '../../common/api/actividad_economica.js';
+import { objectoTienePropiedades }                 from '../../common/components/validadores.js';
+import { ACTIVIDAD_POR_DEFECTO, ACTIVIDAD_CLAVES } from '../../common/components/actividad_economica.js';
+
+/**
+ * Eventos
+ */
+import {
+    EVENTO_GUARDADO,
+    EVENTO_ACTUALIZADO
+} from '../../common/components/eventos_formulario.js';
+import { EVENTO_CERRAR } from '../../common/components/eventos_tarjeta.js';
+
+/**
+ * Valores por defecto
+ */
+const VALIDACION_POR_DEFECTO = {
+    descripcion: null
+};
+
+const TARJETA = {
+    botonIzqVisible: true,
+    confirmacion: {
+        notificacion: {
+            titulo: 'Cerrar formulario',
+            mensaje: 'Se perderán todos los cambios de la actividad económica que no se hayan guardado. ¿Estás seguro?'
+        }
+    }
+};
+
+const TARJETA_NUEVO = {
+    titulo: 'Nuevo rubro',
+    botonIzqTipo: 'cerrar',
+    ...TARJETA
+};
+
+const TARJETA_EDITAR = {
+    titulo: 'Editar rubro',
+    botonIzqTipo: 'volver',
+    ...TARJETA
+};
+
 /**
  * Componentes
  */
-import BaseFormulario from '../../components/BaseFormulario.vue';
-import VcFormError    from '../../components/VcFormError.vue';
+import BaseTarjeta   from '../../components/BaseTarjeta.vue';
+import VcFormError   from '../../components/VcFormError.vue';
+import VcBotonSubmit from '../../components/VcBotonSubmit.vue';
+import VcBotonReset  from '../../components/VcBotonReset.vue';
 
 
 export default {
     name: 'vc-form-actividad',
     components: {
-        BaseFormulario,
-        VcFormError
+        BaseTarjeta,
+        VcFormError,
+        VcBotonSubmit,
+        VcBotonReset
+    },
+    props: {
+        actividadEconomica: {
+            type: Object,
+            validator: function(actividad) {
+                return objectoTienePropiedades(actividad, ACTIVIDAD_CLAVES);
+            },
+            default: function() {
+                return ACTIVIDAD_POR_DEFECTO;
+            }
+        }
     },
     data() {
         return {
-            id: null,
             actividad: null,
-            validacion: null
+            validacion: null,
+            tarjeta: null,
+            estaCargando: false
         }
     },
-    static: {
-        titulos: {
-            crear: 'Nuevo rubro',
-            editar: 'Editar rubro'
-        },
-        
-        url: {
-            actividades: '/actividades-economicas'
-        },
-        
-        mensajes: {
-            obtener: {
-                error: {
-                    noEncontrado: {
-                        titulo: 'No encontrado',
-                        mensaje: 'El rubro no existe o ha sido eliminado'
-                    },
-                    porDefecto: {
-                        titulo: 'Error',
-                        mensaje: 'No se pudo traer los datos del rubro'
-                    }
-                }
-            },
-            enviar: {
-                error: {
-                    porDefecto: {
-                        titulo: 'Error',
-                        mensaje: 'No se pudo crear el rubro'
-                    }
-                }
+    watch: {
+        actividadEconomica: {
+            immediate: true,
+            handler: function(actividad) {
+                this.actividad = { ...actividad };
             }
+        }
+    },
+    computed: {
+        esNueva() {
+            return _.isEqual(ACTIVIDAD_POR_DEFECTO, this.actividadEconomica);
+        },
+
+        fueModificada() {
+            return !_.isEqual(this.actividadEconomica, this.actividad);
         },
         
-        actividadPorDefecto: {
-            descripcion: null
-        },
-        
-        validacionPorDefecto: {
-            descripcion: null
+        /**
+         * Evitar el envio de propiedades innecesarias en las peticiones
+         * @return {Object} Los campos del formulario
+         */
+        camposFormulario() {
+            return _.pick(this.actividad, ACTIVIDAD_CLAVES);
         }
     },
     created() {
-        this.resetearTodo();
-
-        BusEventos.$on('VcTablaActividades:editar', (id) => { this.setID(id) });
-        BusEventos.$on('VcPerfilActividad:editar', (id) => { this.setID(id) });
+        this.tarjeta = this.esNueva ? TARJETA_NUEVO : TARJETA_EDITAR;
+        this.setValidacionPorDefecto();
     },
-    methods: {        
-        setID(id) {
-            this.id = id;
-        },
-        
-        setActividad(actividad) {
-            this.actividad = actividad;
-        },
-        
-        validado(errores) {
-            this.validacion = errores;
-        },
-        
-        guardado(id) {
-            if (id !== null) {
-                this.setID(id);
+    methods: {
+        enviar() {
+            if (this.fueModificada) {
+                this.estaCargando = true;
+                this.esNueva ? this.guardar() : this.actualizar();
             }
-            
-            this.$emit('cerrar');
-            this.$emit('guardado', this.id);
-            BusEventos.$emit('VcFormActividad:guardado', this.id);
-            this.resetearTodo();
         },
-        
+
+        guardar() {
+            apiActividad.guardar(this.camposFormulario)
+            .then((respuesta) => {
+                let status = respuesta.status;
+
+                if (status === 201) {
+                    this.exito(respuesta.notificacion);
+
+                    this.restaurar();
+
+                    this.$emit(EVENTO_GUARDADO);
+
+                    BusEventos.$emit('VcFormActividad:guardado');
+                }
+            })
+            .catch(({
+                notificacion,
+                validacion
+            }) => {
+
+                if (validacion) {
+                    this.validacion = validacion;
+                }
+
+                if (notificacion) {
+                    this.error(notificacion);
+                }
+            })
+            .finally(() => {
+                this.estaCargando = false;
+            });
+        },
+
+        actualizar() {
+            apiActividad.actualizar(this.actividad.id, this.camposFormulario)
+            .then((respuesta) => {
+                let status = respuesta.status;
+
+                if (status === 200) {
+                    this.exito(respuesta.notificacion);
+
+                    this.restaurar();
+
+                    this.$emit(EVENTO_ACTUALIZADO);
+
+                    BusEventos.$emit('VcFormActividad:guardado');
+                }
+            })
+            .catch(({
+                notificacion,
+                validacion
+            }) => {
+
+                if (validacion) {
+                    this.validacion = validacion;
+                }
+
+                if (notificacion) {
+                    this.error(notificacion);
+                }
+            })
+            .finally(() => {
+                this.estaCargando = false;
+            });
+        },
+
+        restaurar() {
+            this.actividad = { ...this.actividadEconomica };
+            this.setValidacionPorDefecto();
+        },
+
+        setValidacionPorDefecto() {
+            this.validacion = { ...VALIDACION_POR_DEFECTO };
+        },
+
         cerrar() {
-            this.$emit('cerrar');
-            this.resetearTodo();
+            this.restaurar();
+            this.$emit(EVENTO_CERRAR);
+        }
+    },
+    notifications: {
+        exito: {
+            title: 'Exito',
+            message: '',
+            type: 'success'
         },
-        
-        resetearId() {
-            this.id = null;
-        },
-        
-        resetearActividad() {
-            this.actividad = { ...this.$options.static.actividadPorDefecto };
-        },
-        
-        resetearValidacion() {
-            this.validacion = { ...this.$options.static.validacionPorDefecto };
-        },
-        
-        resetearTodo() {
-            this.resetearActividad();
-            this.resetearId();
-            this.resetearValidacion();
+        error: {
+            title: 'Error',
+            message: '',
+            type: 'error'
         }
     }
 }
