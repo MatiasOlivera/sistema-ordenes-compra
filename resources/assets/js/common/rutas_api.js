@@ -1,1 +1,7 @@
-export const URL_EMPRESAS = '/empresas';
+import Ruta from './ruta.js';
+
+let rutaEmpresa = new Ruta('/empresas');
+
+export {
+    rutaEmpresa
+}
