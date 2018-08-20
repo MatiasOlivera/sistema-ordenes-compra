@@ -1,154 +1,242 @@
 <template lang="html">
 
-    <base-formulario
-        :titulos="$options.static.titulos"
-        :url="$options.static.url.tiposOrganizacion"
-        :id="id"
-        :modelo="tipo"
-        :modeloPorDefecto="$options.static.tipoPorDefecto"
-        :mensajes="$options.static.mensajes"
-        @obtenido="setTipo"
-        @validado="validado"
-        @guardado="guardado"
-        @deshacer="setTipo"
-        @limpiar="resetearTodo"
+    <base-tarjeta
+        :titulo="tarjeta.titulo"
+        :botonIzqVisible="tarjeta.botonIzqVisible"
+        :botonIzqTipo="tarjeta.botonIzqTipo"
+        :confirmacionRequerida="fueModificado"
+        :confirmacionNotificacion="tarjeta.confirmacion.notificacion"
         @cerrar="cerrar"
     >
+        
+        <form @submit.prevent="enviar">
+            <fieldset class="form-group">
+                <label for="descripcion">Descripción</label>
     
-        <fieldset class="form-group">
-            <label for="descripcion">Descripción</label>
-
-            <input
-                v-model="tipo.descripcion"
-                :class="{'is-invalid' : validacion.descripcion}"
-                type="text"
-                name="descripcion"
-                class="form-control"
-                id="descripcion"
-            >
-            <vc-form-error
-                v-if="validacion.descripcion"
-                :error="validacion.descripcion"
-            >
-            </vc-form-error>
-        </fieldset>
+                <input
+                    v-model="tipo.descripcion"
+                    :class="{'is-invalid' : validacion.descripcion}"
+                    type="text"
+                    name="descripcion"
+                    class="form-control"
+                    id="descripcion"
+                >
+                <vc-form-error
+                    v-if="validacion.descripcion"
+                    :error="validacion.descripcion"
+                >
+                </vc-form-error>
+            </fieldset>
+            
+            <div class="row mt-4">
+                <div class="col">
+                    <vc-boton-submit :disabled="estaCargando">
+                    </vc-boton-submit>
+                </div>
+                
+                <div class="col-auto ml-auto">
+                    <vc-boton-reset @click.native="restaurar">
+                    </vc-boton-reset>
+                </div>
+            </div>
+        </form>
+        
+    </base-tarjeta>
     
-    </base-formulario>
-
 </template>
 
 <script>
-import BaseFormulario from '../../components/BaseFormulario.vue';
-import VcFormError    from '../../components/VcFormError.vue';
+import { apiTipoOrganizacion }           from '../../common/api/tipo_organizacion.js';
+import { objetoTienePropiedades }        from '../../common/components/validadores.js';
+import { TIPO_POR_DEFECTO, TIPO_CLAVES } from '../../common/components/tipo_organizacion.js';
+
+/**
+ * Eventos
+ */
+import { EVENTO_GUARDADO, EVENTO_ACTUALIZADO } from '../../common/components/eventos_formulario.js';
+import { EVENTO_CERRAR } from '../../common/components/eventos_tarjeta.js';
+
+/**
+ * Valores por defecto
+ */
+const VALIDACION_POR_DEFECTO = {
+    descripcion: null
+};
+
+const TARJETA = {
+    botonIzqVisible: true,
+    confirmacion: {
+        notificacion: {
+            titulo: 'Cerrar formulario',
+            mensaje: 'Se perderán todos los cambios del tipo de organización que no se hayan guardado. ¿Estás seguro?'
+        }
+    }
+};
+
+const TARJETA_NUEVO = {
+    titulo: 'Nuevo tipo de organización',
+    botonIzqTipo: 'cerrar',
+    ...TARJETA
+};
+
+const TARJETA_EDITAR = {
+    titulo: 'Editar tipo de organización',
+    botonIzqTipo: 'volver',
+    ...TARJETA
+};
+
+/**
+ * Componentes
+ */
+import BaseTarjeta   from '../../components/BaseTarjeta.vue';
+import VcFormError   from '../../components/VcFormError.vue';
+import VcBotonSubmit from '../../components/VcBotonSubmit.vue';
+import VcBotonReset  from '../../components/VcBotonReset.vue';
+
 
 export default {
     name: 'vc-form-tipo-org',
     components: {
-        BaseFormulario,
-        VcFormError
+        BaseTarjeta,
+        VcFormError,
+        VcBotonSubmit,
+        VcBotonReset
+    },
+    props: {
+        tipoOrganizacion: {
+            type: Object,
+            validator: function(tipo) {
+                return objetoTienePropiedades(tipo, TIPO_CLAVES);
+            },
+            default: function() {
+                return TIPO_POR_DEFECTO;
+            }
+        }
     },
     data() {
         return {
-            id: null,
             tipo: null,
-            validacion: null
+            validacion: null,
+            tarjeta: null,
+            estaCargando: false
         }
     },
-    static: {
-        titulos: {
-            crear: 'Nuevo tipo de organización',
-            editar: 'Editar tipo de organización'
+    computed: {
+        esNuevo() {
+            return _.isEqual(TIPO_POR_DEFECTO, this.tipoOrganizacion);
         },
-        
-        url: {
-            tiposOrganizacion: '/tipos-organizacion'
+
+        fueModificado() {
+            return !_.isEqual(this.tipoOrganizacion, this.tipo);
         },
-        
-        mensajes: {
-            obtener: {
-                error: {
-                    noEncontrado: {
-                        titulo: 'No encontrado',
-                        mensaje: 'El tipo de organización no existe o ha sido eliminado'
-                    },
-                    porDefecto: {
-                        titulo: 'Error',
-                        mensaje: 'No se pudo traer los datos del tipo de organización'
-                    }
-                }
-            },
-            enviar: {
-                error: {
-                    porDefecto: {
-                        titulo: 'Error',
-                        mensaje: 'No se pudo crear el tipo de organización'
-                    }
-                }
+    },
+    watch: {
+        tipoOrganizacion: {
+            immediate: true,
+            handler: function(tipo) {
+                this.tipo = { ...tipo };
             }
-        },
-        
-        tipoPorDefecto: {
-            descripcion: null
-        },
-        
-        validacionPorDefecto: {
-            descripcion: null
         }
     },
     created() {
-        this.resetearTodo();
-
-        BusEventos.$on('VcTablaTipoOrg:editar', (id) => { this.setID(id) });
-        BusEventos.$on('VcPerfilTipoOrg:editar', (id) => { this.setID(id) });
+        this.tarjeta = this.esNuevo ? TARJETA_NUEVO : TARJETA_EDITAR;
+        this.resetearValidacion();
     },
-    methods: {        
-        setID(id) {
-            this.id = id;
-        },
-        
-        setTipo(tipo) {
-            this.tipo = tipo;
-        },
-        
-        validado(errores) {
-            this.validacion = errores;
-        },
-        
-        guardado(id) {
-            if (id !== null) {
-                this.setID(id);
+    methods: {
+        enviar() {
+            if (this.fueModificado) {
+                this.estaCargando = true;
+                this.esNuevo ? this.guardar() : this.actualizar();
             }
-            
-            this.$emit('cerrar');
-            this.$emit('guardado', this.id);
-            BusEventos.$emit('VcFormTipoOrg:guardado', this.id);
-            this.resetearTodo();
         },
-        
-        cerrar() {
-            this.$emit('cerrar');
-            this.resetearTodo();
+
+        guardar() {
+            apiTipoOrganizacion.guardar(this.tipo)
+                .then((respuesta) => {
+                    let status = respuesta.status;
+
+                    if (status === 201) {
+                        this.exito(respuesta.notificacion);
+
+                        this.restaurar();
+
+                        let ID = respuesta.data.data.id;
+                        this.$emit(EVENTO_GUARDADO, ID);
+
+                        BusEventos.$emit('VcFormTipoOrg:guardado');
+                    }
+                })
+                .catch(({
+                    notificacion,
+                    validacion
+                }) => {
+
+                    if (validacion) {
+                        this.validacion = validacion;
+                    }
+
+                    if (notificacion) {
+                        this.error(notificacion);
+                    }
+                })
+                .finally(() => {
+                    this.estaCargando = false;
+                });
         },
-        
-        resetearId() {
-            this.id = null;
+
+        actualizar() {
+            apiTipoOrganizacion.actualizar(this.tipo.id, this.tipo)
+                .then((respuesta) => {
+                    let status = respuesta.status;
+
+                    if (status === 200) {
+                        this.exito(respuesta.notificacion);
+
+                        this.restaurar();
+
+                        this.$emit(EVENTO_ACTUALIZADO);
+
+                        BusEventos.$emit('VcFormTipoOrg:guardado');
+                    }
+                })
+                .catch(({
+                    notificacion,
+                    validacion
+                }) => {
+
+                    if (validacion) {
+                        this.validacion = validacion;
+                    }
+
+                    if (notificacion) {
+                        this.error(notificacion);
+                    }
+                })
+                .finally(() => {
+                    this.estaCargando = false;
+                });
         },
-        
-        resetearTipo() {
-            this.tipo = { ...this.$options.static.tipoPorDefecto };
-        },
-        
-        resetearValidacion() {
-            this.validacion = { ...this.$options.static.validacionPorDefecto };
-        },
-        
-        resetearTodo() {
-            this.resetearTipo();
-            this.resetearId();
+
+        restaurar() {
+            this.tipo = { ...this.tipoOrganizacion };
             this.resetearValidacion();
+        },
+
+        resetearValidacion() {
+            this.validacion = { ...VALIDACION_POR_DEFECTO };
+        },
+
+        cerrar() {
+            this.restaurar();
+            this.$emit(EVENTO_CERRAR);
         }
     },
     notifications: {
+        exito: {
+            title: 'Exito',
+            message: '',
+            type: 'success'
+        },
         error: {
             title: 'Error',
             message: '',
