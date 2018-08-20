@@ -47,7 +47,7 @@
 
 <script>
 import { apiActividad }                            from '../../common/api/actividad_economica.js';
-import { objectoTienePropiedades }                 from '../../common/components/validadores.js';
+import { objetoTienePropiedades }                  from '../../common/components/validadores.js';
 import { ACTIVIDAD_POR_DEFECTO, ACTIVIDAD_CLAVES } from '../../common/components/actividad_economica.js';
 
 /**
@@ -109,7 +109,7 @@ export default {
         actividadEconomica: {
             type: Object,
             validator: function(actividad) {
-                return objectoTienePropiedades(actividad, ACTIVIDAD_CLAVES);
+                return objetoTienePropiedades(actividad, ACTIVIDAD_CLAVES);
             },
             default: function() {
                 return ACTIVIDAD_POR_DEFECTO;

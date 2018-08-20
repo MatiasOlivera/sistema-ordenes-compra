@@ -4,7 +4,7 @@
  * @param  {Array}  claves  Las propiedades que debe tener la prop
  * @return {Boolean}
  */
-export function objectoTienePropiedades(prop, claves) {
+export function objetoTienePropiedades(prop, claves) {
     if (! _.isObject(prop)) {
         throw new TypeError('El argumento "prop" debe ser un objecto');
     }
