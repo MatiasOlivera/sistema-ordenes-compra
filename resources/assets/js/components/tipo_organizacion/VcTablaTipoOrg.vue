@@ -99,13 +99,16 @@ export default {
         
         editar(id) {
             BusEventos.$emit('VcTablaTipoOrg:editar', id);
-            this.$emit('mostrar-form');
+            this.$emit('mostrar-perfil');
         },
         
         darDeBaja(id) {
             this.$_darBajaInstanciaMixin_eliminar(
                 `${this.$options.static.url}/${id}`,
-                () => { this.obtenerRegistros() },
+                () => {
+                    this.obtenerRegistros();
+                    BusEventos.$emit('VcTablaTipoOrg:eliminado', id);
+                },
                 this.$options.static.mensajes.baja
             );
         },
