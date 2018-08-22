@@ -79,48 +79,25 @@
             </fieldset>
             
             <fieldset>
-                <label for="tipoOrganizacion">Tipo de organización</label>
-
-                <div class="input-group">
-                    <select
-                        v-model="juridica.tipo_organizacion_id"
-                        :class="{'is-invalid' : validacion.tipo_organizacion_id}"
-                        name="tipoOrganizacion"
-                        id="tipoOrganizacion"
-                        class="custom-select"
-                        aria-describedby="denominacionAyuda"
+                <label for="vc-select-tipo-org">
+                    Tipo de organización
+                    
+                    <plus-icon
+                        id="iconoNuevo"
+                        class="icono ml-2"
+                        @click="mostrarFormTipoOrg"
                     >
-                        <option
-                            v-for="tipo in tiposOrganizacion"
-                            :key="tipo.id"
-                            :value="tipo.id"
-                            v-text="tipo.descripcion"
-                        >
-                        </option>
-                    </select>
-                    <div class="input-group-append">
-                        <button
-                            @click="mostrarFormTipoOrg"
-                            type="button"
-                            class="btn btn-secondary"
-                        >
-                            <plus-circle-icon class="icono"></plus-circle-icon>
-                        </button>
-                    </div>
-                </div>
+                    </plus-icon>
+                </label>
                 
-                <small
-                    v-if="!validacion.tipo_organizacion_id"
-                    id="tipoOrganizacionAyuda"
-                    class="form-text text-muted"
-                >
-                    El tipo de organización de la persona jurídica
-                </small>
-                <vc-form-error
-                    v-else
+                <vc-select-tipo-org
+                    :tiposOrganizacion="tiposOrganizacion"
+                    :tipo="juridica.tipo_organizacion"
                     :error="validacion.tipo_organizacion_id"
+                    @buscar="buscarTiposOrganizacion"
+                    @input="inputTiposOrganizacion"
                 >
-                </vc-form-error>
+                </vc-select-tipo-org>
             </fieldset>
             
         </base-formulario>
@@ -136,26 +113,28 @@
 </template>
 
 <script>
-import { PlusCircleIcon } from 'vue-feather-icons';
-import BaseFormulario     from '../../components/BaseFormulario.vue';
-import VcFormError        from '../../components/VcFormError.vue';
-import VcFormTipoOrg      from '../../components/tipo_organizacion/VcFormTipoOrg.vue';
-import FiltroCuitMixin    from '../../mixins/persona_juridica/filtro_cuit_mixin.js';
+import { PlusIcon }    from 'vue-feather-icons';
+import BaseFormulario  from '../../components/BaseFormulario.vue';
+import VcFormError     from '../../components/VcFormError.vue';
+import VcFormTipoOrg   from '../../components/tipo_organizacion/VcFormTipoOrg.vue';
+import VcSelectTipoOrg from '../../components/tipo_organizacion/VcSelectTipoOrg.vue';
+import FiltroCuitMixin from '../../mixins/persona_juridica/filtro_cuit_mixin.js';
 
 export default {
     name: 'vc-form-juridica',
     components: {
         BaseFormulario,
         VcFormError,
+        VcSelectTipoOrg,
         VcFormTipoOrg,
-        PlusCircleIcon
+        PlusIcon
     },
     mixins: [ FiltroCuitMixin ],
     data() {
         return {
             id: null,
             juridica: null,
-            tiposOrganizacion: null,
+            tiposOrganizacion: [],
             
             tipoOrganizacionForm: {
                 visible: false
@@ -212,42 +191,40 @@ export default {
         juridicaPorDefecto: {
             cuit: null,
             denominacion: null,
-            tipo_organizacion_id: ''
+            tipo_organizacion_id: null,
+            tipo_organizacion: null,
         },
         
         validacionPorDefecto: {
             cuit: null,
             denominacion: null,
             tipo_organizacion_id: null
-        },
-        
-        tiposOrganizacionPorDefecto: [{
-            id: '',
-            descripcion: 'Seleccione un tipo de organización'
-        }]
+        }
     },
     created() {
         this.resetearTodo();
-        this.obtenerTiposOrganizacion();
 
         BusEventos.$on('VcTablaJuridicas:editar', (id) => { this.setID(id) });
         BusEventos.$on('VcPerfilJuridica:editar', (id) => { this.setID(id) });
     },
     methods: {
-        obtenerTiposOrganizacion() {
+        buscarTiposOrganizacion(valorBuscado) {
             axios.get(this.$options.static.url.tiposOrganizacion, {
                 params: {
-                    limite: 50,
+                    busqueda: valorBuscado,
+                    limite: 10,
                     pagina: 1,
                     ordenarPor: 'descripcion',
                     ascendente: 1,
                     soloEliminados: 0
                 }
             })
-            .then((response) => {
-                let tipos = response.data.data;
-                this.resetearTiposOrganizacion();
-                this.tiposOrganizacion = this.tiposOrganizacion.concat(tipos);
+            .then((respuesta) => {
+                const STATUS = respuesta.status;
+                
+                if (STATUS === 200) {
+                    this.tiposOrganizacion = respuesta.data.data;
+                }
             })
             .catch((error) => {
                 if (error.response) {
@@ -271,6 +248,16 @@ export default {
             })
         },
         
+        inputTiposOrganizacion(juridica) {
+            let id = null;
+            
+            if (_.isObject(juridica) && juridica.hasOwnProperty('id')) {
+                id = juridica.id;
+            }
+            
+            this.juridica.tipo_organizacion_id = id;
+        },
+        
         mostrarFormTipoOrg() {
             this.tipoOrganizacionForm.visible = true;
         },
@@ -279,9 +266,10 @@ export default {
             this.tipoOrganizacionForm.visible = false;
         },
         
-        guardadoFormTipoOrg(id) {
-            this.obtenerTiposOrganizacion();
-            this.juridica.tipo_organizacion_id = id;
+        guardadoFormTipoOrg(tipoOrganizacion) {
+            this.juridica.tipo_organizacion_id = tipoOrganizacion.id;
+            this.juridica.tipo_organizacion = tipoOrganizacion;
+            this.cerrarFormTipoOrg();
         },
         
         setID(id) {
@@ -327,10 +315,6 @@ export default {
             this.validacion = { ...this.$options.static.validacionPorDefecto };
         },
         
-        resetearTiposOrganizacion() {
-            this.tiposOrganizacion = [ ...this.$options.static.tiposOrganizacionPorDefecto ];
-        },
-        
         resetearFormulario() {
             this.resetearJuridica();
             this.resetearId();
@@ -341,7 +325,6 @@ export default {
             this.resetearJuridica();
             this.resetearId();
             this.resetearValidacion();
-            this.resetearTiposOrganizacion();
         }
     },
     notifications: {
@@ -359,5 +342,8 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
+#iconoNuevo {
+    margin-bottom: 5px;
+}
 </style>

@@ -160,8 +160,7 @@ export default {
 
                         this.restaurar();
 
-                        let ID = respuesta.data.data.id;
-                        this.$emit(EVENTO_GUARDADO, ID);
+                        this.$emit(EVENTO_GUARDADO, respuesta.data.data);
 
                         BusEventos.$emit('VcFormTipoOrg:guardado');
                     }
