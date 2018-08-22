@@ -6,8 +6,8 @@
             v-show="ui.detalle.visible"
             :juridica="juridica"
             @editar="editarJuridica"
-            @dar-de-baja="obtener"
-            @dar-de-alta="obtener"
+            @dado-de-baja="obtener"
+            @dado-de-alta="obtener"
             @cerrar="cerrar"
         >
         </vc-detalle-juridica>

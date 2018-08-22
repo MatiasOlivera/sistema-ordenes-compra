@@ -39,7 +39,6 @@
                     {{ juridica.deleted_at | moment('L LT a') }}
                 </dd>
             </template>
-            
         </dl>
         
     </base-perfil>
@@ -47,13 +46,15 @@
 </template>
 
 <script>
+import { apiPersonaJuridica }     from '../../common/api/persona_juridica.js';
+import { objetoTienePropiedades } from '../../common/components/validadores.js';
+import { JURIDICA_CLAVES }        from '../../common/components/persona_juridica.js';
+
 /**
  * Mixins
  */
- import DarBajaInstanciaMixin from '../../mixins/dar_baja_instancia_mixin.js';
- import DarAltaInstanciaMixin from '../../mixins/dar_alta_instancia_mixin.js';
- import FiltroCuitMixin       from '../../mixins/persona_juridica/filtro_cuit_mixin.js';
- 
+import FiltroCuitMixin from '../../mixins/persona_juridica/filtro_cuit_mixin.js';
+
 /**
  * Componentes
  */
@@ -62,15 +63,14 @@ import BasePerfil from '../../components/BasePerfil.vue';
 
 export default {
     name: 'vc-detalle-juridica',
-    mixins: [
-        DarBajaInstanciaMixin,
-        DarAltaInstanciaMixin,
-        FiltroCuitMixin
-    ],
     components: { BasePerfil },
+    mixins: [ FiltroCuitMixin ],
     props: {
         juridica: {
             type: Object,
+            validator: function(juridica) {
+                return objetoTienePropiedades(juridica, JURIDICA_CLAVES);
+            },
             required: true
         }
     },
@@ -78,43 +78,68 @@ export default {
         titulo() {
             return `Perfil de ${this.juridica.denominacion}`;
         },
-        
+
         eliminado() {
-            return ! _.isNull(this.juridica.deleted_at);
-        }
-    },
-    static: {
-        url: {
-            juridicas: '/juridicas'
+            return _.isNull(this.juridica.deleted_at) ? false : true;
         }
     },
     methods: {
         editar() {
             this.$emit('editar');
         },
-        
+
         cerrar() {
             this.$emit('cerrar');
         },
-        
+
         darDeBaja() {
-            this.$_darBajaInstanciaMixin_eliminar(
-                `${this.$options.static.url.juridicas}/${this.id}`,
-                () => {
-                    this.$emit('dar-de-baja');
-                    BusEventos.$emit('VcPerfilJuridica:eliminada')
+            apiPersonaJuridica.darDeBaja(this.juridica.id)
+            .then((respuesta) => {
+                const STATUS = respuesta.status;
+
+                if (STATUS === 200) {
+                    this.exito(respuesta.notificacion);
+
+                    this.$emit('dado-de-baja');
+                    BusEventos.$emit('VcPerfilJuridica:eliminada');
                 }
-            );
+            })
+            .catch(({ notificacion }) => {
+                if (notificacion) {
+                    this.error(notificacion);
+                }
+            });
         },
-        
+
         darDeAlta() {
-            this.$_darAltaInstanciaMixin_restaurar(
-                `${this.$options.static.url.juridicas}/${this.id}/restore`,
-                () => {
-                    this.$emit('dar-de-alta');
-                    BusEventos.$emit('VcPerfilJuridica:restaurada')
+            apiPersonaJuridica.darDeAlta(this.juridica.id)
+            .then((respuesta) => {
+                const STATUS = respuesta.status;
+
+                if (STATUS === 200) {
+                    this.exito(respuesta.notificacion);
+
+                    this.$emit('dado-de-alta');
+                    BusEventos.$emit('VcPerfilJuridica:restaurada');
                 }
-            )
+            })
+            .catch(({ notificacion }) => {
+                if (notificacion) {
+                    this.error(notificacion);
+                }
+            });
+        }
+    },
+    notifications: {
+        exito: {
+            title: 'Exito',
+            message: '',
+            type: 'success'
+        },
+        error: {
+            title: 'Error',
+            message: '',
+            type: 'error'
         }
     }
 }
