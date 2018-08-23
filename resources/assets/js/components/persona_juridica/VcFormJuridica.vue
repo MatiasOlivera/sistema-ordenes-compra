@@ -391,13 +391,6 @@ export default {
         },
 
         resetearJuridica() {
-            // if (this.esNueva) {
-            //     let JURIDICA = { ...JURIDICA_POR_DEFECTO };
-            //     JURIDICA.tipo_organizacion = [];
-            //     this.juridica = JURIDICA;
-            // } else {
-            //     this.juridica = { ...this.personaJuridica };
-            // }
             this.juridica = { ...this.personaJuridica };
         },
 
