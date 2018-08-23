@@ -5,7 +5,7 @@
         <vc-detalle-juridica
             v-show="ui.detalle.visible"
             :juridica="juridica"
-            @editar="editarJuridica"
+            @editar="editar"
             @dado-de-baja="obtener"
             @dado-de-alta="obtener"
             @cerrar="cerrar"
@@ -14,7 +14,9 @@
         
         <vc-form-juridica
             v-show="!ui.detalle.visible"
-            @cerrar="verJuridica"
+            :personaJuridica="juridica"
+            @actualizado="actualizada"
+            @cerrar="verDetalle"
         >
         </vc-form-juridica>
         
@@ -60,6 +62,7 @@ export default {
             juridica: {
                 cuit: null,
                 denominacion: '',
+                tipo_organizacion_id: null,
                 tipo_organizacion: {
                     descripcion: ''
                 },
@@ -85,9 +88,23 @@ export default {
         }
     },
     created() {
-        BusEventos.$on('VcTablaJuridicas:verPerfil', (id) => { this.setID(id) });
-        BusEventos.$on('VcTablaJuridicas:restaurada', (id) => { this.actualizar(id) });
-        BusEventos.$on('VcFormJuridica:guardada', (id) => { this.actualizar(id) });
+        BusEventos.$on('VcTablaJuridicas:verPerfil', (id) => {
+            this.setID(id);
+            this.verDetalle();
+        });
+
+        BusEventos.$on('VcTablaJuridicas:editar', (id) => {
+            this.setID(id);
+            this.editar();
+        });
+
+        BusEventos.$on('VcTablaJuridicas:eliminada', (id) => {
+            this.actualizar(id);
+        });
+
+        BusEventos.$on('VcTablaJuridicas:restaurada', (id) => {
+            this.actualizar(id);
+        });
     },
     static: {
         url: {
@@ -113,12 +130,17 @@ export default {
             );
         },
         
-        editarJuridica() {
+        actualizada() {
+            this.obtener();
+            this.verDetalle();
+        },
+        
+        editar() {
             this.ui.detalle.visible = false;
             BusEventos.$emit('VcPerfilJuridica:editar', this.id);
         },
         
-        verJuridica() {
+        verDetalle() {
             this.ui.detalle.visible = true;
         },
         

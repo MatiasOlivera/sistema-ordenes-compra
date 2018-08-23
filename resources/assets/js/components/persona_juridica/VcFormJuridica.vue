@@ -1,107 +1,115 @@
 <template lang="html">
 
     <div>
-        <base-formulario
+        <base-tarjeta
             v-if="!tipoOrganizacionForm.visible"
-            :titulos="$options.static.titulos"
-            :url="$options.static.url.juridicas"
-            :id="id"
-            :modelo="juridica"
-            :modeloPorDefecto="$options.static.juridicaPorDefecto"
-            :mensajes="$options.static.mensajes"
-            @obtenido="setJuridica"
-            @validado="validado"
-            @guardado="guardado"
-            @deshacer="setJuridica"
-            @limpiar="resetearTodo"
+            :titulo="tarjeta.titulo"
+            :botonIzqVisible="tarjeta.botonIzqVisible"
+            :botonIzqTipo="tarjeta.botonIzqTipo"
+            :confirmacionRequerida="fueModificada"
+            :confirmacionNotificacion="tarjeta.confirmacion.notificacion"
             @cerrar="cerrar"
         >
-        
-            <fieldset class="form-group">
-                <label for="cuit">CUIT
-                    <span
-                        v-if="digitosCuit"
-                        class="text-muted"
+
+            <form @submit.prevent="enviar">
+                <fieldset class="form-group">
+                    <label for="cuit">CUIT
+                        <span
+                            v-if="digitosCuit"
+                            class="text-muted"
+                        >
+                            {{ digitosCuit }} - {{ juridica.cuit | formatoCuit }}
+                        </span>
+                    </label>
+
+                    <input
+                        v-model="juridica.cuit"
+                        :class="{'is-invalid' : validacion.cuit}"
+                        type="text"
+                        name="cuit"
+                        class="form-control"
+                        id="cuit"
+                        aria-describedby="cuitAyuda"
                     >
-                        {{ digitosCuit }} - {{ juridica.cuit | formatoCuit }}
-                    </span>
-                </label>
 
-                <input
-                    v-model="juridica.cuit"
-                    :class="{'is-invalid' : validacion.cuit}"
-                    type="text"
-                    name="cuit"
-                    class="form-control"
-                    id="cuit"
-                    aria-describedby="cuitAyuda"
-                >
-
-                <small
-                    v-if="!validacion.cuit"
-                    id="cuitAyuda"
-                    class="form-text text-muted"
-                >
-                    El CUIT de la persona jurídica sin puntos ni guiones medios
-                </small>
-                <vc-form-error
-                    v-else
-                    :error="validacion.cuit"
-                >
-                </vc-form-error>
-            </fieldset>
-
-            <fieldset class="form-group">
-                <label for="denominacion">Denominación / Razón social</label>
-
-                <input
-                    v-model="juridica.denominacion"
-                    :class="{'is-invalid' : validacion.denominacion}"
-                    type="text"
-                    name="denominacion"
-                    class="form-control"
-                    id="denominacion"
-                    aria-describedby="denominacionAyuda"
-                >
-
-                <small
-                    v-if="!validacion.denominacion"
-                    id="denominacionAyuda"
-                    class="form-text text-muted"
-                >
-                    La denominación de la organización o razón social registrada en AFIP
-                </small>
-                <vc-form-error
-                    v-else
-                    :error="validacion.denominacion"
-                >
-                </vc-form-error>
-            </fieldset>
-            
-            <fieldset>
-                <label for="vc-select-tipo-org">
-                    Tipo de organización
-                    
-                    <plus-icon
-                        id="iconoNuevo"
-                        class="icono ml-2"
-                        @click="mostrarFormTipoOrg"
+                    <small
+                        v-if="!validacion.cuit"
+                        id="cuitAyuda"
+                        class="form-text text-muted"
                     >
-                    </plus-icon>
-                </label>
-                
-                <vc-select-tipo-org
-                    :tiposOrganizacion="tiposOrganizacion"
-                    :tipo="juridica.tipo_organizacion"
-                    :error="validacion.tipo_organizacion_id"
-                    @buscar="buscarTiposOrganizacion"
-                    @input="inputTiposOrganizacion"
-                >
-                </vc-select-tipo-org>
-            </fieldset>
-            
-        </base-formulario>
-        
+                        El CUIT de la persona jurídica sin puntos ni guiones medios
+                    </small>
+                    <vc-form-error
+                        v-else
+                        :error="validacion.cuit"
+                    >
+                    </vc-form-error>
+                </fieldset>
+
+                <fieldset class="form-group">
+                    <label for="denominacion">Denominación / Razón social</label>
+
+                    <input
+                        v-model="juridica.denominacion"
+                        :class="{'is-invalid' : validacion.denominacion}"
+                        type="text"
+                        name="denominacion"
+                        class="form-control"
+                        id="denominacion"
+                        aria-describedby="denominacionAyuda"
+                    >
+
+                    <small
+                        v-if="!validacion.denominacion"
+                        id="denominacionAyuda"
+                        class="form-text text-muted"
+                    >
+                        La denominación de la organización o razón social registrada en AFIP
+                    </small>
+                    <vc-form-error
+                        v-else
+                        :error="validacion.denominacion"
+                    >
+                    </vc-form-error>
+                </fieldset>
+
+                <fieldset>
+                    <label for="vc-select-tipo-org">
+                        Tipo de organización
+
+                        <plus-icon
+                            id="iconoNuevo"
+                            class="icono ml-2"
+                            @click="mostrarFormTipoOrg"
+                        >
+                        </plus-icon>
+                    </label>
+
+                    <vc-select-tipo-org
+                        :tiposOrganizacion="tiposOrganizacion"
+                        :tipo="juridica.tipo_organizacion"
+                        :error="validacion.tipo_organizacion_id"
+                        @buscar="buscarTiposOrganizacion"
+                        @input="inputTiposOrganizacion"
+                    >
+                    </vc-select-tipo-org>
+                </fieldset>
+
+                <div class="row mt-4">
+                    <div class="col">
+                        <vc-boton-submit :disabled="estaCargando">
+                        </vc-boton-submit>
+                    </div>
+
+                    <div class="col-auto ml-auto">
+                        <vc-boton-reset @click.native="restaurar">
+                        </vc-boton-reset>
+                    </div>
+                </div>
+            </form>
+
+        </base-tarjeta>
+
         <vc-form-tipo-org
             v-if="tipoOrganizacionForm.visible"
             @guardado="guardadoFormTipoOrg"
@@ -113,37 +121,109 @@
 </template>
 
 <script>
-import { PlusIcon }    from 'vue-feather-icons';
-import BaseFormulario  from '../../components/BaseFormulario.vue';
-import VcFormError     from '../../components/VcFormError.vue';
-import VcFormTipoOrg   from '../../components/tipo_organizacion/VcFormTipoOrg.vue';
+import { apiPersonaJuridica } from '../../common/api/persona_juridica.js';
+import { objetoTienePropiedades } from '../../common/components/validadores.js';
+import { JURIDICA_POR_DEFECTO, JURIDICA_CLAVES } from '../../common/components/persona_juridica.js';
+
+/**
+ * Eventos
+ */
+import { EVENTO_GUARDADO, EVENTO_ACTUALIZADO } from '../../common/components/eventos_formulario.js';
+import { EVENTO_CERRAR } from '../../common/components/eventos_tarjeta.js';
+
+/**
+ * Valores por defecto
+ */
+const VALIDACION_POR_DEFECTO = {
+    cuit: null,
+    denominacion: null,
+    tipo_organizacion_id: null
+};
+
+const TARJETA = {
+    botonIzqVisible: true,
+    confirmacion: {
+        notificacion: {
+            titulo: 'Cerrar formulario',
+            mensaje: 'Se perderán todos los cambios de la persona jurídica que no se hayan guardado. ¿Estás seguro?'
+        }
+    }
+};
+
+const TARJETA_NUEVO = {
+    titulo: 'Nueva persona jurídica',
+    botonIzqTipo: 'cerrar',
+    ...TARJETA
+};
+
+const TARJETA_EDITAR = {
+    titulo: 'Editar persona jurídica',
+    botonIzqTipo: 'volver',
+    ...TARJETA
+};
+
+/**
+ * Componentes
+ */
+import { PlusIcon } from 'vue-feather-icons';
+import BaseTarjeta from '../../components/BaseTarjeta.vue';
+import VcFormError from '../../components/VcFormError.vue';
+import VcBotonSubmit from '../../components/VcBotonSubmit.vue';
+import VcBotonReset from '../../components/VcBotonReset.vue';
+import VcFormTipoOrg from '../../components/tipo_organizacion/VcFormTipoOrg.vue';
 import VcSelectTipoOrg from '../../components/tipo_organizacion/VcSelectTipoOrg.vue';
+
+/**
+ * Mixins
+ */
 import FiltroCuitMixin from '../../mixins/persona_juridica/filtro_cuit_mixin.js';
+
 
 export default {
     name: 'vc-form-juridica',
     components: {
-        BaseFormulario,
+        PlusIcon,
+        BaseTarjeta,
         VcFormError,
+        VcBotonSubmit,
+        VcBotonReset,
         VcSelectTipoOrg,
-        VcFormTipoOrg,
-        PlusIcon
+        VcFormTipoOrg
     },
-    mixins: [ FiltroCuitMixin ],
+    mixins: [FiltroCuitMixin],
+    props: {
+        personaJuridica: {
+            type: Object,
+            validator: function(juridica) {
+                return objetoTienePropiedades(juridica, JURIDICA_CLAVES);
+            },
+            default: function() {
+                return JURIDICA_POR_DEFECTO;
+            }
+        }
+    },
     data() {
         return {
-            id: null,
             juridica: null,
+            validacion: null,
+            tarjeta: null,
+            estaCargando: false,
+
             tiposOrganizacion: [],
-            
             tipoOrganizacionForm: {
                 visible: false
-            },
-            
-            validacion: null
+            }
         }
     },
     computed: {
+        esNueva() {
+            return _.isEqual(JURIDICA_POR_DEFECTO, this.personaJuridica);
+        },
+
+        fueModificada() {
+            return !_.isEqual(this.personaJuridica, this.juridica);
+        },
+
         digitosCuit() {
             if (this.juridica.cuit) {
                 let cuit = this.juridica.cuit;
@@ -154,62 +234,21 @@ export default {
             return null;
         }
     },
-    static: {
-        titulos: {
-            crear: 'Nueva persona jurídica',
-            editar: 'Editar persona jurídica'
-        },
-        
-        url: {
-            juridicas: '/juridicas',
-            tiposOrganizacion: '/tipos-organizacion'
-        },
-        
-        mensajes: {
-            obtener: {
-                error: {
-                    noEncontrado: {
-                        titulo: 'No encontrada',
-                        mensaje: 'La persona jurídica no existe o ha sido eliminada'
-                    },
-                    porDefecto: {
-                        titulo: 'Error',
-                        mensaje: 'No se pudo traer los datos de la persona jurídica'
-                    }
-                }
-            },
-            enviar: {
-                error: {
-                    porDefecto: {
-                        titulo: 'Error',
-                        mensaje: 'No se pudo crear la persona jurídica'
-                    }
-                }
+    watch: {
+        personaJuridica: {
+            immediate: true,
+            handler: function(juridica) {
+                this.juridica = { ...juridica };
             }
-        },
-        
-        juridicaPorDefecto: {
-            cuit: null,
-            denominacion: null,
-            tipo_organizacion_id: null,
-            tipo_organizacion: null,
-        },
-        
-        validacionPorDefecto: {
-            cuit: null,
-            denominacion: null,
-            tipo_organizacion_id: null
         }
     },
     created() {
-        this.resetearTodo();
-
-        BusEventos.$on('VcTablaJuridicas:editar', (id) => { this.setID(id) });
-        BusEventos.$on('VcPerfilJuridica:editar', (id) => { this.setID(id) });
+        this.tarjeta = this.esNueva ? TARJETA_NUEVO : TARJETA_EDITAR;
+        this.resetearValidacion();
     },
     methods: {
         buscarTiposOrganizacion(valorBuscado) {
-            axios.get(this.$options.static.url.tiposOrganizacion, {
+            axios.get('/tipos-organizacion', {
                 params: {
                     busqueda: valorBuscado,
                     limite: 10,
@@ -221,7 +260,7 @@ export default {
             })
             .then((respuesta) => {
                 const STATUS = respuesta.status;
-                
+
                 if (STATUS === 200) {
                     this.tiposOrganizacion = respuesta.data.data;
                 }
@@ -247,84 +286,128 @@ export default {
                 }
             })
         },
-        
+
         inputTiposOrganizacion(juridica) {
             let id = null;
-            
+
             if (_.isObject(juridica) && juridica.hasOwnProperty('id')) {
+                this.juridica.tipo_organizacion = juridica;
                 id = juridica.id;
             }
-            
+
             this.juridica.tipo_organizacion_id = id;
         },
-        
+
         mostrarFormTipoOrg() {
             this.tipoOrganizacionForm.visible = true;
         },
-        
+
         cerrarFormTipoOrg() {
             this.tipoOrganizacionForm.visible = false;
         },
-        
+
         guardadoFormTipoOrg(tipoOrganizacion) {
             this.juridica.tipo_organizacion_id = tipoOrganizacion.id;
             this.juridica.tipo_organizacion = tipoOrganizacion;
             this.cerrarFormTipoOrg();
         },
-        
-        setID(id) {
-            this.id = id;
-        },
-        
-        setJuridica(juridica) {
-            if (juridica.tipo_organizacion === null) {
-                juridica.tipo_organizacion_id = '';
+
+        enviar() {
+            if (this.fueModificada) {
+                this.estaCargando = true;
+                this.esNueva ? this.guardar() : this.actualizar();
             }
-            
-            this.juridica = juridica;
         },
-        
-        validado(errores) {
-            this.validacion = errores;
+
+        guardar() {
+            apiPersonaJuridica.guardar(this.juridica)
+                .then((respuesta) => {
+                    let status = respuesta.status;
+
+                    if (status === 201) {
+                        this.exito(respuesta.notificacion);
+
+                        this.restaurar();
+
+                        this.$emit(EVENTO_GUARDADO);
+
+                        BusEventos.$emit('VcFormJuridica:guardado');
+                    }
+                })
+                .catch(({
+                    notificacion,
+                    validacion
+                }) => {
+
+                    if (validacion) {
+                        this.validacion = validacion;
+                    }
+
+                    if (notificacion) {
+                        this.error(notificacion);
+                    }
+                })
+                .finally(() => {
+                    this.estaCargando = false;
+                });
         },
-        
-        guardado(id) {
-            if (id !== null) {
-                this.setID(id);
-            }
-            
-            this.$emit('cerrar');
-            BusEventos.$emit('VcFormJuridica:guardada', this.id);
-            this.resetearFormulario();
+
+        actualizar() {
+            apiPersonaJuridica.actualizar(this.juridica.id, this.juridica)
+                .then((respuesta) => {
+                    let status = respuesta.status;
+
+                    if (status === 200) {
+                        this.exito(respuesta.notificacion);
+
+                        this.restaurar();
+
+                        this.$emit(EVENTO_ACTUALIZADO);
+
+                        BusEventos.$emit('VcFormJuridica:guardado');
+                    }
+                })
+                .catch(({
+                    notificacion,
+                    validacion
+                }) => {
+
+                    if (validacion) {
+                        this.validacion = validacion;
+                    }
+
+                    if (notificacion) {
+                        this.error(notificacion);
+                    }
+                })
+                .finally(() => {
+                    this.estaCargando = false;
+                });
         },
-        
-        cerrar() {
-            this.$emit('cerrar');
-            this.resetearFormulario();
-        },      
-        
-        resetearId() {
-            this.id = null;
+
+        restaurar() {
+            this.resetearJuridica();
+            this.resetearValidacion();
         },
-        
+
         resetearJuridica() {
-            this.juridica = { ...this.$options.static.juridicaPorDefecto };
+            // if (this.esNueva) {
+            //     let JURIDICA = { ...JURIDICA_POR_DEFECTO };
+            //     JURIDICA.tipo_organizacion = [];
+            //     this.juridica = JURIDICA;
+            // } else {
+            //     this.juridica = { ...this.personaJuridica };
+            // }
+            this.juridica = { ...this.personaJuridica };
         },
-        
+
         resetearValidacion() {
-            this.validacion = { ...this.$options.static.validacionPorDefecto };
+            this.validacion = { ...VALIDACION_POR_DEFECTO };
         },
-        
-        resetearFormulario() {
-            this.resetearJuridica();
-            this.resetearId();
-            this.resetearValidacion();
-        },
-        
-        resetearTodo() {
-            this.resetearJuridica();
-            this.resetearId();
-            this.resetearValidacion();
+
+        cerrar() {
+            this.restaurar();
+            this.$emit(EVENTO_CERRAR);
         }
     },
     notifications: {

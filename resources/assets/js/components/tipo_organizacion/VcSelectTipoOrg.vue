@@ -1,5 +1,5 @@
 <template lang="html">
-    
+
     <div>
         <multiselect
             v-model="seleccionado"
@@ -25,17 +25,17 @@
             <template slot="maxElements">
                 Haz llegado al máximo permitido de opciones seleccionadas. Primero quite una opción seleccionada para elegir otra.
             </template>
-            
+
             <template slot="noResult">
                 No se encontraron registros que coincidan con tu búsqueda.
             </template>
         </multiselect>
-        
+
         <div v-if="error">
             <p class="small text-danger">{{ error }}</p>
         </div>
     </div>
-    
+
 </template>
 
 <script>
@@ -53,12 +53,14 @@ export default {
             type: Array,
             required: true
         },
-        
+
         tipo: {
-            type: Object,
-            default: null
+            type: [Array, Object],
+            default: function() {
+                return [];
+            }
         },
-        
+
         error: {
             type: String
         }
@@ -77,11 +79,11 @@ export default {
         tiposOrganizacion: function() {
             this.estaCargando = false;
         },
-        
+
         tipo: {
             immediate: true,
             handler: function(tipo) {
-                if (_.isObject(tipo)) this.seleccionado = [ tipo ];
+                this.seleccionado = tipo;
             }
         }
     },
@@ -92,7 +94,7 @@ export default {
                 this.$emit('buscar', valorBuscado);
             }
         },
-        
+
         input(seleccionado) {
             this.$emit('input', seleccionado);
         }

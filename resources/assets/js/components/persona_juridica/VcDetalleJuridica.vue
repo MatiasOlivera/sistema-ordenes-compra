@@ -1,5 +1,5 @@
 <template lang="html">
-    
+
     <base-perfil
         :titulo="titulo"
         :nombreInstancia="juridica.denominacion"
@@ -9,40 +9,40 @@
         @dar-de-alta="darDeAlta"
         @cerrar="cerrar"
     >
-    
+
         <dl>
             <dt>Denominación:</dt>
             <dd>{{ juridica.denominacion }}</dd>
-            
+
             <dt>CUIT:</dt>
             <dd>{{ juridica.cuit | formatoCuit }}</dd>
-            
+
             <dt>Tipo de organización:</dt>
             <dd>{{ juridica.tipo_organizacion.descripcion }}</dd>
-            
+
             <dt>Creado:</dt>
             <dd>
-                {{ juridica.created_at | moment('from') }}, 
+                {{ juridica.created_at | moment('from') }},
                 {{ juridica.created_at | moment('L LT a') }}
             </dd>
-            
+
             <dt>Actualizado:</dt>
             <dd>
-                {{ juridica.updated_at | moment('from') }}, 
+                {{ juridica.updated_at | moment('from') }},
                 {{ juridica.updated_at | moment('L LT a') }}
             </dd>
-            
+
             <template v-if="eliminado">
                 <dt>Eliminado:</dt>
                 <dd>
-                    {{ juridica.deleted_at | moment('from') }}, 
+                    {{ juridica.deleted_at | moment('from') }},
                     {{ juridica.deleted_at | moment('L LT a') }}
                 </dd>
             </template>
         </dl>
-        
+
     </base-perfil>
-    
+
 </template>
 
 <script>

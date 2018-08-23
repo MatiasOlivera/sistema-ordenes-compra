@@ -101,18 +101,21 @@ export default {
     methods: {
         verPerfil(id) {
             BusEventos.$emit('VcTablaJuridicas:verPerfil', id);
-            this.$emit('mostrar-perfil')
+            this.$emit('mostrar-perfil');
         },
         
         editar(id) {
             BusEventos.$emit('VcTablaJuridicas:editar', id);
-            this.$emit('mostrar-form');
+            this.$emit('mostrar-perfil');
         },
         
         darDeBaja(id) {
             this.$_darBajaInstanciaMixin_eliminar(
                 `${this.$options.static.url}/${id}`,
-                () => { this.obtenerRegistros() },
+                () => {
+                    this.obtenerRegistros();
+                    BusEventos.$emit('VcTablaJuridicas:eliminada', id);
+                },
                 this.$options.static.mensajes.baja
             );
         },
