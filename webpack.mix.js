@@ -18,3 +18,7 @@ mix.js('resources/assets/js/app.js', 'public/js')
    .js('resources/assets/js/empresas.js', 'public/js')
    .js('resources/assets/js/actividades.js', 'public/js')
    .sass('resources/assets/sass/app.scss', 'public/css');
+
+mix.webpackConfig({
+    devtool: 'source-map'
+});
