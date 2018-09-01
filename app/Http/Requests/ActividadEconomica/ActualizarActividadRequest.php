@@ -2,7 +2,8 @@
 
 namespace App\Http\Requests\ActividadEconomica;
 
-class ActualizarActividadRequest extends ActividadRequest {
+class ActualizarActividadRequest extends ActividadRequest
+{
     /**
      * Setter de descripción
      */

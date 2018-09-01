@@ -30,30 +30,36 @@ class JuridicaEmpresaController extends Controller
     {
         $denominacionJuridica = $personaJuridica->denominacion;
         $nombreEmpresa = $empresa->nombre_fantasia;
-        
+
         $existente = $personaJuridica->empresas()
             ->where('empresa_id', $empresa->id)
             ->first();
-        
+
         if ($existente) {
-            $respuesta = ['mensaje' => "{$denominacionJuridica} ya es dueña de {$nombreEmpresa}"];
+            $respuesta = [
+                'mensaje' => "{$denominacionJuridica} ya es dueña de {$nombreEmpresa}"
+            ];
             $codigoEstado = 400;
             return response()->json($respuesta, $codigoEstado);
         }
-        
+
         $personaJuridica->empresas()->attach($empresa->id);
         $asociada = $personaJuridica->save();
-        
+
         if ($asociada) {
-            $respuesta = ['mensaje' => "{$denominacionJuridica} ha sido registrada como dueña de {$nombreEmpresa}"];
+            $respuesta = [
+                'mensaje' => "{$denominacionJuridica} ha sido "
+                . "registrada como dueña de {$nombreEmpresa}"
+            ];
             $codigoEstado = 201;
         } else {
             $respuesta = [
-                'mensaje' => "Hubo un problema al intentar registrar a {$denominacionJuridica} como dueña de {$nombreEmpresa}"
+                'mensaje' => "Hubo un problema al intentar registrar a "
+                . "{$denominacionJuridica} como dueña de {$nombreEmpresa}"
             ];
             $codigoEstado = 400;
         }
-        
+
         return response()->json($respuesta, $codigoEstado);
     }
 
@@ -68,30 +74,36 @@ class JuridicaEmpresaController extends Controller
     {
         $denominacionJuridica = $personaJuridica->denominacion;
         $nombreEmpresa = $empresa->nombre_fantasia;
-        
+
         $existente = $personaJuridica->empresas()
             ->where('empresa_id', $empresa->id)
             ->first();
-        
+
         if (! $existente) {
-            $respuesta = ['mensaje' => "{$denominacionJuridica} ya no es dueña de {$nombreEmpresa}"];
+            $respuesta = [
+                'mensaje' => "{$denominacionJuridica} ya no es dueña de {$nombreEmpresa}"
+            ];
             $codigoEstado = 400;
             return response()->json($respuesta, $codigoEstado);
         }
-        
+
         $personaJuridica->empresas()->detach($empresa->id);
         $asociada = $personaJuridica->save();
-        
+
         if ($asociada) {
-            $respuesta = ['mensaje' => "{$denominacionJuridica} ha sido removida como dueña de {$nombreEmpresa}"];
+            $respuesta = [
+                'mensaje' => "{$denominacionJuridica} ha sido removida "
+                . "como dueña de {$nombreEmpresa}"
+            ];
             $codigoEstado = 200;
         } else {
             $respuesta = [
-                'mensaje' => "Hubo un problema al intentar remover a {$denominacionJuridica} como dueña de {$nombreEmpresa}"
+                'mensaje' => "Hubo un problema al intentar remover a "
+                . "{$denominacionJuridica} como dueña de {$nombreEmpresa}"
             ];
             $codigoEstado = 400;
         }
-        
+
         return response()->json($respuesta, $codigoEstado);
     }
 }

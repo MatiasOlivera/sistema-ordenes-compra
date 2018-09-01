@@ -2,4 +2,6 @@
 
 namespace App\Http\Requests\Empresa;
 
-class GuardarEmpresaRequest extends EmpresaRequest {}
+class GuardarEmpresaRequest extends EmpresaRequest
+{
+}

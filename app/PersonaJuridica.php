@@ -15,7 +15,7 @@ class PersonaJuridica extends Model
      * @var string
      */
     protected $table = 'personas_juridicas';
-    
+
     /**
      * La clave primaria no es autoincremental
      * @var boolean
@@ -54,7 +54,7 @@ class PersonaJuridica extends Model
     {
         return $this->belongsTo('App\TipoOrganizacion');
     }
-    
+
     /**
      * Obtener las empresas que pertenecen a esta persona jurídica
      */

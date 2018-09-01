@@ -29,7 +29,8 @@ class PersonaJuridicaController extends Controller
      * @return \Illuminate\Http\Response
      */
     
-    public function view() {
+    public function view()
+    {
         return view('juridicas');
     }
 
@@ -177,7 +178,8 @@ class PersonaJuridicaController extends Controller
      * @param  \App\PersonaJuridica  $personaJuridica
      * @return \Illuminate\Http\Response
      */
-    public function restore(PersonaJuridica $personaJuridica) {
+    public function restore(PersonaJuridica $personaJuridica)
+    {
         $denominacion = $personaJuridica->denominacion;
         $restaurada = $personaJuridica->restore();
         

@@ -27,7 +27,8 @@ class TipoOrganizacionController extends Controller
      * @return \Illuminate\Http\Response
      */
     
-    public function view() {
+    public function view()
+    {
         return view('tipos_organizacion');
     }
     
@@ -146,7 +147,8 @@ class TipoOrganizacionController extends Controller
      * @param  \App\TipoOrganizacion  $tipoOrganizacion
      * @return \Illuminate\Http\Response
      */
-    public function restore(TipoOrganizacion $tipoOrganizacion) {
+    public function restore(TipoOrganizacion $tipoOrganizacion)
+    {
         $descripcion = $tipoOrganizacion->descripcion;
         $restaurado = $tipoOrganizacion->restore();
         

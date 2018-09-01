@@ -27,13 +27,14 @@ class EmpresaController extends Controller
      * @return \Illuminate\Http\Response
      */
     
-    public function view() {
+    public function view()
+    {
         return view('empresas');
     }
     
     /**
      * Display a listing of the resource.
-     * 
+     *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */

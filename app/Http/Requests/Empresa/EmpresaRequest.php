@@ -21,7 +21,7 @@ abstract class EmpresaRequest extends FormRequest
             'boolean'
         ]
     ];
-    
+
     /**
      * Determine if the user is authorized to make this request.
      *

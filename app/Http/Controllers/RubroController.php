@@ -27,7 +27,8 @@ class RubroController extends Controller
      * @return \Illuminate\Http\Response
      */
     
-    public function view() {
+    public function view()
+    {
         return view('rubros');
     }
     
@@ -144,7 +145,8 @@ class RubroController extends Controller
      * @param  \App\Rubro  $rubro
      * @return \Illuminate\Http\Response
      */
-    public function restore(Rubro $rubro) {
+    public function restore(Rubro $rubro)
+    {
         $descripcion = $rubro->descripcion;
         $restaurado = $rubro->restore();
         

@@ -31,7 +31,7 @@ class Empresa extends Model
     protected $fillable = [
         'nombre_fantasia', 'es_mayorista'
     ];
-    
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -57,7 +57,7 @@ class Empresa extends Model
     {
         return $this->hasOne('App\Proveedor', 'id');
     }
-    
+
     /**
      * Obtener las actividades económicas a las que se dedica esta empresa
      */

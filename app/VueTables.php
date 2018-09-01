@@ -7,8 +7,14 @@ use Carbon\Carbon;
 
 class VueTables
 {
-    public function obtener(Request $request, $modelo, array $campos = [], array $modelos = [], string $existenciaRelacion = null, array $excluir = []) {
-        
+    public function obtener(
+        Request $request,
+        $modelo,
+        array $campos = [],
+        array $modelos = [],
+        string $existenciaRelacion = null,
+        array $excluir = []
+    ) {
         $busqueda       = $request->query('busqueda', null);
         $limite         = $request->query('limite', 10);
         $pagina         = $request->query('pagina', 1);
@@ -22,17 +28,17 @@ class VueTables
         } else {
             $datos = $modelo::with($modelos);
         }
-        
+
         if (isset($soloEliminados) && $soloEliminados) {
             $datos->onlyTrashed();
         }
-        
+
         if (isset($excluir) && $excluir) {
-            $datos->whereDoesntHave($excluir[0], function($consulta) use ($excluir) {
+            $datos->whereDoesntHave($excluir[0], function ($consulta) use ($excluir) {
                 $consulta->where($excluir[1], $excluir[2]);
             });
         }
-        
+
         if (isset($existenciaRelacion) && $existenciaRelacion) {
             $datos->has($existenciaRelacion);
         }
@@ -56,38 +62,35 @@ class VueTables
     protected function filtrarPorColumna($datos, $busqueda)
     {
         if (is_array($busqueda) || is_object($busqueda)) {
-            
-            return $datos->where(function($consulta) use ($busqueda) {
-                
+            return $datos->where(function ($consulta) use ($busqueda) {
                 foreach ($busqueda as $campo => $valor) {
-                    
                     if (is_string($valor)) {
                         $consulta->where($campo, 'LIKE', "%{$valor}%");
                     } else {
-                        $fechaInicio = Carbon::createFromFormat('Y-m-d',
-                            $valor['start'])->startOfDay();
-                        $fechaFin = Carbon::createFromFormat('Y-m-d',
-                            $valor['end'])->endOfDay();
+                        $fechaInicio = Carbon::createFromFormat(
+                            'Y-m-d',
+                            $valor['start']
+                        )->startOfDay();
+
+                        $fechaFin = Carbon::createFromFormat(
+                            'Y-m-d',
+                            $valor['end']
+                        )->endOfDay();
 
                         $consulta->whereBetween($campo, [$fechaInicio, $fechaFin]);
                     }
-                
                 }
-            
             });
-        
         }
     }
 
     protected function filtrar($datos, $busqueda, $campos)
     {
-        return $datos->where(function($consulta) use ($busqueda, $campos) {
-            
+        return $datos->where(function ($consulta) use ($busqueda, $campos) {
             foreach ($campos as $indice => $campo) {
                 $metodo = $indice ? 'orWhere' : 'where';
                 $consulta->{$metodo}($campo, 'LIKE', "%{$busqueda}%");
             }
-        
         });
     }
 }

@@ -16,7 +16,7 @@ abstract class TipoOrganizacionRequest extends FormRequest
             'unique:tipos_organizacion,descripcion'
         ]
     ];
-    
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -36,7 +36,7 @@ abstract class TipoOrganizacionRequest extends FormRequest
     {
         return $this->reglas;
     }
-    
+
     /**
     * Get the error messages for the defined validation rules.
     *

@@ -10,14 +10,14 @@ class ActualizarRequest extends PersonaJuridicaRequest
     /**
      * Setter de CUIT
      */
-    
+
     private function setCuit()
     {
         // Regla unique: ignora a la persona jurídica que
         // actualmente posee este CUIT
         $this->reglas['cuit'][4] .= ",{$this->personaJuridica->id}";
     }
-    
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -27,7 +27,7 @@ class ActualizarRequest extends PersonaJuridicaRequest
     {
         return true;
     }
-    
+
     /**
      * Get the validation rules that apply to the request.
      *

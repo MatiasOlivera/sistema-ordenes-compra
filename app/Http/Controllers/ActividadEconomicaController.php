@@ -19,17 +19,18 @@ class ActividadEconomicaController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     /**
      * Mostrar la vista
      *
      * @return \Illuminate\Http\Response
      */
-    
-    public function view() {
+
+    public function view()
+    {
         return view('actividades');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -39,17 +40,17 @@ class ActividadEconomicaController extends Controller
     public function index(Request $request)
     {
         $empresaId = $request->query('empresaId', null);
-        
+
         $vuetables = new Vuetables();
-        
+
         $modelo = new ActividadEconomica();
         $campos = ["descripcion"];
         $excluir = [];
-        
+
         if ($empresaId) {
             $excluir = ['empresas', 'empresa_id', $empresaId];
         }
-        
+
         $respuesta = $vuetables->obtener(
             $request,
             $modelo,
@@ -58,7 +59,7 @@ class ActividadEconomicaController extends Controller
             null,
             $excluir
         );
-        
+
         return $respuesta;
     }
 
@@ -72,11 +73,11 @@ class ActividadEconomicaController extends Controller
     {
         $descripcion = $request->input('descripcion');
         $input = $request->all();
-        
+
         $actividadEconomica = new ActividadEconomica();
         $actividadEconomica->fill($input);
         $guardada = $actividadEconomica->save();
-        
+
         if ($guardada) {
             $respuesta = ['mensaje' => "El rubro {$descripcion} ha sido creado"];
             $codigoEstado = 201;
@@ -84,7 +85,7 @@ class ActividadEconomicaController extends Controller
             $respuesta = ['mensaje' => "Hubo un problema al intentar guardar el rubro ${$descripcion}"];
             $codigoEstado = 400;
         }
-        
+
         return response()->json($respuesta, $codigoEstado);
     }
 
@@ -98,7 +99,7 @@ class ActividadEconomicaController extends Controller
     {
         return $actividadEconomica;
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -110,10 +111,10 @@ class ActividadEconomicaController extends Controller
     {
         $descripcion = $request->input('descripcion');
         $input = $request->all();
-        
+
         $actividadEconomica->fill($input);
         $actualizada = $actividadEconomica->save();
-        
+
         if ($actualizada) {
             $respuesta = ['mensaje' => "El rubro {$descripcion} ha sido actualizado"];
             $codigoEstado = 200;
@@ -135,7 +136,7 @@ class ActividadEconomicaController extends Controller
     {
         $descripcion = $actividadEconomica->descripcion;
         $eliminada = $actividadEconomica->delete();
-        
+
         if ($eliminada) {
             $respuesta = ['mensaje' => "El rubro {$descripcion} ha sido eliminado"];
             $codigoEstado = 200;
@@ -146,17 +147,18 @@ class ActividadEconomicaController extends Controller
 
         return response()->json($respuesta, $codigoEstado);
     }
-    
+
     /**
      * Restaurar la actividad económica que ha sido eliminada
      *
      * @param  \App\ActividadEconomica  $actividadEconomica
      * @return \Illuminate\Http\Response
      */
-    public function restore(ActividadEconomica $actividadEconomica) {
+    public function restore(ActividadEconomica $actividadEconomica)
+    {
         $descripcion = $actividadEconomica->descripcion;
         $restaurada = $actividadEconomica->restore();
-        
+
         if ($restaurada) {
             $respuesta = ['mensaje' => "El rubro {$descripcion} ha sido dado de alta"];
             $codigoEstado = 200;

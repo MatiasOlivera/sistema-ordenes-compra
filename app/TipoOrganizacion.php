@@ -35,7 +35,7 @@ class TipoOrganizacion extends Model
     /**
      * Obtener las personas jurídicas que pertenezcan a este tipo de organización
      */
-    
+
     public function juridicas()
     {
         return $this->hasMany('App\PersonaJuridica');

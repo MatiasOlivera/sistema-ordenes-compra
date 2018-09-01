@@ -2,4 +2,6 @@
 
 namespace App\Http\Requests\TipoOrganizacion;
 
-class GuardarRequest extends TipoOrganizacionRequest {}
+class GuardarRequest extends TipoOrganizacionRequest
+{
+}

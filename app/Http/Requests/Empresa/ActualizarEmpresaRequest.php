@@ -15,7 +15,7 @@ class ActualizarEmpresaRequest extends EmpresaRequest
         // actualmente posee este nombre de fantasía
         $this->reglas['nombre_fantasia'][5] .= ",{$this->empresa->id}";
     }
-    
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -25,7 +25,7 @@ class ActualizarEmpresaRequest extends EmpresaRequest
     {
         return true;
     }
-    
+
     /**
      * Get the validation rules that apply to the request.
      *

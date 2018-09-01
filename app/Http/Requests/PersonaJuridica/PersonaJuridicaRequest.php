@@ -28,7 +28,7 @@ abstract class PersonaJuridicaRequest extends FormRequest
             'exists:tipos_organizacion,id'
         ]
     ];
-    
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -48,7 +48,7 @@ abstract class PersonaJuridicaRequest extends FormRequest
     {
         return $this->reglas;
     }
-    
+
     /**
     * Get the error messages for the defined validation rules.
     *

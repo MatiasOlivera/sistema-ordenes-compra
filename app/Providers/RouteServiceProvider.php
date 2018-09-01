@@ -28,39 +28,39 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-        
+
         /**
          * Personas jurídicas
          */
-        
+
         Route::bind('personaJuridica', function ($id) {
             return PersonaJuridica::withTrashed()
                 ->where('id', $id)
                 ->firstOrFail();
         });
-        
+
         /**
          * Tipos de organización
          */
-        Route::bind('tipoOrganizacion', function($id) {
+        Route::bind('tipoOrganizacion', function ($id) {
             return TipoOrganizacion::withTrashed()
                 ->where('id', $id)
                 ->firstOrFail();
         });
-        
+
         /**
          * Empresas
          */
-        Route::bind('empresa', function($id) {
+        Route::bind('empresa', function ($id) {
             return Empresa::withTrashed()
                 ->where('id', $id)
                 ->firstOrFail();
         });
-        
+
         /**
          * Actividades económicas
          */
-        Route::bind('actividadEconomica', function($id) {
+        Route::bind('actividadEconomica', function ($id) {
             return ActividadEconomica::withTrashed()
                 ->where('id', $id)
                 ->firstOrFail();
