@@ -1,50 +1,55 @@
 <template lang="html">
 
-    <button
-        @click="click"
-        type="button"
-        name="info"
-        class="btn btn-sm btn-outline-info"
-        data-toggle="tooltip"
-        data-placement="top"
-        :title="tooltip"
-    >
-        <info-icon class="icono"></info-icon>
-    </button>
+  <button
+    :title="tooltip"
+    type="button"
+    name="info"
+    class="btn btn-sm btn-outline-info"
+    data-toggle="tooltip"
+    data-placement="top"
+    @click="click"
+  >
+    <info-icon class="icono"/>
+  </button>
 
 </template>
 
 <script>
 /**
- * Mixins
- */
-import TooltipMixin from '../mixins/tooltip_mixin.js';
-
-/**
  * Componentes
  */
 import { InfoIcon } from 'vue-feather-icons';
 
+/**
+ * Mixins
+ */
+import TooltipMixin from '../mixins/tooltip_mixin';
+
 export default {
-    name: 'vc-boton-info',
-    mixins: [ TooltipMixin ],
-    components: { InfoIcon },
-    props: {
-        tooltip: {
-            type: String,
-            default: 'Perfil'
-        }
-    },
-    static: {
-        elemento: 'button[name="info"]'
-    },
-    methods: {
-        click() {
-            this.$_TooltipMixin_ocultarTooltip();
-            this.$emit('click');
-        }
+  name: 'VcBotonInfo',
+
+  components: { InfoIcon },
+
+  mixins: [TooltipMixin],
+
+  props: {
+    tooltip: {
+      type: String,
+      default: 'Perfil'
     }
-}
+  },
+
+  static: {
+    elemento: 'button[name="info"]'
+  },
+
+  methods: {
+    click() {
+      this.$_TooltipMixin_ocultarTooltip();
+      this.$emit('click');
+    }
+  }
+};
 </script>
 
 <style lang="css">

@@ -5,26 +5,30 @@
  * @return {Boolean}
  */
 export function objetoTienePropiedades(prop, claves) {
-    if (! _.isObject(prop)) {
-        throw new TypeError('El argumento "prop" debe ser un objecto');
+  if (!_.isObject(prop)) {
+    throw new TypeError('El argumento "prop" debe ser un objecto');
+  }
+
+  if (_.isEmpty(prop)) {
+    throw new Error(
+      'El argumento "prop" debe tener por lo menos un par clave/valor'
+    );
+  }
+
+  if (!_.isArray(claves)) {
+    throw new TypeError('El argumento "claves" debe ser un array');
+  }
+
+  if (_.isEmpty(claves)) {
+    throw new Error(
+      'El argumento "claves" debe incluir por lo menos una propiedad'
+    );
+  }
+
+  for (let clave of claves) {
+    if (!prop.hasOwnProperty(clave)) {
+      return false;
     }
-    
-    if (_.isEmpty(prop)) {
-        throw new Error('El argumento "prop" debe tener por lo menos un par clave/valor');
-    }
-    
-    if (! _.isArray(claves)) {
-        throw new TypeError('El argumento "claves" debe ser un array');
-    }
-    
-    if (_.isEmpty(claves)) {
-        throw new Error('El argumento "claves" debe incluir por lo menos una propiedad');
-    }
-    
-    for (let clave of claves) {
-        if (!prop.hasOwnProperty(clave)) {
-            return false;
-        }
-    }
-    return true;
+  }
+  return true;
 }

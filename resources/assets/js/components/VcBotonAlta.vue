@@ -1,94 +1,98 @@
 <template lang="html">
-    
-    <button
-        @click="confirmar"
-        type="button"
-        name="alta"
-        class="btn btn-sm btn-outline-primary"
-        data-toggle="tooltip"
-        data-placement="top"
-        :title="tooltip"
-    >
-        <arrow-up-icon class="icono"></arrow-up-icon>
-    </button>
-    
+
+  <button
+    :title="tooltip"
+    type="button"
+    name="alta"
+    class="btn btn-sm btn-outline-primary"
+    data-toggle="tooltip"
+    data-placement="top"
+    @click="confirmar"
+  >
+    <arrow-up-icon class="icono"/>
+  </button>
+
 </template>
 
 <script>
-/**
- * Mixins
- */
-import TooltipMixin from '../mixins/tooltip_mixin.js';
-
 /**
  * Componentes
  */
 import { ArrowUpIcon } from 'vue-feather-icons';
 
+/**
+ * Mixins
+ */
+import TooltipMixin from '../mixins/tooltip_mixin';
+
 export default {
-    name: 'vc-boton-alta',
-    mixins: [ TooltipMixin ],
-    components: { ArrowUpIcon },
-    props: {
-        tooltip: {
-            type: String,
-            default: 'Dar de alta'
-        },
-        nombre: {
-            type: String
-        }
+  name: 'VcBotonAlta',
+
+  components: { ArrowUpIcon },
+
+  mixins: [TooltipMixin],
+
+  props: {
+    tooltip: {
+      type: String,
+      default: 'Dar de alta'
     },
-    static: {
-        elemento: 'button[name="alta"]'
-    },
-    methods: {        
-        confirmar() {
-            
-            function ocultarNotificacion(instancia, notificacion) {
-                instancia.hide(
-                    {transitionOut: 'fadeOut'},
-                    notificacion,
-                    'button'
-                );
-            }
-            
-            let mensaje = this.nombre
-            ? `¿Estás seguro que quieres dar de alta a ${this.nombre}?`
-            : '¿Estás seguro que quieres darlo de alta?';
-            
-            this.pregunta({
-                title: 'Confirmar el alta',
-                message: mensaje,
-                timeout: false,
-                buttons: [
-                    [
-                        '<button>Si</button>',
-                        (instance, toast) => {
-                            ocultarNotificacion(instance, toast);
-                            this.$emit('confirmado');
-                        },
-                        true
-                    ],
-                    [
-                        '<button>No</button>',
-                        (instance, toast) => {
-                            ocultarNotificacion(instance, toast);
-                        }
-                    ]
-                ]
-            });
-            
-            this.$_TooltipMixin_ocultarTooltip();
-        }
-    },
-    notifications: {
-        pregunta: {
-            title: '',
-            message: '',
-            type: 'question'
-        }
+
+    nombre: {
+      type: String,
+      default: ''
     }
-}
+  },
+
+  static: {
+    elemento: 'button[name="alta"]'
+  },
+
+  methods: {
+    confirmar() {
+      function ocultarNotificacion(instancia, notificacion) {
+        instancia.hide({ transitionOut: 'fadeOut' }, notificacion, 'button');
+      }
+
+      const MENSAJE =
+        this.nombre !== ''
+          ? `¿Estás seguro que quieres dar de alta a ${this.nombre}?`
+          : '¿Estás seguro que quieres darlo de alta?';
+
+      this.pregunta({
+        title: 'Confirmar el alta',
+        message: MENSAJE,
+        timeout: false,
+        buttons: [
+          [
+            '<button>Si</button>',
+            (instance, toast) => {
+              ocultarNotificacion(instance, toast);
+              this.$emit('confirmado');
+            },
+            true
+          ],
+          [
+            '<button>No</button>',
+            (instance, toast) => {
+              ocultarNotificacion(instance, toast);
+            }
+          ]
+        ]
+      });
+
+      this.$_TooltipMixin_ocultarTooltip();
+    }
+  },
+
+  notifications: {
+    pregunta: {
+      title: '',
+      message: '',
+      type: 'question'
+    }
+  }
+};
 </script>
 
 <style lang="css">

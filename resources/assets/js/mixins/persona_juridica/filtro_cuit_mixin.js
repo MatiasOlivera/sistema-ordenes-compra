@@ -1,16 +1,19 @@
 export default {
-    filters: {
-        formatoCuit: function(cuit) {
-            if (!cuit) return '';
-            
-            const caracter = 'x';
-            cuit = cuit.toString();
-            
-            let tipo = cuit.substring(0,2).padEnd(2, caracter);
-            let numero = cuit.substring(2,10).padEnd(8, caracter);
-            let digitoVerificador = cuit.substring(10,11).padEnd(1, caracter);
+  filters: {
+    formatoCuit: function(cuit) {
+      if (!cuit) return '';
 
-            return `${tipo}-${numero}-${digitoVerificador}`;
-        }
+      const CARACTER = 'x';
+      const CUIT_CADENA = cuit.toString();
+
+      const TIPO = CUIT_CADENA.substring(0, 2).padEnd(2, CARACTER);
+      const NUMERO = CUIT_CADENA.substring(2, 10).padEnd(8, CARACTER);
+      const DIGITO_VERIFICADOR = CUIT_CADENA.substring(10, 11).padEnd(
+        1,
+        CARACTER
+      );
+
+      return `${TIPO}-${NUMERO}-${DIGITO_VERIFICADOR}`;
     }
-}
+  }
+};

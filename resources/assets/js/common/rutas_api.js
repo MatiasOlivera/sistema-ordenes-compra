@@ -1,13 +1,13 @@
-import Ruta from './ruta.js';
+import Ruta from './ruta';
 
-let rutaActividad = new Ruta('/actividades-economicas');
-let rutaEmpresa = new Ruta('/empresas');
-let rutaPersonaJuridica = new Ruta('/juridicas');
-let rutaTipoOrganizacion = new Ruta('/tipos-organizacion');
+const rutaActividad = new Ruta('/actividades-economicas');
+const rutaEmpresa = new Ruta('/empresas');
+const rutaPersonaJuridica = new Ruta('/juridicas');
+const rutaTipoOrganizacion = new Ruta('/tipos-organizacion');
 
 export {
-    rutaActividad,
-    rutaEmpresa,
-    rutaPersonaJuridica,
-    rutaTipoOrganizacion
-}
+  rutaActividad,
+  rutaEmpresa,
+  rutaPersonaJuridica,
+  rutaTipoOrganizacion
+};
