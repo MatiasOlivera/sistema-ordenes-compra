@@ -15,21 +15,21 @@
 
       <dt>Creado:</dt>
       <dd>
-        {{ actividad.created_at | moment('from') }},
-        {{ actividad.created_at | moment('L LT a') }}
+        {{ actividad.created_at | formatoRelativo }},
+        {{ actividad.created_at | formatoFecha }}
       </dd>
 
       <dt>Actualizado:</dt>
       <dd>
-        {{ actividad.updated_at | moment('from') }},
-        {{ actividad.updated_at | moment('L LT a') }}
+        {{ actividad.updated_at | formatoRelativo }},
+        {{ actividad.updated_at | formatoFecha }}
       </dd>
 
       <template v-if="eliminado">
         <dt>Eliminado:</dt>
         <dd>
-          {{ actividad.deleted_at | moment('from') }},
-          {{ actividad.deleted_at | moment('L LT a') }}
+          {{ actividad.deleted_at | formatoRelativo }},
+          {{ actividad.deleted_at | formatoFecha }}
         </dd>
       </template>
     </dl>
@@ -41,6 +41,8 @@
 import apiActividad from '../../common/api/actividad_economica';
 import { objetoTienePropiedades } from '../../common/components/validadores';
 import { ACTIVIDAD_CLAVES } from '../../common/components/actividad_economica';
+import formatoFecha from '../../mixins/formato_fecha_mixin';
+import formatoRelativo from '../../mixins/formato_relativo_mixin';
 
 /**
  * Componentes
@@ -51,6 +53,8 @@ export default {
   name: 'VcDetalleActividad',
 
   components: { BasePerfil },
+
+  mixins: [formatoFecha, formatoRelativo],
 
   props: {
     actividad: {

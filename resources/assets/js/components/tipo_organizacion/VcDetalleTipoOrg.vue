@@ -15,21 +15,21 @@
 
       <dt>Creado:</dt>
       <dd>
-        {{ tipoOrganizacion.created_at | moment('from') }},
-        {{ tipoOrganizacion.created_at | moment('L LT a') }}
+        {{ tipoOrganizacion.created_at | formatoRelativo }},
+        {{ tipoOrganizacion.created_at | formatoFecha }}
       </dd>
 
       <dt>Actualizado:</dt>
       <dd>
-        {{ tipoOrganizacion.updated_at | moment('from') }},
-        {{ tipoOrganizacion.updated_at | moment('L LT a') }}
+        {{ tipoOrganizacion.updated_at | formatoRelativo }},
+        {{ tipoOrganizacion.updated_at | formatoFecha }}
       </dd>
 
       <template v-if="eliminado">
         <dt>Eliminado:</dt>
         <dd>
-          {{ tipoOrganizacion.deleted_at | moment('from') }},
-          {{ tipoOrganizacion.deleted_at | moment('L LT a') }}
+          {{ tipoOrganizacion.deleted_at | formatoRelativo }},
+          {{ tipoOrganizacion.deleted_at | formatoFecha }}
         </dd>
       </template>
     </dl>
@@ -41,6 +41,8 @@
 import apiTipoOrganizacion from '../../common/api/tipo_organizacion';
 import { objetoTienePropiedades } from '../../common/components/validadores';
 import { TIPO_CLAVES } from '../../common/components/tipo_organizacion';
+import formatoFecha from '../../mixins/formato_fecha_mixin';
+import formatoRelativo from '../../mixins/formato_relativo_mixin';
 
 /**
  * Componentes
@@ -51,6 +53,8 @@ export default {
   name: 'VcDetalleTipoOrg',
 
   components: { BasePerfil },
+
+  mixins: [formatoFecha, formatoRelativo],
 
   props: {
     tipoOrganizacion: {

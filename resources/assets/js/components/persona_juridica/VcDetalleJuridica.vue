@@ -22,21 +22,21 @@
 
       <dt>Creado:</dt>
       <dd>
-        {{ juridica.created_at | moment('from') }},
-        {{ juridica.created_at | moment('L LT a') }}
+        {{ juridica.created_at | formatoRelativo }},
+        {{ juridica.created_at | formatoFecha }}
       </dd>
 
       <dt>Actualizado:</dt>
       <dd>
-        {{ juridica.updated_at | moment('from') }},
-        {{ juridica.updated_at | moment('L LT a') }}
+        {{ juridica.updated_at | formatoRelativo }},
+        {{ juridica.updated_at | formatoFecha }}
       </dd>
 
       <template v-if="eliminado">
         <dt>Eliminado:</dt>
         <dd>
-          {{ juridica.deleted_at | moment('from') }},
-          {{ juridica.deleted_at | moment('L LT a') }}
+          {{ juridica.deleted_at | formatoRelativo }},
+          {{ juridica.deleted_at | formatoFecha }}
         </dd>
       </template>
     </dl>
@@ -54,6 +54,8 @@ import { JURIDICA_CLAVES } from '../../common/components/persona_juridica';
  * Mixins
  */
 import FiltroCuitMixin from '../../mixins/persona_juridica/filtro_cuit_mixin';
+import formatoFecha from '../../mixins/formato_fecha_mixin';
+import formatoRelativo from '../../mixins/formato_relativo_mixin';
 
 /**
  * Componentes
@@ -62,8 +64,11 @@ import BasePerfil from '../BasePerfil.vue';
 
 export default {
   name: 'VcDetalleJuridica',
+
   components: { BasePerfil },
-  mixins: [FiltroCuitMixin],
+
+  mixins: [FiltroCuitMixin, formatoFecha, formatoRelativo],
+
   props: {
     juridica: {
       type: Object,
@@ -73,6 +78,7 @@ export default {
       required: true
     }
   },
+
   computed: {
     titulo() {
       return `Perfil de ${this.juridica.denominacion}`;
@@ -82,6 +88,7 @@ export default {
       return !_.isNull(this.juridica.deleted_at);
     }
   },
+
   methods: {
     editar() {
       this.$emit('editar');
@@ -131,6 +138,7 @@ export default {
         });
     }
   },
+
   notifications: {
     exito: {
       title: 'Exito',

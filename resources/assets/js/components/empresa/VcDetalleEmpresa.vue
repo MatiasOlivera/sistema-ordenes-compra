@@ -52,21 +52,21 @@
 
         <dt>Creado:</dt>
         <dd>
-          {{ empresa.created_at | moment('from') }},
-          {{ empresa.created_at | moment('L LT a') }}
+          {{ empresa.created_at | formatoRelativo }},
+          {{ empresa.created_at | formatoFecha }}
         </dd>
 
         <dt>Actualizado:</dt>
         <dd>
-          {{ empresa.updated_at | moment('from') }},
-          {{ empresa.updated_at | moment('L LT a') }}
+          {{ empresa.updated_at | formatoRelativo }},
+          {{ empresa.updated_at | formatoFecha }}
         </dd>
 
         <template v-if="eliminado">
           <dt>Eliminado:</dt>
           <dd>
-            {{ empresa.deleted_at | moment('from') }},
-            {{ empresa.deleted_at | moment('L LT a') }}
+            {{ empresa.deleted_at | formatoRelativo }},
+            {{ empresa.deleted_at | formatoFecha }}
           </dd>
         </template>
       </dl>
@@ -85,6 +85,8 @@ import { TruckIcon } from 'vue-feather-icons';
  */
 import DarBajaInstanciaMixin from '../../mixins/dar_baja_instancia_mixin';
 import DarAltaInstanciaMixin from '../../mixins/dar_alta_instancia_mixin';
+import formatoFecha from '../../mixins/formato_fecha_mixin';
+import formatoRelativo from '../../mixins/formato_relativo_mixin';
 
 /**
  * Componentes
@@ -101,7 +103,12 @@ export default {
     TruckIcon
   },
 
-  mixins: [DarBajaInstanciaMixin, DarAltaInstanciaMixin],
+  mixins: [
+    DarBajaInstanciaMixin,
+    DarAltaInstanciaMixin,
+    formatoFecha,
+    formatoRelativo
+  ],
 
   props: {
     empresa: {
