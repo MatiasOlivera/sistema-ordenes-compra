@@ -13,15 +13,13 @@
 
     <!-- Estilos -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    @stack('styles')
 </head>
 
 <body class="bg-light">
-    @yield('body')
-    
+    <div id="app"></div>
+
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
-    @stack('scripts')
 </body>
 
 </html>
