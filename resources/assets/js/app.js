@@ -2,6 +2,8 @@ import Vue from 'vue';
 import VueNotifications from 'vue-notifications';
 import { ServerTable } from 'vue-tables-2';
 
+import App from './App.vue';
+import router from './router';
 
 // Configuraciones
 import {
@@ -28,3 +30,11 @@ Vue.use(
   TABLA_TEMA,
   TABLA_PLANTILLA
 );
+
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  router,
+  components: { App },
+  template: '<App/>'
+});

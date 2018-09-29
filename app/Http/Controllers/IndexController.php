@@ -15,9 +15,6 @@ class IndexController extends Controller
 
     public function __invoke()
     {
-        if (Auth::check()) {
-            return redirect()->route('bienvenida');
-        }
-        return view('index');
+        return view('app');
     }
 }
