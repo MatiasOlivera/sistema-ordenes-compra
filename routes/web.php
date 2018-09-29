@@ -31,9 +31,6 @@ Route::post('/registro', 'Auth\RegisterController@register')
 Route::get('/', 'IndexController')
     ->name('index');
 
-Route::get('/inicio', 'BienvenidaController')
-    ->name('bienvenida');
-
 /** 
  * Personas Fisicas
  */
