@@ -60,6 +60,8 @@
 <script>
 import VcFormError from '../components/VcFormError.vue';
 
+import { DASHBOARD } from '../router/rutas';
+
 export default {
   components: {
     VcFormError
@@ -81,7 +83,7 @@ export default {
       axios
         .post('/login', this.user)
         .then(() => {
-          window.location.replace('/inicio');
+          this.$router.push({ name: DASHBOARD });
         })
         .catch((error) => {
           if (error.response) {
@@ -128,11 +130,11 @@ export default {
 <style lang="css">
 html,
 body,
-#main {
+#app {
   height: 100%;
 }
 
-#main {
+#app {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
