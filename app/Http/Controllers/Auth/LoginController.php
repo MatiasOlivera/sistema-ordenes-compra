@@ -23,13 +23,6 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/inicio';
-
-    /**
      * Create a new controller instance.
      *
      * @return void
@@ -74,7 +67,7 @@ class LoginController extends Controller
         $this->clearLoginAttempts($request);
 
         return $this->authenticated($request, $this->guard()->user())
-                ?: response()->json(['user' => auth()->user()->id], 200);
+                ?: response()->json(['usuario' => auth()->user()], 200);
     }
 
     /**
@@ -90,7 +83,7 @@ class LoginController extends Controller
         $request->session()->invalidate();
 
         if ($request->expectsJson()) {
-            return response()->json(['ruta' => '/'], 303);
+            return response()->json(['sesion' => false], 200);
         }
 
         return redirect()->route('index');

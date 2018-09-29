@@ -20,10 +20,10 @@ class RedirectIfAuthenticated
         if (Auth::guard($guard)->check()) {
 
             if ($request->expectsJson()) {
-                return response()->json(['ruta' => '/inicio'], 303);
+                return response()->json(['sesion' => true], 200);
             }
 
-            return redirect()->route('index');
+            return response()->json(['sesion' => false], 200);
         }
 
         return $next($request);
