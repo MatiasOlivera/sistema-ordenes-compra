@@ -34,6 +34,7 @@
         "vue-feather-icons": "^4.7.1",
         "vue-multiselect": "^2.1.0",
         "vue-notifications": "^0.9.0",
+        "vue-router": "^3.0.1",
         "vue-scrollto": "^2.11.0",
         "vue-tables-2": "^1.4.63"
     }
