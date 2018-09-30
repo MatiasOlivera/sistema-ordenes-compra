@@ -19,12 +19,12 @@
         class="collapse navbar-collapse"
       >
 
-        <a
+        <router-link
+          :to="{ name: rutas.DASHBOARD }"
           class="navbar-brand"
-          href="#"
         >
           Gestión de ordenes
-        </a>
+        </router-link>
 
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
@@ -46,21 +46,21 @@
           </li>
 
           <li class="nav-item">
-            <a
+            <router-link
+              :to="{ name: rutas.PERSONAS_JURIDICAS }"
               class="nav-link"
-              href="#"
             >
               Jurídicas
-            </a>
+            </router-link>
           </li>
 
           <li class="nav-item">
-            <a
+            <router-link
+              :to="{ name: rutas.EMPRESAS }"
               class="nav-link"
-              href="#"
             >
               Empresas
-            </a>
+            </router-link>
           </li>
 
           <li class="nav-item dropdown">
@@ -81,22 +81,22 @@
               aria-labelledby="dropdownMenu"
             >
               <h6 class="dropdown-header">Empresa</h6>
-              <a
-                href="#"
+              <router-link
+                :to="{ name: rutas.ACTIVIDADES_ECONOMICAS }"
                 class="dropdown-item"
               >
                 Rubros
-              </a>
+              </router-link>
 
               <div class="dropdown-divider"/>
 
               <h6 class="dropdown-header">Persona jurídica</h6>
-              <a
-                href="#"
+              <router-link
+                :to="{ name: rutas.TIPOS_DE_ORGANIZACIONES }"
                 class="dropdown-item"
               >
                 Tipos de organización
-              </a>
+              </router-link>
 
               <div class="dropdown-divider"/>
 
@@ -138,8 +138,27 @@
 </template>
 
 <script>
+import {
+  DASHBOARD,
+  PERSONAS_JURIDICAS,
+  TIPOS_DE_ORGANIZACIONES,
+  EMPRESAS,
+  ACTIVIDADES_ECONOMICAS
+} from '../router/rutas';
+
 export default {
-  name: 'LaCabecera'
+  name: 'LaCabecera',
+  data() {
+    return {
+      rutas: {
+        DASHBOARD,
+        PERSONAS_JURIDICAS,
+        TIPOS_DE_ORGANIZACIONES,
+        EMPRESAS,
+        ACTIVIDADES_ECONOMICAS
+      }
+    };
+  }
 };
 </script>
 
