@@ -24,17 +24,6 @@ class PersonaJuridicaController extends Controller
     }
     
     /**
-     * Mostrar la vista
-     *
-     * @return \Illuminate\Http\Response
-     */
-    
-    public function view()
-    {
-        return view('juridicas');
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request

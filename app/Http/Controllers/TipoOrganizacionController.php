@@ -22,17 +22,6 @@ class TipoOrganizacionController extends Controller
     }
     
     /**
-     * Mostrar la vista
-     *
-     * @return \Illuminate\Http\Response
-     */
-    
-    public function view()
-    {
-        return view('tipos_organizacion');
-    }
-    
-    /**
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request

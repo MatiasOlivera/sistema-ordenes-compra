@@ -42,10 +42,6 @@ Route::apiResource('/personas', 'PersonaFisicaController')
 /**
  * Personas jurídicas
  */
-
-Route::get('/personas-juridicas', 'PersonaJuridicaController@view')
-    ->name('juridicas.view');
-
 Route::patch('/juridicas/{personaJuridica}/restore', 'PersonaJuridicaController@restore')
     ->name('juridicas.restore');
 
@@ -64,9 +60,6 @@ Route::delete('/juridicas/{personaJuridica}/empresas/{empresa}', 'JuridicaEmpres
 /**
  * Tipos de organización
  */
-Route::get('/tipos-de-organizacion', 'TipoOrganizacionController@view')
-    ->name('tipos-organizacion.view');
-
 Route::patch('/tipos-organizacion/{tipoOrganizacion}/restore', 'TipoOrganizacionController@restore')
     ->name('tipos-organizacion.restore');
 
@@ -76,9 +69,6 @@ Route::apiResource('/tipos-organizacion', 'TipoOrganizacionController')
 /**
  * Empresas
  */
-Route::get('/empresa', 'EmpresaController@view')
-    ->name('empresas.view');
-
 Route::patch('/empresas/{empresa}/restore', 'EmpresaController@restore')
     ->name('empresas.restore');
 
@@ -87,9 +77,6 @@ Route::apiResource('/empresas', 'EmpresaController');
 /**
  * Actividades econonómicas
  */
-Route::get('/rubros', 'ActividadEconomicaController@view')
-    ->name('actividades-economicas.view');
-
 Route::patch('/actividades-economicas/{actividadEconomica}/restore', 'ActividadEconomicaController@restore')
     ->name('actividades-economicas.restore');
 

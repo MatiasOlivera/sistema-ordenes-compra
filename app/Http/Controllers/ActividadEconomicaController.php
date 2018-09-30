@@ -21,17 +21,6 @@ class ActividadEconomicaController extends Controller
     }
 
     /**
-     * Mostrar la vista
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-    public function view()
-    {
-        return view('actividades');
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request

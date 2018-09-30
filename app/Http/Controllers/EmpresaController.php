@@ -20,18 +20,7 @@ class EmpresaController extends Controller
     {
         $this->middleware('auth');
     }
-    
-    /**
-     * Mostrar la vista
-     *
-     * @return \Illuminate\Http\Response
-     */
-    
-    public function view()
-    {
-        return view('empresas');
-    }
-    
+
     /**
      * Display a listing of the resource.
      *

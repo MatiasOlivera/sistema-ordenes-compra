@@ -20,18 +20,7 @@ class RubroController extends Controller
     {
         $this->middleware('auth');
     }
-    
-    /**
-     * Mostrar la vista
-     *
-     * @return \Illuminate\Http\Response
-     */
-    
-    public function view()
-    {
-        return view('rubros');
-    }
-    
+
     /**
      * Display a listing of the resource.
      *
