@@ -1,5 +1,5 @@
 import api from '../servicio_api';
-import { rutaEmpresa as ruta } from '../rutas_api';
+import { RUTA_EMPRESAS } from '../rutas_api';
 import { crearNotification } from '../servicio_mensajes';
 
 const NO_ENCONTRADO = {
@@ -56,12 +56,15 @@ const MENSAJES = {
 
 const apiEmpresa = {
   guardar(empresa) {
-    return api.guardar(ruta.base, empresa, MENSAJES.GUARDAR);
+    return api.guardar(RUTA_EMPRESAS, empresa, MENSAJES.GUARDAR);
   },
 
   actualizar(id, empresa) {
-    const RUTA = ruta.especifica(id);
-    return api.actualizar(RUTA, empresa, MENSAJES.ACTUALIZAR);
+    return api.actualizar(
+      `${RUTA_EMPRESAS}/${id}`,
+      empresa,
+      MENSAJES.ACTUALIZAR
+    );
   }
 };
 

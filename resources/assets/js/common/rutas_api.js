@@ -1,13 +1,20 @@
-import Ruta from './ruta';
+/**
+ * Rutas
+ */
+export const RUTA_PERSONAS_JURIDICAS = 'juridicas';
+export const RUTA_TIPOS_DE_ORGANIZACIONES = 'tipos-organizacion';
+export const RUTA_EMPRESAS = 'empresas';
+export const RUTA_ACTIVIDADES_ECONOMICAS = 'actividades-economicas';
 
-const rutaActividad = new Ruta('/actividades-economicas');
-const rutaEmpresa = new Ruta('/empresas');
-const rutaPersonaJuridica = new Ruta('/juridicas');
-const rutaTipoOrganizacion = new Ruta('/tipos-organizacion');
+/**
+ * Sufijos
+ */
+export const SUFIJO_RESTAURAR = 'restore';
 
-export {
-  rutaActividad,
-  rutaEmpresa,
-  rutaPersonaJuridica,
-  rutaTipoOrganizacion
+export default {
+  RUTA_PERSONAS_JURIDICAS,
+  RUTA_TIPOS_DE_ORGANIZACIONES,
+  RUTA_EMPRESAS,
+  RUTA_ACTIVIDADES_ECONOMICAS,
+  SUFIJO_RESTAURAR
 };

@@ -1,5 +1,5 @@
 import api from '../servicio_api';
-import { rutaActividad as ruta } from '../rutas_api';
+import { RUTA_ACTIVIDADES_ECONOMICAS, SUFIJO_RESTAURAR } from '../rutas_api';
 import { crearNotification } from '../servicio_mensajes';
 
 const NO_ENCONTRADO = {
@@ -56,27 +56,40 @@ const MENSAJES = {
 
 const apiActividad = {
   obtener(id) {
-    const RUTA = ruta.especifica(id);
-    return api.obtener(RUTA, MENSAJES.OBTENER);
+    return api.obtener(
+      `${RUTA_ACTIVIDADES_ECONOMICAS}/${id}`,
+      MENSAJES.OBTENER
+    );
   },
 
   guardar(actividad) {
-    return api.guardar(ruta.base, actividad, MENSAJES.GUARDAR);
+    return api.guardar(
+      RUTA_ACTIVIDADES_ECONOMICAS,
+      actividad,
+      MENSAJES.GUARDAR
+    );
   },
 
   actualizar(id, actividad) {
-    const RUTA = ruta.especifica(id);
-    return api.actualizar(RUTA, actividad, MENSAJES.ACTUALIZAR);
+    return api.actualizar(
+      `${RUTA_ACTIVIDADES_ECONOMICAS}/${id}`,
+      actividad,
+      MENSAJES.ACTUALIZAR
+    );
   },
 
   darDeBaja(id) {
-    const RUTA = ruta.especifica(id);
-    return api.eliminar(RUTA, MENSAJES.ELIMINAR);
+    return api.eliminar(
+      `${RUTA_ACTIVIDADES_ECONOMICAS}/${id}`,
+      MENSAJES.ELIMINAR
+    );
   },
 
   darDeAlta(id) {
-    const RUTA = ruta.alta(id);
-    return api.restaurar(RUTA, MENSAJES.RESTAURAR);
+    return api.restaurar(
+      `${RUTA_ACTIVIDADES_ECONOMICAS}/${id}/${SUFIJO_RESTAURAR}`,
+      MENSAJES.RESTAURAR
+    );
   }
 };
 

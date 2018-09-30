@@ -1,5 +1,5 @@
 import api from '../servicio_api';
-import { rutaTipoOrganizacion as ruta } from '../rutas_api';
+import { RUTA_TIPOS_DE_ORGANIZACIONES } from '../rutas_api';
 import { crearNotification } from '../servicio_mensajes';
 
 const NO_ENCONTRADO = {
@@ -62,27 +62,36 @@ const MENSAJES = {
 
 const apiTipoOrganizacion = {
   obtener(id) {
-    const RUTA = ruta.especifica(id);
-    return api.obtener(RUTA, MENSAJES.OBTENER);
+    return api.obtener(
+      `${RUTA_TIPOS_DE_ORGANIZACIONES}/${id}`,
+      MENSAJES.OBTENER
+    );
   },
 
   guardar(tipo) {
-    return api.guardar(ruta.base, tipo, MENSAJES.GUARDAR);
+    return api.guardar(RUTA_TIPOS_DE_ORGANIZACIONES, tipo, MENSAJES.GUARDAR);
   },
 
   actualizar(id, tipo) {
-    const RUTA = ruta.especifica(id);
-    return api.actualizar(RUTA, tipo, MENSAJES.ACTUALIZAR);
+    return api.actualizar(
+      `${RUTA_TIPOS_DE_ORGANIZACIONES}/${id}`,
+      tipo,
+      MENSAJES.ACTUALIZAR
+    );
   },
 
   darDeBaja(id) {
-    const RUTA = ruta.especifica(id);
-    return api.eliminar(RUTA, MENSAJES.ELIMINAR);
+    return api.eliminar(
+      `${RUTA_TIPOS_DE_ORGANIZACIONES}/${id}`,
+      MENSAJES.ELIMINAR
+    );
   },
 
   darDeAlta(id) {
-    const RUTA = ruta.alta(id);
-    return api.restaurar(RUTA, MENSAJES.RESTAURAR);
+    return api.restaurar(
+      `${RUTA_TIPOS_DE_ORGANIZACIONES}/${id}`,
+      MENSAJES.RESTAURAR
+    );
   }
 };
 
