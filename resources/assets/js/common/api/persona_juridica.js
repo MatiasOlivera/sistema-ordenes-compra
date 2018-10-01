@@ -104,7 +104,10 @@ const apiPersonaJuridica = {
   },
 
   darDeAlta(id) {
-    return restaurar(`${RUTA_PERSONAS_JURIDICAS}/${id}`, MENSAJES.RESTAURAR);
+    return restaurar(
+      `${RUTA_PERSONAS_JURIDICAS}/${id}/${SUFIJO_RESTAURAR}`,
+      MENSAJES.RESTAURAR
+    );
   }
 };
 

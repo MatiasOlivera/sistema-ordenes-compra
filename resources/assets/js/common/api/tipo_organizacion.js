@@ -5,7 +5,7 @@ import {
   eliminar,
   restaurar
 } from '../servicio_api';
-import { RUTA_TIPOS_DE_ORGANIZACIONES } from '../rutas_api';
+import { RUTA_TIPOS_DE_ORGANIZACIONES, SUFIJO_RESTAURAR } from '../rutas_api';
 import { crearNotification } from '../servicio_mensajes';
 
 const NO_ENCONTRADO = {
@@ -93,7 +93,7 @@ const apiTipoOrganizacion = {
 
   darDeAlta(id) {
     return restaurar(
-      `${RUTA_TIPOS_DE_ORGANIZACIONES}/${id}`,
+      `${RUTA_TIPOS_DE_ORGANIZACIONES}/${id}/${SUFIJO_RESTAURAR}`,
       MENSAJES.RESTAURAR
     );
   }
