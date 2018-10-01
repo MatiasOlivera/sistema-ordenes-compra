@@ -1,10 +1,9 @@
-import servicioPeticion from './servicio_peticion';
+import { get, post, put, destroy, patch } from './servicio_peticion';
 import { setMensajesExito, setMensajesError } from './servicio_mensajes';
 
 const api = {
-  obtener(url, mensajes) {
-    return servicioPeticion
-      .obtener(url)
+  obtener(url, parametros, mensajes) {
+    return get(url, parametros)
       .then((respuesta) => respuesta)
       .catch((error) => {
         throw setMensajesError(error, mensajes);
@@ -12,8 +11,7 @@ const api = {
   },
 
   guardar(url, datos, mensajes) {
-    return servicioPeticion
-      .guardar(url, datos)
+    return post(url, datos)
       .then((respuesta) => setMensajesExito(respuesta, mensajes))
       .catch((error) => {
         throw setMensajesError(error, mensajes);
@@ -21,8 +19,7 @@ const api = {
   },
 
   actualizar(url, datos, mensajes) {
-    return servicioPeticion
-      .actualizar(url, datos)
+    return put(url, datos)
       .then((respuesta) => setMensajesExito(respuesta, mensajes))
       .catch((error) => {
         throw setMensajesError(error, mensajes);
@@ -30,8 +27,7 @@ const api = {
   },
 
   eliminar(url, mensajes) {
-    return servicioPeticion
-      .eliminar(url)
+    return destroy(url)
       .then((respuesta) => setMensajesExito(respuesta, mensajes))
       .catch((error) => {
         throw setMensajesError(error, mensajes);
@@ -39,8 +35,7 @@ const api = {
   },
 
   restaurar(url, mensajes) {
-    return servicioPeticion
-      .restaurar(url)
+    return patch(url)
       .then((respuesta) => setMensajesExito(respuesta, mensajes))
       .catch((error) => {
         throw setMensajesError(error, mensajes);
