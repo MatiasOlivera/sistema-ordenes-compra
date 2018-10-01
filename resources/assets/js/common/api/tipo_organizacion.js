@@ -1,4 +1,10 @@
-import api from '../servicio_api';
+import {
+  obtener,
+  guardar,
+  actualizar,
+  eliminar,
+  restaurar
+} from '../servicio_api';
 import { RUTA_TIPOS_DE_ORGANIZACIONES } from '../rutas_api';
 import { crearNotification } from '../servicio_mensajes';
 
@@ -61,19 +67,20 @@ const MENSAJES = {
 };
 
 const apiTipoOrganizacion = {
-  obtener(id) {
-    return api.obtener(
+  obtener(id, parametros = {}) {
+    return obtener(
       `${RUTA_TIPOS_DE_ORGANIZACIONES}/${id}`,
+      parametros,
       MENSAJES.OBTENER
     );
   },
 
   guardar(tipo) {
-    return api.guardar(RUTA_TIPOS_DE_ORGANIZACIONES, tipo, MENSAJES.GUARDAR);
+    return guardar(RUTA_TIPOS_DE_ORGANIZACIONES, tipo, MENSAJES.GUARDAR);
   },
 
   actualizar(id, tipo) {
-    return api.actualizar(
+    return actualizar(
       `${RUTA_TIPOS_DE_ORGANIZACIONES}/${id}`,
       tipo,
       MENSAJES.ACTUALIZAR
@@ -81,14 +88,11 @@ const apiTipoOrganizacion = {
   },
 
   darDeBaja(id) {
-    return api.eliminar(
-      `${RUTA_TIPOS_DE_ORGANIZACIONES}/${id}`,
-      MENSAJES.ELIMINAR
-    );
+    return eliminar(`${RUTA_TIPOS_DE_ORGANIZACIONES}/${id}`, MENSAJES.ELIMINAR);
   },
 
   darDeAlta(id) {
-    return api.restaurar(
+    return restaurar(
       `${RUTA_TIPOS_DE_ORGANIZACIONES}/${id}`,
       MENSAJES.RESTAURAR
     );

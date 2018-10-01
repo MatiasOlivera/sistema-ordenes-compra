@@ -1,4 +1,10 @@
-import api from '../servicio_api';
+import {
+  obtener,
+  guardar,
+  actualizar,
+  eliminar,
+  restaurar
+} from '../servicio_api';
 import { RUTA_ACTIVIDADES_ECONOMICAS, SUFIJO_RESTAURAR } from '../rutas_api';
 import { crearNotification } from '../servicio_mensajes';
 
@@ -55,23 +61,20 @@ const MENSAJES = {
 };
 
 const apiActividad = {
-  obtener(id) {
-    return api.obtener(
+  obtener(id, parametros = {}) {
+    return obtener(
       `${RUTA_ACTIVIDADES_ECONOMICAS}/${id}`,
+      parametros,
       MENSAJES.OBTENER
     );
   },
 
   guardar(actividad) {
-    return api.guardar(
-      RUTA_ACTIVIDADES_ECONOMICAS,
-      actividad,
-      MENSAJES.GUARDAR
-    );
+    return guardar(RUTA_ACTIVIDADES_ECONOMICAS, actividad, MENSAJES.GUARDAR);
   },
 
   actualizar(id, actividad) {
-    return api.actualizar(
+    return actualizar(
       `${RUTA_ACTIVIDADES_ECONOMICAS}/${id}`,
       actividad,
       MENSAJES.ACTUALIZAR
@@ -79,14 +82,11 @@ const apiActividad = {
   },
 
   darDeBaja(id) {
-    return api.eliminar(
-      `${RUTA_ACTIVIDADES_ECONOMICAS}/${id}`,
-      MENSAJES.ELIMINAR
-    );
+    return eliminar(`${RUTA_ACTIVIDADES_ECONOMICAS}/${id}`, MENSAJES.ELIMINAR);
   },
 
   darDeAlta(id) {
-    return api.restaurar(
+    return restaurar(
       `${RUTA_ACTIVIDADES_ECONOMICAS}/${id}/${SUFIJO_RESTAURAR}`,
       MENSAJES.RESTAURAR
     );

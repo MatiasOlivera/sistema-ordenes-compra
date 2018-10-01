@@ -1,4 +1,10 @@
-import api from '../servicio_api';
+import {
+  obtener,
+  guardar,
+  actualizar,
+  eliminar,
+  restaurar
+} from '../servicio_api';
 import { RUTA_PERSONAS_JURIDICAS, SUFIJO_RESTAURAR } from '../rutas_api';
 import { crearNotification } from '../servicio_mensajes';
 
@@ -73,16 +79,20 @@ const MENSAJES = {
 };
 
 const apiPersonaJuridica = {
-  obtener(id) {
-    return api.obtener(`${RUTA_PERSONAS_JURIDICAS}/${id}`, MENSAJES.OBTENER);
+  obtener(id, parametros = {}) {
+    return obtener(
+      `${RUTA_PERSONAS_JURIDICAS}/${id}`,
+      parametros,
+      MENSAJES.OBTENER
+    );
   },
 
   guardar(juridica) {
-    return api.guardar(RUTA_PERSONAS_JURIDICAS, juridica, MENSAJES.GUARDAR);
+    return guardar(RUTA_PERSONAS_JURIDICAS, juridica, MENSAJES.GUARDAR);
   },
 
   actualizar(id, juridica) {
-    return api.actualizar(
+    return actualizar(
       `${RUTA_PERSONAS_JURIDICAS}/${id}`,
       juridica,
       MENSAJES.ACTUALIZAR
@@ -90,14 +100,11 @@ const apiPersonaJuridica = {
   },
 
   darDeBaja(id) {
-    return api.eliminar(`${RUTA_PERSONAS_JURIDICAS}/${id}`, MENSAJES.ELIMINAR);
+    return eliminar(`${RUTA_PERSONAS_JURIDICAS}/${id}`, MENSAJES.ELIMINAR);
   },
 
   darDeAlta(id) {
-    return api.restaurar(
-      `${RUTA_PERSONAS_JURIDICAS}/${id}`,
-      MENSAJES.RESTAURAR
-    );
+    return restaurar(`${RUTA_PERSONAS_JURIDICAS}/${id}`, MENSAJES.RESTAURAR);
   }
 };
 

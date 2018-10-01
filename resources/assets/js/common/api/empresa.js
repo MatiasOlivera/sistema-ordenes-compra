@@ -1,4 +1,4 @@
-import api from '../servicio_api';
+import { guardar, actualizar } from '../servicio_api';
 import { RUTA_EMPRESAS } from '../rutas_api';
 import { crearNotification } from '../servicio_mensajes';
 
@@ -56,15 +56,11 @@ const MENSAJES = {
 
 const apiEmpresa = {
   guardar(empresa) {
-    return api.guardar(RUTA_EMPRESAS, empresa, MENSAJES.GUARDAR);
+    return guardar(RUTA_EMPRESAS, empresa, MENSAJES.GUARDAR);
   },
 
   actualizar(id, empresa) {
-    return api.actualizar(
-      `${RUTA_EMPRESAS}/${id}`,
-      empresa,
-      MENSAJES.ACTUALIZAR
-    );
+    return actualizar(`${RUTA_EMPRESAS}/${id}`, empresa, MENSAJES.ACTUALIZAR);
   }
 };
 
