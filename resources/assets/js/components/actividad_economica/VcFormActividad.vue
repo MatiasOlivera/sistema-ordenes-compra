@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import apiActividad from '../../common/api/actividad_economica';
+import apiActividad from '../../api/actividad_economica';
 import { objetoTienePropiedades } from '../../common/components/validadores';
 import {
   ACTIVIDAD_POR_DEFECTO,

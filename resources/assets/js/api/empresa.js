@@ -1,6 +1,6 @@
-import { guardar, actualizar } from '../servicio_api';
-import { RUTA_EMPRESAS } from '../rutas_api';
-import { crearNotification } from '../servicio_mensajes';
+import { guardar, actualizar } from '../services/api';
+import { RUTA_EMPRESAS } from './rutas_api';
+import { crearNotification } from '../services/api/servicio_mensajes';
 
 const NO_ENCONTRADO = {
   noEncontrado: crearNotification('No encontrada', 'La empresa no existe')

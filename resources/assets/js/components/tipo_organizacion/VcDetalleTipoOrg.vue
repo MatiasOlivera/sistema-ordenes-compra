@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import apiTipoOrganizacion from '../../common/api/tipo_organizacion';
+import apiTipoOrganizacion from '../../api/tipo_organizacion';
 import { objetoTienePropiedades } from '../../common/components/validadores';
 import { TIPO_CLAVES } from '../../common/components/tipo_organizacion';
 import formatoFecha from '../../mixins/formato_fecha_mixin';

@@ -91,7 +91,7 @@
 </template>
 
 <script>
-import apiEmpresa from '../../common/api/empresa';
+import apiEmpresa from '../../api/empresa';
 
 /**
  * Componentes

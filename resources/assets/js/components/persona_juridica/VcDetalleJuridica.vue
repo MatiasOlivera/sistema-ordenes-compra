@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import apiPersonaJuridica from '../../common/api/persona_juridica';
+import apiPersonaJuridica from '../../api/persona_juridica';
 import { objetoTienePropiedades } from '../../common/components/validadores';
 import { JURIDICA_CLAVES } from '../../common/components/persona_juridica';
 

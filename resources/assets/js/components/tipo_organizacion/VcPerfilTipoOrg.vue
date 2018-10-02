@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import apiTipoOrganizacion from '../../common/api/tipo_organizacion';
+import apiTipoOrganizacion from '../../api/tipo_organizacion';
 
 /**
  * Eventos

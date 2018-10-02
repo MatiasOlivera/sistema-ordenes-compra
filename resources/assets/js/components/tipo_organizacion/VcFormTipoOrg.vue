@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import apiTipoOrganizacion from '../../common/api/tipo_organizacion';
+import apiTipoOrganizacion from '../../api/tipo_organizacion';
 import { objetoTienePropiedades } from '../../common/components/validadores';
 import {
   TIPO_POR_DEFECTO,

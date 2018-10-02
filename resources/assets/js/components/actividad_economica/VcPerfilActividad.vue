@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import apiActividad from '../../common/api/actividad_economica';
+import apiActividad from '../../api/actividad_economica';
 
 /**
  * Eventos

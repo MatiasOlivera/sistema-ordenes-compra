@@ -116,7 +116,7 @@
 <script>
 import { PlusIcon } from 'vue-feather-icons';
 
-import apiPersonaJuridica from '../../common/api/persona_juridica';
+import apiPersonaJuridica from '../../api/persona_juridica';
 import { objetoTienePropiedades } from '../../common/components/validadores';
 import {
   JURIDICA_POR_DEFECTO,

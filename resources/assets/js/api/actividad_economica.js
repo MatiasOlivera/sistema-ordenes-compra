@@ -4,15 +4,12 @@ import {
   actualizar,
   eliminar,
   restaurar
-} from '../servicio_api';
-import { RUTA_TIPOS_DE_ORGANIZACIONES, SUFIJO_RESTAURAR } from '../rutas_api';
-import { crearNotification } from '../servicio_mensajes';
+} from '../services/api';
+import { RUTA_ACTIVIDADES_ECONOMICAS, SUFIJO_RESTAURAR } from './rutas_api';
+import { crearNotification } from '../services/api/servicio_mensajes';
 
 const NO_ENCONTRADO = {
-  noEncontrado: crearNotification(
-    'No encontrado',
-    'El tipo de organización no existe'
-  )
+  noEncontrado: crearNotification('No encontrado', 'El rubro no existe')
 };
 
 const MENSAJES = {
@@ -20,7 +17,7 @@ const MENSAJES = {
     error: {
       porDefecto: crearNotification(
         'Error',
-        'No se pudo traer los datos del tipo de organización'
+        'No se pudo traer los datos del rubro'
       ),
       ...NO_ENCONTRADO
     }
@@ -31,10 +28,7 @@ const MENSAJES = {
       porDefecto: crearNotification('Guardado')
     },
     error: {
-      porDefecto: crearNotification(
-        'Error',
-        'No se pudo crear el tipo de organización'
-      )
+      porDefecto: crearNotification('Error', 'No se pudo crear el rubro')
     }
   },
 
@@ -66,37 +60,37 @@ const MENSAJES = {
   }
 };
 
-const apiTipoOrganizacion = {
+const apiActividad = {
   obtener(id, parametros = {}) {
     return obtener(
-      `${RUTA_TIPOS_DE_ORGANIZACIONES}/${id}`,
+      `${RUTA_ACTIVIDADES_ECONOMICAS}/${id}`,
       parametros,
       MENSAJES.OBTENER
     );
   },
 
-  guardar(tipo) {
-    return guardar(RUTA_TIPOS_DE_ORGANIZACIONES, tipo, MENSAJES.GUARDAR);
+  guardar(actividad) {
+    return guardar(RUTA_ACTIVIDADES_ECONOMICAS, actividad, MENSAJES.GUARDAR);
   },
 
-  actualizar(id, tipo) {
+  actualizar(id, actividad) {
     return actualizar(
-      `${RUTA_TIPOS_DE_ORGANIZACIONES}/${id}`,
-      tipo,
+      `${RUTA_ACTIVIDADES_ECONOMICAS}/${id}`,
+      actividad,
       MENSAJES.ACTUALIZAR
     );
   },
 
   darDeBaja(id) {
-    return eliminar(`${RUTA_TIPOS_DE_ORGANIZACIONES}/${id}`, MENSAJES.ELIMINAR);
+    return eliminar(`${RUTA_ACTIVIDADES_ECONOMICAS}/${id}`, MENSAJES.ELIMINAR);
   },
 
   darDeAlta(id) {
     return restaurar(
-      `${RUTA_TIPOS_DE_ORGANIZACIONES}/${id}/${SUFIJO_RESTAURAR}`,
+      `${RUTA_ACTIVIDADES_ECONOMICAS}/${id}/${SUFIJO_RESTAURAR}`,
       MENSAJES.RESTAURAR
     );
   }
 };
 
-export default apiTipoOrganizacion;
+export default apiActividad;
