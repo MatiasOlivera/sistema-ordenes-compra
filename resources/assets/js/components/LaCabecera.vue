@@ -20,7 +20,7 @@
       >
 
         <router-link
-          :to="{ name: rutas.DASHBOARD }"
+          :to="{ name: rutas.dashboard }"
           class="navbar-brand"
         >
           Gestión de ordenes
@@ -47,7 +47,7 @@
 
           <li class="nav-item">
             <router-link
-              :to="{ name: rutas.PERSONAS_JURIDICAS }"
+              :to="{ name: rutas.juridicas }"
               class="nav-link"
             >
               Jurídicas
@@ -56,7 +56,7 @@
 
           <li class="nav-item">
             <router-link
-              :to="{ name: rutas.EMPRESAS }"
+              :to="{ name: rutas.empresas }"
               class="nav-link"
             >
               Empresas
@@ -82,7 +82,7 @@
             >
               <h6 class="dropdown-header">Empresa</h6>
               <router-link
-                :to="{ name: rutas.ACTIVIDADES_ECONOMICAS }"
+                :to="{ name: rutas.actividades }"
                 class="dropdown-item"
               >
                 Rubros
@@ -92,7 +92,7 @@
 
               <h6 class="dropdown-header">Persona jurídica</h6>
               <router-link
-                :to="{ name: rutas.TIPOS_DE_ORGANIZACIONES }"
+                :to="{ name: rutas.tiposDeOrg }"
                 class="dropdown-item"
               >
                 Tipos de organización
@@ -139,11 +139,11 @@
 
 <script>
 import {
-  DASHBOARD,
-  PERSONAS_JURIDICAS,
-  TIPOS_DE_ORGANIZACIONES,
-  EMPRESAS,
-  ACTIVIDADES_ECONOMICAS
+  RUTA_DASHBOARD,
+  RUTA_JURIDICAS,
+  RUTA_TIPOS_DE_ORG,
+  RUTA_EMPRESAS,
+  RUTA_ACTIVIDADES_ECONOMICAS
 } from '../router/rutas';
 
 export default {
@@ -151,11 +151,11 @@ export default {
   data() {
     return {
       rutas: {
-        DASHBOARD,
-        PERSONAS_JURIDICAS,
-        TIPOS_DE_ORGANIZACIONES,
-        EMPRESAS,
-        ACTIVIDADES_ECONOMICAS
+        dashboard: RUTA_DASHBOARD,
+        juridicas: RUTA_JURIDICAS,
+        tiposDeOrg: RUTA_TIPOS_DE_ORG,
+        empresas: RUTA_EMPRESAS,
+        actividades: RUTA_ACTIVIDADES_ECONOMICAS
       }
     };
   }

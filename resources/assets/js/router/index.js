@@ -2,12 +2,12 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import {
-  INDEX,
-  DASHBOARD,
-  PERSONAS_JURIDICAS,
-  TIPOS_DE_ORGANIZACIONES,
-  EMPRESAS,
-  ACTIVIDADES_ECONOMICAS
+  RUTA_INDEX,
+  RUTA_DASHBOARD,
+  RUTA_JURIDICAS,
+  RUTA_TIPOS_DE_ORG,
+  RUTA_EMPRESAS,
+  RUTA_ACTIVIDADES_ECONOMICAS
 } from './rutas';
 
 import ViewLogin from '../views/ViewLogin.vue';
@@ -22,32 +22,32 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
-      name: INDEX,
+      name: RUTA_INDEX,
       path: '/',
       component: ViewLogin
     },
     {
-      name: DASHBOARD,
+      name: RUTA_DASHBOARD,
       path: '/inicio',
       component: ViewDashboard
     },
     {
-      name: PERSONAS_JURIDICAS,
+      name: RUTA_JURIDICAS,
       path: '/personas-juridicas',
       component: ViewJuridicas
     },
     {
-      name: TIPOS_DE_ORGANIZACIONES,
+      name: RUTA_TIPOS_DE_ORG,
       path: '/tipos-organizaciones',
       component: ViewTiposOrganizacion
     },
     {
-      name: EMPRESAS,
+      name: RUTA_EMPRESAS,
       path: '/companias',
       component: ViewEmpresas
     },
     {
-      name: ACTIVIDADES_ECONOMICAS,
+      name: RUTA_ACTIVIDADES_ECONOMICAS,
       path: '/rubros',
       component: ViewActividades
     }
