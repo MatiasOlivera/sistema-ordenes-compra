@@ -4,6 +4,7 @@ import { ServerTable } from 'vue-tables-2';
 
 import App from './App.vue';
 import router from './router';
+import store from './store';
 
 // Configuraciones
 import {
@@ -35,6 +36,7 @@ Vue.use(
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 });
