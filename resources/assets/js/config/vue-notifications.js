@@ -3,15 +3,23 @@ import iziToast from 'izitoast';
 
 export const NOTIFICACION_TIMEOUT = 10000;
 
+const TIPOS = {
+  exito: 'success',
+  error: 'error',
+  info: 'info',
+  advertencia: 'warning',
+  pregunta: 'question'
+};
+
 function notificacion({
-  title,
-  message,
-  type,
+  titulo: title,
+  mensaje: message,
+  tipo,
   timeout,
   buttons = [],
   displayMode
 }) {
-  if (type === VueNotifications.types.warn) type = 'warning';
+  const type = TIPOS[tipo];
   return iziToast[type]({ title, message, timeout, buttons, displayMode });
 }
 
@@ -19,7 +27,7 @@ export const TIPOS_DE_NOTIFICACION = {
   success: notificacion,
   error: notificacion,
   info: notificacion,
-  warn: notificacion,
+  warning: notificacion,
   question: notificacion
 };
 

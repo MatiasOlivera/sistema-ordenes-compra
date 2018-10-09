@@ -60,8 +60,8 @@ export default {
           : '¿Estás seguro que quieres eliminarlo?';
 
       this.pregunta({
-        title: 'Confirmar la eliminación',
-        message: MENSAJE,
+        titulo: 'Confirmar la eliminación',
+        mensaje: MENSAJE,
         timeout: false,
         buttons: [
           [
@@ -87,9 +87,9 @@ export default {
 
   notifications: {
     pregunta: {
-      title: '',
-      message: '',
-      type: 'question'
+      titulo: '',
+      mensaje: '',
+      tipo: 'pregunta'
     }
   }
 };

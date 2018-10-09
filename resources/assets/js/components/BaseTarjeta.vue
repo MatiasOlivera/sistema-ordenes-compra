@@ -128,8 +128,8 @@ export default {
       }
 
       this.pregunta({
-        title: this.confirmacionNotificacion.titulo,
-        message: this.confirmacionNotificacion.mensaje,
+        titulo: this.confirmacionNotificacion.titulo,
+        mensaje: this.confirmacionNotificacion.mensaje,
         timeout: false,
         buttons: [
           [
@@ -154,9 +154,9 @@ export default {
 
   notifications: {
     pregunta: {
-      title: '',
-      message: '',
-      type: 'question'
+      titulo: '',
+      mensaje: '',
+      tipo: 'pregunta'
     }
   }
 };

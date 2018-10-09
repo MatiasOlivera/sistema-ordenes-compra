@@ -60,8 +60,8 @@ export default {
           : '¿Estás seguro que quieres darlo de alta?';
 
       this.pregunta({
-        title: 'Confirmar el alta',
-        message: MENSAJE,
+        titulo: 'Confirmar el alta',
+        mensaje: MENSAJE,
         timeout: false,
         buttons: [
           [
@@ -87,9 +87,9 @@ export default {
 
   notifications: {
     pregunta: {
-      title: '',
-      message: '',
-      type: 'question'
+      titulo: '',
+      mensaje: '',
+      tipo: 'pregunta'
     }
   }
 };

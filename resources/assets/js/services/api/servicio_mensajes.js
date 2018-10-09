@@ -1,7 +1,12 @@
-export function crearNotification(titulo = '', mensaje = '') {
+export function crearNotification(
+  titulo = 'Titulo',
+  mensaje = 'Mensaje',
+  tipo = 'advertencia'
+) {
   return {
-    title: titulo,
-    message: mensaje
+    titulo,
+    mensaje,
+    tipo
   };
 }
 
@@ -15,7 +20,7 @@ export function setMensajesExito(
 
   if (STATUS === 200 || STATUS === 201) {
     if (_.has(respuesta.data, 'mensaje')) {
-      const { title: titulo } = mensajes.exito.porDefecto;
+      const { titulo } = mensajes.exito.porDefecto;
       datos.notificacion = crearNotificacion(titulo, respuesta.data.mensaje);
     }
   }
