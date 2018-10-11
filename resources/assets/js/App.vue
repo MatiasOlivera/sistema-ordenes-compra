@@ -25,7 +25,9 @@ export default {
     ultima: {
       /* eslint-disable object-shorthand, func-names */
       handler: function(notificacion) {
-        this.mostrarNotificacion(notificacion);
+        if (notificacion !== null && notificacion !== undefined) {
+          this.mostrarNotificacion(notificacion);
+        }
       },
       deep: true
     }
