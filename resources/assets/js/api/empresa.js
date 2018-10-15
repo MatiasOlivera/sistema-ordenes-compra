@@ -1,4 +1,4 @@
-import { guardar, actualizar } from '../services/api';
+import { obtener, guardar, actualizar } from '../services/api';
 import { RUTA_EMPRESAS } from './rutas_api';
 import { crearNotification } from '../services/api/servicio_mensajes';
 
@@ -7,7 +7,13 @@ const NO_ENCONTRADO = {
 };
 
 const MENSAJES = {
-  OBTENER: {
+  OBTENER_EMPRESAS: {
+    error: {
+      porDefecto: crearNotification('Error', 'No se pudo traer las empresas')
+    }
+  },
+
+  OBTENER_EMPRESA: {
     error: {
       porDefecto: crearNotification(
         'Error',
@@ -54,14 +60,31 @@ const MENSAJES = {
   }
 };
 
-const apiEmpresa = {
-  guardar(empresa) {
-    return guardar(RUTA_EMPRESAS, empresa, MENSAJES.GUARDAR);
-  },
+export function obtenerEmpresas(parametros = {}) {
+  const PARAMETROS_POR_DEFECTO = {
+    busqueda: null,
+    limite: 10,
+    pagina: 1,
+    ordenarPor: 'nombre_fantasia',
+    ascendente: 1,
+    soloEliminados: 0
+  };
 
-  actualizar(id, empresa) {
-    return actualizar(`${RUTA_EMPRESAS}/${id}`, empresa, MENSAJES.ACTUALIZAR);
-  }
+  const CONDICIONES = { ...PARAMETROS_POR_DEFECTO, ...parametros };
+
+  return obtener(RUTA_EMPRESAS, CONDICIONES, MENSAJES.OBTENER_EMPRESAS);
+}
+
+export function guardarEmpresa(empresa) {
+  return guardar(RUTA_EMPRESAS, empresa, MENSAJES.GUARDAR);
+}
+
+export function actualizarEmpresa(id, empresa) {
+  return actualizar(`${RUTA_EMPRESAS}/${id}`, empresa, MENSAJES.ACTUALIZAR);
+}
+
+export default {
+  obtenerEmpresas,
+  guardarEmpresa,
+  actualizarEmpresa
 };
-
-export default apiEmpresa;

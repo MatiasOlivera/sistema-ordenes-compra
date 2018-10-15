@@ -16,35 +16,26 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+import { MODULO_JURIDICAS } from '../../store/tipos_modulos';
+import {
+  ELIMINAR_JURIDICA,
+  RESTAURAR_JURIDICA
+} from '../../store/tipos_acciones';
+
+import { RUTA_JURIDICA_PERFIL, RUTA_JURIDICA_EDITAR } from '../../router/rutas';
+
 import BaseTabla from '../BaseTabla.vue';
-import DarBajaInstanciaMixin from '../../mixins/dar_baja_instancia_mixin';
-import DarAltaInstanciaMixin from '../../mixins/dar_alta_instancia_mixin';
 
 export default {
   name: 'VcTablaJuridicas',
 
   components: { BaseTabla },
 
-  mixins: [DarBajaInstanciaMixin, DarAltaInstanciaMixin],
-
   data() {
     return {
       obtenerTabla: false
     };
-  },
-
-  created() {
-    BusEventos.$on('VcFormJuridica:guardada', () => {
-      this.obtenerRegistros();
-    });
-
-    BusEventos.$on('VcPerfilJuridica:eliminada', () => {
-      this.obtenerRegistros();
-    });
-
-    BusEventos.$on('VcPerfilJuridica:restaurada', () => {
-      this.obtenerRegistros();
-    });
   },
 
   static: {
@@ -66,67 +57,30 @@ export default {
       sortable: ['denominacion', 'cuit']
     },
 
-    campoNombre: 'denominacion',
-
-    mensajes: {
-      alta: {
-        error: {
-          noEncontrado: {
-            titulo: 'No encontrada',
-            mensaje: 'La persona jurídica no existe o ha sido eliminada'
-          },
-          porDefecto: {
-            titulo: 'Error',
-            mensaje: 'No se pudo dar de alta a la persona jurídica'
-          }
-        }
-      },
-      baja: {
-        error: {
-          noEncontrado: {
-            titulo: 'No encontrada',
-            mensaje: 'La persona jurídica no existe o ha sido eliminada'
-          },
-          porDefecto: {
-            titulo: 'Error',
-            mensaje: 'No se pudo dar de baja a la persona jurídica'
-          }
-        }
-      }
-    }
+    campoNombre: 'denominacion'
   },
 
   methods: {
+    ...mapActions(MODULO_JURIDICAS, [ELIMINAR_JURIDICA, RESTAURAR_JURIDICA]),
+
     verPerfil(id) {
-      BusEventos.$emit('VcTablaJuridicas:verPerfil', id);
-      this.$emit('mostrar-perfil');
+      this.$router.push({ name: RUTA_JURIDICA_PERFIL, params: { id } });
     },
 
     editar(id) {
-      BusEventos.$emit('VcTablaJuridicas:editar', id);
-      this.$emit('mostrar-perfil');
+      this.$router.push({ name: RUTA_JURIDICA_EDITAR, params: { id } });
     },
 
     darDeBaja(id) {
-      this.$_darBajaInstanciaMixin_eliminar(
-        `${this.$options.static.url}/${id}`,
-        () => {
-          this.obtenerRegistros();
-          BusEventos.$emit('VcTablaJuridicas:eliminada', id);
-        },
-        this.$options.static.mensajes.baja
-      );
+      this.eliminarJuridica(id).then(() => {
+        this.obtenerRegistros();
+      });
     },
 
     darDeAlta(id) {
-      this.$_darAltaInstanciaMixin_restaurar(
-        `${this.$options.static.url}/${id}/restore`,
-        () => {
-          this.obtenerRegistros();
-          BusEventos.$emit('VcTablaJuridicas:restaurada', id);
-        },
-        this.$options.static.mensajes.alta
-      );
+      this.restaurarJuridica(id).then(() => {
+        this.obtenerRegistros();
+      });
     },
 
     obtenerRegistros() {

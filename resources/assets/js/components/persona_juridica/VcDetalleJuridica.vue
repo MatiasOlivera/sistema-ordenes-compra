@@ -5,8 +5,8 @@
     :nombre-instancia="juridica.denominacion"
     :eliminado="eliminado"
     @editar="editar"
-    @dar-de-baja="darDeBaja"
-    @dar-de-alta="darDeAlta"
+    @dar-de-baja="darDeBaja(juridica.id)"
+    @dar-de-alta="darDeAlta(juridica.id)"
     @cerrar="cerrar"
   >
 
@@ -46,9 +46,14 @@
 </template>
 
 <script>
-import apiPersonaJuridica from '../../api/persona_juridica';
-import { objetoTienePropiedades } from '../../common/components/validadores';
-import { JURIDICA_CLAVES } from '../../common/components/persona_juridica';
+import { mapActions } from 'vuex';
+import {
+  ELIMINAR_JURIDICA,
+  RESTAURAR_JURIDICA
+} from '../../store/tipos_acciones';
+import { MODULO_JURIDICAS } from '../../store/tipos_modulos';
+
+import { RUTA_JURIDICAS, RUTA_JURIDICA_EDITAR } from '../../router/rutas';
 
 /**
  * Mixins
@@ -72,9 +77,6 @@ export default {
   props: {
     juridica: {
       type: Object,
-      validator: function(juridica) {
-        return objetoTienePropiedades(juridica, JURIDICA_CLAVES);
-      },
       required: true
     }
   },
@@ -90,65 +92,17 @@ export default {
   },
 
   methods: {
+    ...mapActions(MODULO_JURIDICAS, {
+      darDeBaja: ELIMINAR_JURIDICA,
+      darDeAlta: RESTAURAR_JURIDICA
+    }),
+
     editar() {
-      this.$emit('editar');
+      this.$router.push({ name: RUTA_JURIDICA_EDITAR });
     },
 
     cerrar() {
-      this.$emit('cerrar');
-    },
-
-    darDeBaja() {
-      apiPersonaJuridica
-        .darDeBaja(this.juridica.id)
-        .then((respuesta) => {
-          const STATUS = respuesta.status;
-
-          if (STATUS === 200) {
-            this.exito(respuesta.notificacion);
-
-            this.$emit('dado-de-baja');
-            BusEventos.$emit('VcPerfilJuridica:eliminada');
-          }
-        })
-        .catch(({ notificacion }) => {
-          if (notificacion) {
-            this.error(notificacion);
-          }
-        });
-    },
-
-    darDeAlta() {
-      apiPersonaJuridica
-        .darDeAlta(this.juridica.id)
-        .then((respuesta) => {
-          const STATUS = respuesta.status;
-
-          if (STATUS === 200) {
-            this.exito(respuesta.notificacion);
-
-            this.$emit('dado-de-alta');
-            BusEventos.$emit('VcPerfilJuridica:restaurada');
-          }
-        })
-        .catch(({ notificacion }) => {
-          if (notificacion) {
-            this.error(notificacion);
-          }
-        });
-    }
-  },
-
-  notifications: {
-    exito: {
-      title: 'Exito',
-      message: '',
-      type: 'success'
-    },
-    error: {
-      title: 'Error',
-      message: '',
-      type: 'error'
+      this.$router.push({ name: RUTA_JURIDICAS });
     }
   }
 };

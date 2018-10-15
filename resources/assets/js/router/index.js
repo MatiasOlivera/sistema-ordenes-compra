@@ -10,6 +10,7 @@ import {
   RUTA_JURIDICAS,
   RUTA_JURIDICA_CREAR,
   RUTA_JURIDICA_PERFIL,
+  RUTA_JURIDICA_EDITAR,
   RUTA_TIPOS_DE_ORG,
   RUTA_EMPRESAS,
   RUTA_ACTIVIDADES_ECONOMICAS
@@ -25,6 +26,8 @@ import ViewJuridicas from '../views/persona_juridica/ViewJuridicas.vue';
 import ViewJuridicasListado from '../views/persona_juridica/ViewJuridicasListado.vue';
 import ViewJuridicasCrear from '../views/persona_juridica/ViewJuridicasCrear.vue';
 import ViewJuridicasPerfil from '../views/persona_juridica/ViewJuridicasPerfil.vue';
+import ViewJuridicasPerfilDetalle from '../views/persona_juridica/ViewJuridicasPerfilDetalle.vue';
+import ViewJuridicasPerfilEditar from '../views/persona_juridica/ViewJuridicasPerfilEditar.vue';
 
 import ViewTiposOrganizacion from '../views/ViewTiposOrganizacion.vue';
 import ViewEmpresas from '../views/ViewEmpresas.vue';
@@ -59,9 +62,20 @@ export default new Router({
           component: ViewJuridicasCrear
         },
         {
-          name: RUTA_JURIDICA_PERFIL,
           path: ':id',
-          component: ViewJuridicasPerfil
+          component: ViewJuridicasPerfil,
+          children: [
+            {
+              name: RUTA_JURIDICA_PERFIL,
+              path: '',
+              component: ViewJuridicasPerfilDetalle
+            },
+            {
+              name: RUTA_JURIDICA_EDITAR,
+              path: 'editar',
+              component: ViewJuridicasPerfilEditar
+            }
+          ]
         }
       ]
     },

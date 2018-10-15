@@ -115,8 +115,14 @@
 
 <script>
 import { PlusIcon } from 'vue-feather-icons';
+import { mapActions } from 'vuex';
 
-import apiPersonaJuridica from '../../api/persona_juridica';
+import {
+  CREAR_JURIDICA,
+  ACTUALIZAR_JURIDICA
+} from '../../store/tipos_acciones';
+import { MODULO_JURIDICAS } from '../../store/tipos_modulos';
+
 import { objetoTienePropiedades } from '../../common/components/validadores';
 import {
   JURIDICA_POR_DEFECTO,
@@ -126,10 +132,6 @@ import {
 /**
  * Eventos
  */
-import {
-  EVENTO_GUARDADO,
-  EVENTO_ACTUALIZADO
-} from '../../common/components/eventos_formulario';
 import { EVENTO_CERRAR } from '../../common/components/eventos_tarjeta';
 
 /**
@@ -255,6 +257,11 @@ export default {
   },
 
   methods: {
+    ...mapActions(MODULO_JURIDICAS, {
+      crearJuridica: CREAR_JURIDICA,
+      actualizarJuridica: ACTUALIZAR_JURIDICA
+    }),
+
     buscarTiposOrganizacion(valorBuscado) {
       axios
         .get('/tipos-organizacion', {
@@ -324,72 +331,35 @@ export default {
     enviar() {
       if (this.fueModificada) {
         this.estaCargando = true;
+
+        let accion;
+
         if (this.esNueva) {
-          this.guardar();
+          accion = this.crearJuridica(this.juridica);
         } else {
-          this.actualizar();
+          accion = this.actualizarJuridica({
+            id: this.juridica.id,
+            juridica: this.juridica
+          });
         }
+
+        accion
+          .then(() => {
+            if (this.esNueva) {
+              this.restaurar();
+            } else {
+              this.cerrar();
+            }
+          })
+          .catch((validacion) => {
+            if (validacion) {
+              this.validacion = validacion;
+            }
+          })
+          .finally(() => {
+            this.estaCargando = false;
+          });
       }
-    },
-
-    guardar() {
-      apiPersonaJuridica
-        .guardar(this.juridica)
-        .then((respuesta) => {
-          const { status: STATUS } = respuesta;
-
-          if (STATUS === 201) {
-            this.exito(respuesta.notificacion);
-
-            this.restaurar();
-
-            this.$emit(EVENTO_GUARDADO);
-
-            BusEventos.$emit('VcFormJuridica:guardado');
-          }
-        })
-        .catch(({ notificacion, validacion }) => {
-          if (validacion) {
-            this.validacion = validacion;
-          }
-
-          if (notificacion) {
-            this.error(notificacion);
-          }
-        })
-        .finally(() => {
-          this.estaCargando = false;
-        });
-    },
-
-    actualizar() {
-      apiPersonaJuridica
-        .actualizar(this.juridica.id, this.juridica)
-        .then((respuesta) => {
-          const { status: STATUS } = respuesta;
-
-          if (STATUS === 200) {
-            this.exito(respuesta.notificacion);
-
-            this.restaurar();
-
-            this.$emit(EVENTO_ACTUALIZADO);
-
-            BusEventos.$emit('VcFormJuridica:guardado');
-          }
-        })
-        .catch(({ notificacion, validacion }) => {
-          if (validacion) {
-            this.validacion = validacion;
-          }
-
-          if (notificacion) {
-            this.error(notificacion);
-          }
-        })
-        .finally(() => {
-          this.estaCargando = false;
-        });
     },
 
     restaurar() {
@@ -408,19 +378,6 @@ export default {
     cerrar() {
       this.restaurar();
       this.$emit(EVENTO_CERRAR);
-    }
-  },
-
-  notifications: {
-    exito: {
-      title: 'Exito',
-      message: '',
-      type: 'success'
-    },
-    error: {
-      title: 'Error',
-      message: '',
-      type: 'error'
     }
   }
 };
