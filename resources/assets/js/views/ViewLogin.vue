@@ -108,20 +108,20 @@ export default {
   },
   notifications: {
     porDefecto: {
-      title: 'Solicitud',
-      message: '¡Oops! Hubo un problema al procesar la solicitud',
-      type: 'error'
+      titulo: 'Solicitud',
+      mensaje: '¡Oops! Hubo un problema al procesar la solicitud',
+      tipo: 'error'
     },
     peticion: {
-      title: 'Petición',
-      message: `No estás en la misma red que el servidor o este
+      titulo: 'Petición',
+      mensaje: `No estás en la misma red que el servidor o este
                 podría estar caído`,
-      type: 'error'
+      tipo: 'error'
     },
     config: {
-      title: 'Configuración',
-      message: '¡Oops! Hubo un problema al configurar la solicitud',
-      type: 'error'
+      titulo: 'Configuración',
+      mensaje: '¡Oops! Hubo un problema al configurar la solicitud',
+      tipo: 'error'
     }
   }
 };
